@@ -4,188 +4,390 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Firebase SDKs (Compat v9) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
         body {
-            background-color: #0b0f17;
+            background-color: #0b0e14;
             color: #ffffff;
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
-        .card-bg {
-            background-color: #111827;
-            border: 1px solid #1f2937;
+
+        /* Navbar / Header */
+        header {
+            width: 100%;
+            max-width: 820px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #121824;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 1px solid #232d3f;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-sizing: border-box;
         }
-        .input-bg {
-            background-color: #0b0f17;
-            border: 1px solid #1f2937;
+
+        header h1 {
+            font-size: 16px;
+            color: #fbbf24;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .btn-yellow {
-            background-color: #fbbf24;
-            color: #000000;
-            font-weight: 700;
+
+        header p {
+            font-size: 11px;
+            color: #8a99ad;
+            margin: 3px 0 0 0;
         }
-        .btn-yellow:hover {
-            background-color: #f59e0b;
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: #0b0e14;
+            border: 1px solid #2d3748;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-btn.active {
+            background: #fbbf24;
+            border-color: #fbbf24;
+            color: #0b0e14;
+        }
+
+        /* Contenedor Principal (Boost Pro) */
+        .container {
+            display: flex;
+            gap: 20px;
+            background: #121824;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid #232d3f;
+        }
+
+        .panel {
+            background: #18202e;
+            padding: 20px;
+            border-radius: 8px;
+            width: 250px;
+            border: 1px solid #232d3f;
+        }
+
+        .panel h3 {
+            font-size: 14px;
+            color: #8a99ad;
+            margin-bottom: 15px;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #a0aec0;
+            margin-bottom: 5px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 8px;
+            background: #0b0e14;
+            border: 1px solid #2d3748;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .checkout-panel {
+            background: #151b26;
+            padding: 20px;
+            border-radius: 8px;
+            width: 280px;
+            border: 1px solid #232d3f;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 8px;
+            background: #0b0e14;
+            border: 1px solid #2d3748;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .tab.active {
+            background: #38bdf8;
+            border-color: #38bdf8;
+            color: #0b0e14;
+            font-weight: bold;
+        }
+
+        .checkbox-group {
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #promoBanner {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #38bdf8;
+            margin: 15px 0;
+            line-height: 1.4;
+            display: none;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fbbf24;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .btn-submit {
+            background: linear-gradient(to bottom, #fbbf24, #f59e0b);
+            color: #0b0e14;
+            border: none;
+            padding: 12px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        /* Sección de Cuentas (Firebase) */
+        .cuentas-container {
+            width: 100%;
+            max-width: 820px;
+            display: none;
+        }
+
+        .cuentas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .cuenta-card {
+            background: #121824;
+            border: 1px solid #232d3f;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .cuenta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .cuenta-tag {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            font-size: 10px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .cuenta-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .cuenta-info {
+            background: #0b0e14;
+            border: 1px solid #2d3748;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #a0aec0;
+            margin: 12px 0;
+        }
+
+        .cuenta-info div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .cuenta-info div:last-child {
+            margin-bottom: 0;
+        }
+
+        .cuenta-info strong {
+            color: #fbbf24;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-6">
+<body>
 
-    <!-- Header / Navbar -->
-    <header class="w-full max-w-6xl flex justify-between items-center mb-8 px-4">
+    <!-- Header / Barra de Navegación -->
+    <header>
         <div>
-            <h1 class="text-xl font-extrabold tracking-wider text-amber-400">NEXUS STORE</h1>
-            <p class="text-xs text-gray-400">Cuentas sin correo verificado, listas para transferir</p>
+            <h1>Nexus Store</h1>
+            <p>Cuentas sin correo verificado y Boost Pro</p>
         </div>
-        <div class="flex items-center gap-3">
-            <button onclick="switchTab('cuentas')" id="btn-tab-cuentas" class="bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-gray-700">Cuentas</button>
-            <button onclick="switchTab('boost')" id="btn-tab-boost" class="bg-amber-400 text-black px-4 py-2 rounded-lg text-sm font-bold transition border border-amber-500">Boost Pro</button>
+        <div class="nav-buttons">
+            <button class="nav-btn active" id="btnBoost" onclick="switchTab('boost')">Boost Pro</button>
+            <button class="nav-btn" id="btnCuentas" onclick="switchTab('cuentas')">Cuentas</button>
         </div>
     </header>
 
-    <!-- SECCIÓN: BOOST PRO (Exacta al diseño original) -->
-    <main id="section-boost" class="w-full max-w-6xl flex flex-col items-center">
-        <!-- Subtabs de Impulso -->
-        <div class="flex bg-gray-900/80 p-1.5 rounded-full border border-gray-800 mb-8 gap-2">
-            <button class="bg-white text-gray-900 px-6 py-2 rounded-full text-sm font-bold shadow">Impulso de rango</button>
-            <button class="text-gray-400 hover:text-white px-6 py-2 rounded-full text-sm font-medium transition">Partidas de posicionamiento</button>
-            <button class="text-gray-400 hover:text-white px-6 py-2 rounded-full text-sm font-medium transition">Victorias netas</button>
+    <!-- SECCIÓN: BOOST PRO -->
+    <div class="container" id="sectionBoost">
+        <!-- Panel Izquierdo: Liga Actual -->
+        <div class="panel">
+            <h3>Rango Actual</h3>
+            <div class="form-group">
+                <label>Liga Actual</label>
+                <select id="ligaActual" onchange="actualizarBoost()">
+                    <option value="Hierro">Hierro</option>
+                    <option value="Bronce">Bronce</option>
+                    <option value="Plata">Plata</option>
+                    <option value="Oro">Oro</option>
+                    <option value="Platino" selected>Platino</option>
+                    <option value="Esmeralda">Esmeralda</option>
+                    <option value="Diamante">Diamante</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>División</label>
+                <select id="divisionActual" onchange="actualizarBoost()">
+                    <option value="IV" selected>Div. IV</option>
+                    <option value="III">Div. III</option>
+                    <option value="II">Div. II</option>
+                    <option value="I">Div. I</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label>¿Cuántos LP obtienes?</label>
+                <select id="lpGanan">
+                    <option>22 a 25 LP</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Contenedor de las 3 tarjetas de Boost -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-            
-            <!-- Tarjeta 1: Rango Actual -->
-            <div class="card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl">
-                <div>
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-6 h-6 rounded-full bg-cyan-900/50 flex items-center justify-center text-cyan-400 text-xs">🛡️</div>
-                        <div>
-                            <span class="text-[10px] uppercase tracking-wider text-gray-400 block font-semibold">RANGO ACTUAL</span>
-                            <span class="text-sm font-bold text-gray-200">Platino Div. 4</span>
-                        </div>
-                    </div>
+        <!-- Panel Central: Liga Deseada -->
+        <div class="panel">
+            <h3>Rango Deseado</h3>
+            <div class="form-group">
+                <label>Liga Deseada</label>
+                <select id="ligaDeseada" onchange="actualizarBoost()">
+                    <option value="Hierro">Hierro</option>
+                    <option value="Bronce">Bronce</option>
+                    <option value="Plata">Plata</option>
+                    <option value="Oro">Oro</option>
+                    <option value="Platino" selected>Platino</option>
+                    <option value="Esmeralda">Esmeralda</option>
+                    <option value="Diamante">Diamante</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>División</label>
+                <select id="divisionDeseada" onchange="actualizarBoost()">
+                    <option value="IV">Div. IV</option>
+                    <option value="III">Div. III</option>
+                    <option value="II">Div. II</option>
+                    <option value="I" selected>Div. I</option>
+                </select>
+            </div>
+        </div>
 
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-xs text-gray-400 mb-1">
-                                <span>Liga Actual</span>
-                                <span>División</span>
-                                <span>LP (opc.)</span>
-                            </div>
-                            <div class="grid grid-cols-3 gap-2">
-                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
-                                    <option>Platino</option>
-                                </select>
-                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
-                                    <option>Div. IV</option>
-                                </select>
-                                <input type="number" value="0" class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400 text-center">
-                            </div>
-                        </div>
-
-                        <div class="pt-4">
-                            <label class="text-[11px] text-gray-400 block text-center mb-2">¿Cuantos LP obtienes x victoria?</label>
-                            <select class="input-bg w-full text-xs rounded-lg p-3 text-white outline-none focus:border-amber-400 border border-amber-500/30">
-                                <option>22 a 25 LP</option>
-                            </select>
-                        </div>
-                    </div>
+        <!-- Panel Derecho: Checkout / Personalizar -->
+        <div class="checkout-panel">
+            <div>
+                <h3>Personalizar Pedido</h3>
+                <div class="tabs">
+                    <div class="tab active">Solo Q</div>
+                    <div class="tab">Duo</div>
                 </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="transmision">
+                    <label for="transmision" style="display:inline; margin:0; cursor:pointer;">Transmisión en vivo</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="offline">
+                    <label for="offline" style="display:inline; margin:0; cursor:pointer;">Modo Offline</label>
+                </div>
+
+                <!-- Banner de Oferta Dinámico -->
+                <div id="promoBanner"></div>
             </div>
 
-            <!-- Tarjeta 2: Rango Deseado -->
-            <div class="card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl">
-                <div>
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-6 h-6 rounded-full bg-cyan-900/50 flex items-center justify-center text-cyan-400 text-xs">🛡️</div>
-                        <div>
-                            <span class="text-[10px] uppercase tracking-wider text-gray-400 block font-semibold">RANGO DESEADO</span>
-                            <span class="text-sm font-bold text-gray-200">Platino Div. 1</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-xs text-gray-400 mb-1">
-                                <span>Liga Deseada</span>
-                                <span>División</span>
-                                <span>LP (opc.)</span>
-                            </div>
-                            <div class="grid grid-cols-3 gap-2">
-                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
-                                    <option>Platino</option>
-                                </select>
-                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
-                                    <option>Div. I</option>
-                                </select>
-                                <input type="number" value="0" class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400 text-center">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <div class="price" id="precioTotal">USD $23.76</div>
+                <button class="btn-submit" id="btnAccion">¡Aprovechar Oferta!</button>
             </div>
-
-            <!-- Tarjeta 3: Personalizar Pedido (Con banner de oferta) -->
-            <div class="card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl border-gray-800">
-                <div class="space-y-5">
-                    <span class="text-xs uppercase tracking-wider text-gray-400 font-bold block">PERSONALIZAR PEDIDO</span>
-
-                    <!-- Selector Solo Q / Duo -->
-                    <div class="grid grid-cols-2 bg-[#0b0f17] p-1 rounded-xl border border-gray-800">
-                        <button class="bg-cyan-400 text-black text-xs font-bold py-2 rounded-lg shadow">Solo Q</button>
-                        <button class="text-gray-400 text-xs font-semibold py-2 hover:text-white transition">Duo</button>
-                    </div>
-
-                    <!-- Toggles -->
-                    <div class="space-y-3 pt-1">
-                        <label class="flex items-center justify-between text-xs text-gray-300 cursor-pointer">
-                            <span>Transmisión en vivo</span>
-                            <input type="checkbox" class="w-4 h-4 rounded accent-amber-400 bg-gray-900 border-gray-700">
-                        </label>
-                        <label class="flex items-center justify-between text-xs text-gray-300 cursor-pointer">
-                            <span>Modo Offline</span>
-                            <input type="checkbox" class="w-4 h-4 rounded accent-amber-400 bg-gray-900 border-gray-700">
-                        </label>
-                    </div>
-
-                    <!-- Banner de Oferta -->
-                    <div class="relative bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 rounded-xl p-3 text-center">
-                        <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-black text-[9px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider">¡OFERTA LIGA COMPLETA!</span>
-                        <p class="text-[11px] text-gray-300 mt-1 leading-snug">
-                            Estás contratando un impulso en la misma liga, ¡a un paso de <strong class="text-amber-400">Esmeralda IV</strong>! Contratas <strong class="text-amber-400">Esmeralda</strong> ¡Obtienes un descuento especial!
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Precio y Botón -->
-                <div class="mt-6 pt-4 border-t border-gray-800/80 text-center">
-                    <div class="text-2xl font-black text-amber-400 mb-3 tracking-tight">USD $23.76</div>
-                    <button class="w-full btn-yellow py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-amber-500/10 transition">
-                        ¡Aprovechar Oferta de Platino!
-                    </button>
-                </div>
-            </div>
-
         </div>
-    </main>
+    </div>
 
-    <!-- SECCIÓN: TIENDA DE CUENTAS (Conectada a Firebase) -->
-    <main id="section-cuentas" class="w-full max-w-6xl hidden">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-bold text-amber-400">Cuentas Disponibles en Stock</h2>
-            <span class="text-xs text-gray-400" id="contador-cuentas">Cargando inventario...</span>
+    <!-- SECCIÓN: TIENDA DE CUENTAS (Firebase) -->
+    <div class="cuentas-container" id="sectionCuentas">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="color: #fbbf24; text-transform: uppercase; font-size: 14px; margin:0;">Cuentas Disponibles en Stock</h3>
+            <span id="contadorCuentas" style="font-size: 12px; color: #8a99ad;">Cargando...</span>
         </div>
-        <div id="grid-cuentas" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Las tarjetas se inyectarán dinámicamente mediante JS -->
+        <div class="cuentas-grid" id="gridCuentas">
+            <!-- Las cuentas se cargan dinámicamente aquí -->
         </div>
-    </main>
+    </div>
 
     <script>
-        // CONFIGURACIÓN DE FIREBASE (Reemplaza con tus credenciales reales si cambian)
+        // CONFIGURACIÓN DE FIREBASE (Reemplaza con tus datos reales)
         const firebaseConfig = {
             apiKey: "TU_API_KEY",
             authDomain: "TU_AUTH_DOMAIN",
@@ -195,85 +397,110 @@
             appId: "TU_APP_ID"
         };
 
-        // Inicializar Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
 
-        // Función para alternar pestañas
+        // Control de pestañas
         function switchTab(tab) {
-            const boostSec = document.getElementById('section-boost');
-            const cuentasSec = document.getElementById('section-cuentas');
-            const btnBoost = document.getElementById('btn-tab-boost');
-            const btnCuentas = document.getElementById('btn-tab-cuentas');
+            const sectionBoost = document.getElementById('sectionBoost');
+            const sectionCuentas = document.getElementById('sectionCuentas');
+            const btnBoost = document.getElementById('btnBoost');
+            const btnCuentas = document.getElementById('btnCuentas');
 
-            if (tab === 'cuentas') {
-                boostSec.classList.add('hidden');
-                cuentasSec.classList.remove('hidden');
-                btnCuentas.className = "bg-amber-400 text-black px-4 py-2 rounded-lg text-sm font-bold transition border border-amber-500";
-                btnBoost.className = "bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-gray-700";
-                cargarCuentasFirebase();
+            if (tab === 'boost') {
+                sectionBoost.style.display = 'flex';
+                sectionCuentas.style.display = 'none';
+                btnBoost.classList.add('active');
+                btnCuentas.classList.remove('active');
             } else {
-                cuentasSec.classList.add('hidden');
-                boostSec.classList.remove('hidden');
-                btnBoost.className = "bg-amber-400 text-black px-4 py-2 rounded-lg text-sm font-bold transition border border-amber-500";
-                btnCuentas.className = "bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-gray-700";
+                sectionBoost.style.display = 'none';
+                sectionCuentas.style.display = 'block';
+                btnBoost.classList.remove('active');
+                btnCuentas.classList.add('active');
+                cargarCuentasFirebase();
             }
         }
 
-        // Cargar datos de la colección "cuentas" en Firestore
+        // Lógica de cálculo de Boost
+        const ligasOrden = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante"];
+
+        function actualizarBoost() {
+            let lAct = document.getElementById("ligaActual").value;
+            let dAct = document.getElementById("divisionActual").value;
+            let lDes = document.getElementById("ligaDeseada").value;
+            let dDes = document.getElementById("divisionDeseada").value;
+
+            let promoBanner = document.getElementById("promoBanner");
+            let btnAccion = document.getElementById("btnAccion");
+
+            let esMismaLiga = (lAct === lDes);
+            let esLigaCompleta = (esMismaLiga && dAct === "IV" && dDes === "I");
+
+            if (esLigaCompleta) {
+                let indexLigaActual = ligasOrden.indexOf(lAct);
+                let siguienteLiga = ligasOrden[indexLigaActual + 1] || "la siguiente liga";
+
+                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ¡Obtienes un descuento especial!`;
+                promoBanner.style.display = "block";
+                btnAccion.innerText = `¡Aprovechar Oferta de ${lAct}!`;
+            } else {
+                promoBanner.style.display = "none";
+                btnAccion.innerText = `¡Contratar Boost!`;
+            }
+        }
+
+        // Carga de Cuentas desde Firebase Firestore
         function cargarCuentasFirebase() {
-            const grid = document.getElementById('grid-cuentas');
-            const contador = document.getElementById('contador-cuentas');
-            grid.innerHTML = '<p class="text-gray-400 text-sm col-span-3 text-center py-8">Sincronizando cuentas con la base de datos...</p>';
+            const grid = document.getElementById('gridCuentas');
+            const contador = document.getElementById('contadorCuentas');
+            grid.innerHTML = '<p style="color: #8a99ad; font-size: 13px; grid-column: span 3; text-align: center; padding: 40px 0;">Sincronizando inventario...</p>';
 
             db.collection("cuentas").get()
                 .then((querySnapshot) => {
                     grid.innerHTML = "";
                     if (querySnapshot.empty) {
-                        contador.innerText = "0 cuentas disponibles";
-                        grid.innerHTML = '<p class="text-gray-400 text-sm col-span-3 text-center py-8">No hay cuentas cargadas en este momento.</p>';
+                        contador.innerText = "0 cuentas";
+                        grid.innerHTML = '<p style="color: #8a99ad; font-size: 13px; grid-column: span 3; text-align: center; padding: 40px 0;">No hay cuentas disponibles en este momento.</p>';
                         return;
                     }
 
-                    contador.innerText = `${querySnapshot.size} cuentas encontradas`;
-                    
+                    contador.innerText = `${querySnapshot.size} disponibles`;
+
                     querySnapshot.forEach((doc) => {
                         const cuenta = doc.data();
-                        
-                        // Tarjeta de cuenta individual para la tienda
-                        const tarjeta = document.createElement('div');
-                        tarjeta.className = "card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl border border-gray-800 hover:border-amber-500/50 transition";
-                        tarjeta.innerHTML = `
+                        const card = document.createElement('div');
+                        card.className = "cuenta-card";
+                        card.innerHTML = `
                             <div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <span class="bg-amber-400/10 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-amber-400/20">${cuenta.servidor || 'LAS'}</span>
-                                    <span class="text-lg font-black text-white">$${cuenta.precio || '0.00'}</span>
+                                <div class="cuenta-header">
+                                    <span class="cuenta-tag">${cuenta.servidor || 'LAS'}</span>
+                                    <span class="cuenta-price">$${cuenta.precio || '0.00'}</span>
                                 </div>
-                                <h3 class="text-base font-bold text-white mb-2">${cuenta.titulo || 'Cuenta LoL'}</h3>
-                                <p class="text-xs text-gray-400 mb-4">${cuenta.descripcion || 'Sin descripción detallada.'}</p>
-                                <div class="space-y-1.5 text-xs text-gray-300 mb-6 bg-[#0b0f17] p-3 rounded-xl border border-gray-800">
-                                    <div class="flex justify-between"><span>Esencia Azul:</span> <strong class="text-amber-400">${cuenta.esencia || '0'} EA</strong></div>
-                                    <div class="flex justify-between"><span>Nivel:</span> <strong>${cuenta.nivel || 'N/A'}</strong></div>
+                                <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #ffffff;">${cuenta.titulo || 'Cuenta LoL'}</h4>
+                                <p style="margin: 0; font-size: 11px; color: #8a99ad; line-height: 1.4;">${cuenta.descripcion || 'Sin descripción.'}</p>
+                                <div class="cuenta-info">
+                                    <div><span>Esencia Azul:</span> <strong>${cuenta.esencia || '0'} EA</strong></div>
+                                    <div><span>Nivel:</span> <strong>${cuenta.nivel || 'N/A'}</strong></div>
                                 </div>
                             </div>
-                            <button onclick="comprarCuenta('${doc.id}')" class="w-full btn-yellow py-2.5 rounded-xl text-xs uppercase tracking-wider shadow transition">
-                                Comprar Cuenta
-                            </button>
+                            <button class="btn-submit" onclick="comprarCuenta('${doc.id}')">Comprar Cuenta</button>
                         `;
-                        grid.appendChild(tarjeta);
+                        grid.appendChild(card);
                     });
                 })
                 .catch((error) => {
-                    console.error("Error obteniendo cuentas: ", error);
-                    grid.innerHTML = '<p class="text-red-400 text-sm col-span-3 text-center py-8">Error al conectar con la base de datos.</p>';
+                    console.error("Error al obtener cuentas: ", error);
+                    grid.innerHTML = '<p style="color: #f87171; font-size: 13px; grid-column: span 3; text-align: center; padding: 40px 0;">Error al conectar con la base de datos.</p>';
                 });
         }
 
         function comprarCuenta(id) {
-            alert("Redirigiendo al proceso de pago para la cuenta ID: " + id);
+            alert("Iniciando compra para la cuenta ID: " + id);
         }
+
+        actualizarBoost();
     </script>
 </body>
 </html>
