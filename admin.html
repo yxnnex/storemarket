@@ -141,7 +141,7 @@
             <div id="mensaje-login" class="mensaje" style="color: #ef4444;"></div>
         </div>
 
-        <!-- SECCIÓN DEL PANEL (Oculta hasta iniciar sesión) -->
+        <!-- SECCIÓN DEL PANEL -->
         <div id="seccion-panel" class="hidden">
             <div class="user-info">
                 <span id="user-email-display"></span>
@@ -162,6 +162,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label>URL de la Imagen (Ej: Imgur o enlace directo)</label>
+                    <input type="url" id="imageUrl" placeholder="https://i.imgur.com/tu-imagen.jpg" required>
+                </div>
+
+                <div class="form-group">
                     <label>Cantidad de Campeones</label>
                     <input type="text" id="championCount" placeholder="Ej: 30 campeones" required>
                 </div>
@@ -172,7 +177,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Escencia Azul (RP)</label>
+                    <label>Escencia Azul</label>
                     <input type="text" id="riotPoints" placeholder="Ej: 2000 RP" required>
                 </div>
 
@@ -219,7 +224,6 @@
         const userEmailDisplay = document.getElementById('user-email-display');
         const btnLogout = document.getElementById('btn-logout');
 
-        // Monitorear si hay una sesión activa
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 seccionLogin.classList.add('hidden');
@@ -231,7 +235,6 @@
             }
         });
 
-        // Iniciar sesión
         formLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -246,12 +249,10 @@
             }
         });
 
-        // Cerrar sesión
         btnLogout.addEventListener('click', async () => {
             await signOut(auth);
         });
 
-        // Publicar cuenta en Firestore (o Realtime Database según configuración)
         const formCuenta = document.getElementById('form-cuenta');
         const mensajeEstado = document.getElementById('mensaje-estado');
 
@@ -263,6 +264,7 @@
 
             const nuevaCuenta = {
                 server: document.getElementById('server').value,
+                imageUrl: document.getElementById('imageUrl').value,
                 championCount: document.getElementById('championCount').value,
                 currentRank: document.getElementById('currentRank').value,
                 riotPoints: document.getElementById('riotPoints').value,
