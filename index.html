@@ -3,239 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Firebase SDKs (Compat v9) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <title>Nexus Store - Boost Pro</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: #07090e; color: #ffffff; padding: 20px; min-height: 100vh; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        /* ESTILOS DE LA CALCULADORA */
+        .boost-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 340px;
+            gap: 20px;
+            align-items: start;
+        }
+        @media (max-width: 1024px) { .boost-layout { grid-template-columns: 1fr; } }
+
+        .boost-card {
+            background: rgba(18, 20, 28, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .rank-header {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
+            background: rgba(11, 14, 20, 0.4); padding: 14px; border-radius: 12px;
+        }
+        .rank-emblem { width: 45px; height: 45px; object-fit: contain; }
+        .rank-info span { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
+        .rank-info h3 { font-size: 1.1rem; color: #f8fafc; }
+
+        .form-row { display: grid; grid-template-columns: 1.5fr 1.3fr 1fr; gap: 10px; margin-bottom: 15px; }
+        label { display: block; font-size: 0.78rem; color: #94a3b8; margin-bottom: 6px; }
+        select, input {
+            width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; color: #ffffff; font-size: 0.85srem;
+        }
+        select:focus, input:focus { outline: none; border-color: #f3ba2f; }
+
+        /* ALERTA DE OFERTA DINÁMICA */
+        .promo-banner {
+            background: linear-gradient(135deg, rgba(243, 186, 47, 0.2), rgba(56, 189, 248, 0.15));
+            border: 1px solid rgba(243, 186, 47, 0.4);
+            padding: 12px; border-radius: 8px; font-size: 0.8rem; color: #fef08a;
+            text-align: center; margin-bottom: 12px; display: none;
+        }
+
+        .boost-total { font-size: 1.4rem; font-weight: bold; color: #f3ba2f; text-align: center; margin: 15px 0; }
+        .btn-contratar {
+            width: 100%; background-color: #f3ba2f; color: #0b0e14; border: none;
+            padding: 13px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer;
+        }
+        .btn-contratar:hover { background-color: #e0a822; }
+    </style>
 </head>
 <body>
 
-    <!-- Header / Barra de Navegación -->
-    <header>
-        <div>
-            <h1>Nexus Store</h1>
-            <p>Cuentas sin correo verificado y Boost Pro</p>
-        </div>
-        <div class="nav-buttons">
-            <button class="nav-btn active" id="btnBoost" onclick="switchTab('boost')">Boost Pro</button>
-            <button class="nav-btn" id="btnCuentas" onclick="switchTab('cuentas')">Cuentas</button>
-        </div>
-    </header>
+    <div class="container">
+        <h2 style="margin-bottom: 20px; color: #f3ba2f;">Calculadora de Boost con Detección de Liga Entera</h2>
+        
+        <div class="boost-layout">
+            <!-- Rango Actual -->
+            <div class="boost-card">
+                <div class="rank-header">
+                    <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Actual">
+                    <div class="rank-info">
+                        <span>Rango actual</span>
+                        <h3 id="txt-actual">Hierro Div. 4</h3>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Liga Actual</label>
+                        <select id="liga-actual">
+                            <option value="Hierro">Hierro</option>
+                            <option value="Bronce">Bronce</option>
+                            <option value="Plata">Plata</option>
+                            <option value="Oro" selected>Oro</option>
+                            <option value="Platino">Platino</option>
+                            <option value="Esmeralda">Esmeralda</option>
+                            <option value="Diamante">Diamante</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>División</label>
+                        <select id="division-actual">
+                            <option value="4">Div. IV</option>
+                            <option value="3">Div. III</option>
+                            <option value="2">Div. II</option>
+                            <option value="1">Div. I</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>LP</label>
+                        <input type="number" id="lp-actual" value="0" min="0" max="100">
+                    </div>
+                </div>
+            </div>
 
-    <!-- SECCIÓN: BOOST PRO -->
-    <div class="container" id="sectionBoost">
-        <!-- Panel Izquierdo: Liga Actual -->
-        <div class="panel">
-            <h3>Rango Actual</h3>
-            <div class="form-group">
-                <label>Liga Actual</label>
-                <select id="ligaActual" onchange="actualizarBoost()">
-                    <option value="Hierro">Hierro</option>
-                    <option value="Bronce">Bronce</option>
-                    <option value="Plata">Plata</option>
-                    <option value="Oro">Oro</option>
-                    <option value="Platino" selected>Platino</option>
-                    <option value="Esmeralda">Esmeralda</option>
-                    <option value="Diamante">Diamante</option>
-                </select>
+            <!-- Rango Deseado -->
+            <div class="boost-card">
+                <div class="rank-header">
+                    <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Deseado">
+                    <div class="rank-info">
+                        <span>Rango deseado</span>
+                        <h3 id="txt-deseado">Oro Div. 1</h3>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Liga Deseada</label>
+                        <select id="liga-deseada">
+                            <option value="Hierro">Hierro</option>
+                            <option value="Bronce">Bronce</option>
+                            <option value="Plata">Plata</option>
+                            <option value="Oro" selected>Oro</option>
+                            <option value="Platino">Platino</option>
+                            <option value="Esmeralda">Esmeralda</option>
+                            <option value="Diamante">Diamante</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>División</label>
+                        <select id="division-deseada">
+                            <option value="4">Div. IV</option>
+                            <option value="3">Div. III</option>
+                            <option value="2">Div. II</option>
+                            <option value="1" selected>Div. I</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>LP</label>
+                        <input type="number" id="lp-deseado" value="0" min="0" max="100">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>División</label>
-                <select id="divisionActual" onchange="actualizarBoost()">
-                    <option value="IV" selected>Div. IV</option>
-                    <option value="III">Div. III</option>
-                    <option value="II">Div. II</option>
-                    <option value="I">Div. I</option>
-                </select>
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-                <label>¿Cuántos LP obtienes?</label>
-                <select id="lpGanan">
-                    <option>22 a 25 LP</option>
-                </select>
-            </div>
-        </div>
 
-        <!-- Panel Central: Liga Deseada -->
-        <div class="panel">
-            <h3>Rango Deseado</h3>
-            <div class="form-group">
-                <label>Liga Deseada</label>
-                <select id="ligaDeseada" onchange="actualizarBoost()">
-                    <option value="Hierro">Hierro</option>
-                    <option value="Bronce">Bronce</option>
-                    <option value="Plata">Plata</option>
-                    <option value="Oro">Oro</option>
-                    <option value="Platino" selected>Platino</option>
-                    <option value="Esmeralda">Esmeralda</option>
-                    <option value="Diamante">Diamante</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>División</label>
-                <select id="divisionDeseada" onchange="actualizarBoost()">
-                    <option value="IV">Div. IV</option>
-                    <option value="III">Div. III</option>
-                    <option value="II">Div. II</option>
-                    <option value="I" selected>Div. I</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Panel Derecho: Checkout / Personalizar -->
-        <div class="checkout-panel">
-            <div>
-                <h3>Personalizar Pedido</h3>
-                <div class="tabs">
-                    <div class="tab active">Solo Q</div>
-                    <div class="tab">Duo</div>
+            <!-- Panel de Precio y Alerta -->
+            <div class="boost-card">
+                <h3 style="font-size: 0.95rem; margin-bottom: 15px;">RESUMEN</h3>
+                
+                <!-- ALERTA DINÁMICA DE OFERTA -->
+                <div id="promo-banner" class="promo-banner">
+                    🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Descuento aplicado.
                 </div>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="transmision">
-                    <label for="transmision" style="display:inline; margin:0; cursor:pointer;">Transmisión en vivo</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="offline">
-                    <label for="offline" style="display:inline; margin:0; cursor:pointer;">Modo Offline</label>
-                </div>
-
-                <!-- Banner de Oferta Dinámico -->
-                <div id="promoBanner"></div>
+                <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
+                <button class="btn-contratar" id="btn-contratar-boost">Obtener oferta</button>
             </div>
-
-            <div>
-                <div class="price" id="precioTotal">USD $23.76</div>
-                <button class="btn-submit" id="btnAccion">¡Aprovechar Oferta!</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECCIÓN: TIENDA DE CUENTAS (Firebase) -->
-    <div class="cuentas-container" id="sectionCuentas">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="color: #fbbf24; text-transform: uppercase; font-size: 14px; margin:0;">Cuentas Disponibles en Stock</h3>
-            <span id="contadorCuentas" style="font-size: 12px; color: #8a99ad;">Cargando...</span>
-        </div>
-        <div class="cuentas-grid" id="gridCuentas">
-            <!-- Las cuentas se cargan dinámicamente aquí -->
         </div>
     </div>
 
     <script>
-        // CONFIGURACIÓN DE FIREBASE (Reemplaza con tus datos reales)
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_AUTH_DOMAIN",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.firestore();
-
-        // Control de pestañas
-        function switchTab(tab) {
-            const sectionBoost = document.getElementById('sectionBoost');
-            const sectionCuentas = document.getElementById('sectionCuentas');
-            const btnBoost = document.getElementById('btnBoost');
-            const btnCuentas = document.getElementById('btnCuentas');
-
-            if (tab === 'boost') {
-                sectionBoost.style.display = 'flex';
-                sectionCuentas.style.display = 'none';
-                btnBoost.classList.add('active');
-                btnCuentas.classList.remove('active');
-            } else {
-                sectionBoost.style.display = 'none';
-                sectionCuentas.style.display = 'block';
-                btnBoost.classList.remove('active');
-                btnCuentas.classList.add('active');
-                cargarCuentasFirebase();
-            }
-        }
-
-        // Lógica de cálculo de Boost
         const ligasOrden = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante"];
+        const valoresLigas = { Hierro: 1, Bronce: 2, Plata: 3, Oro: 4, Platino: 5, Esmeralda: 6, Diamante: 7 };
+
+        const ligaActual = document.getElementById('liga-actual');
+        const divActual = document.getElementById('division-actual');
+        const ligaDeseada = document.getElementById('liga-deseada');
+        const divDeseada = document.getElementById('division-deseada');
+        
+        const txtActual = document.getElementById('txt-actual');
+        const txtDeseado = document.getElementById('txt-deseado');
+        const precioBoost = document.getElementById('precio-boost');
+        const promoBanner = document.getElementById('promo-banner');
+        const btnContratar = document.getElementById('btn-contratar-boost');
 
         function actualizarBoost() {
-            let lAct = document.getElementById("ligaActual").value;
-            let dAct = document.getElementById("divisionActual").value;
-            let lDes = document.getElementById("ligaDeseada").value;
-            let dDes = document.getElementById("divisionDeseada").value;
+            const lAct = ligaActual.value;
+            const dAct = divActual.value;
+            const lDes = ligaDeseada.value;
+            const dDes = divDeseada.value;
 
-            let promoBanner = document.getElementById("promoBanner");
-            let btnAccion = document.getElementById("btnAccion");
+            txtActual.textContent = `${lAct} Div. ${dAct}`;
+            txtDeseado.textContent = `${lDes} Div. ${dDes}`;
 
-            let esMismaLiga = (lAct === lDes);
-            let esLigaCompleta = (esMismaLiga && parseInt(dAct) > parseInt(dDes) && dDes === "1");
+            const scoreActual = (valoresLigas[lAct] * 4) + (5 - parseInt(dAct));
+            const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
+            const diff = scoreDeseado - scoreActual;
+
+            // Tarifa base por división (ej: Oro a $7)
+            let tarifaPorDivision = 7.00;
+            if (lAct === "Hierro" || lAct === "Bronce") tarifaPorDivision = 5.00;
+            if (lAct === "Platino" || lAct === "Esmeralda") tarifaPorDivision = 9.00;
+            if (lAct === "Diamante") tarifaPorDivision = 12.00;
+
+            let precio = diff > 0 ? diff * tarifaPorDivision : 0;
+
+            // =========================================================================
+            // DETECCIÓN AUTOMÁTICA DE LIGA ENTERA (Ej: Div. 4 a Div. 1 en el mismo rango)
+            // =========================================================================
+            let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1");
 
             if (esLigaCompleta) {
+                // Porcentaje que aumenta conforme sube el elo
+                let porcentajeDescuento = 0.05; // 5% en Hierro/Bronce
+                if (lAct === "Plata" || lAct === "Oro") porcentajeDescuento = 0.08; // 8%
+                if (lAct === "Platino" || lAct === "Esmeralda") porcentajeDescuento = 0.12; // 12%
+                if (lAct === "Diamante") porcentajeDescuento = 0.15; // 15%
+
+                // Regla especial pedida: en Hierro si salía $5 a la última división, se le saca $2 (no $3)
+                let descuentoMonto = (lAct === "Hierro") ? 2.00 : (precio * porcentajeDescuento);
+                
+                precio -= descuentoMonto;
+
                 let indexLigaActual = ligasOrden.indexOf(lAct);
                 let siguienteLiga = ligasOrden[indexLigaActual + 1] || "la siguiente liga";
 
-                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ¡Obtienes un descuento especial!`;
+                // Muestra la alerta inteligente en el cartel
+                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Si contratas el impulso de una liga entera de <b>${lAct} IV</b> a <b>${lAct} I</b> (¡a un paso de ${siguienteLiga}!), se aplica tu descuento especial.`;
                 promoBanner.style.display = "block";
-                btnAccion.innerText = `¡Aprovechar Oferta de ${lAct}!`;
+                btnContratar.textContent = `¡Aprovechar Oferta de ${lAct}!`;
             } else {
                 promoBanner.style.display = "none";
-                btnAccion.innerText = `¡Contratar Boost!`;
+                btnContratar.textContent = "Obtener oferta";
             }
+
+            precioBoost.textContent = precio > 0 ? precio.toFixed(2) : "0.00";
         }
 
-        // Carga de Cuentas desde Firebase Firestore
-        function cargarCuentasFirebase() {
-            const grid = document.getElementById('gridCuentas');
-            const contador = document.getElementById('contadorCuentas');
-            grid.innerHTML = '<p style="color: #8a99ad; font-size: 13px; grid-column: span 3; text-align: center; padding: 40px 0;">Sincronizando inventario...</p>';
-
-            db.collection("cuentas").get()
-                .then((querySnapshot) => {
-                    grid.innerHTML = "";
-                    if (querySnapshot.empty) {
-                        contador.innerText = "0 cuentas";
-                        grid.innerHTML = '<p style="color: #8a99ad; font-size: 13px; grid-column: span 3; text-align: center; padding: 40px 0;">No hay cuentas disponibles en este momento.</p>';
-                        return;
-                    }
-
-                    contador.innerText = `${querySnapshot.size} disponibles`;
-
-                    querySnapshot.forEach((doc) => {
-                        const cuenta = doc.data();
-                        const card = document.createElement('div');
-                        card.className = "cuenta-card";
-                        card.innerHTML = `
-                            <div>
-                                <div class="cuenta-header">
-                                    <span class="cuenta-tag">${cuenta.servidor || 'LAS'}</span>
-                                    <span class="cuenta-price">$${cuenta.precio || '0.00'}</span>
-                                </div>
-                                <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #ffffff;">${cuenta.titulo || 'Cuenta LoL'}</h4>
-                                <p style="margin: 0; font-size: 11px; color: #8a99ad; line-height: 1.4;">${cuenta.descripcion || 'Sin descripción.'}</p>
-                                <div class="cuenta-info">
-                                    <div><span>Esencia Azul:</span> <strong>${cuenta.esencia || '0'} EA</strong></div>
-                                    <div><span>Nivel:</span> <strong>${cuenta.nivel || 'N/A'}</strong></div>
-                                </div>
-                            </div>
-                            <button class="btn-submit" onclick="comprarCuenta('${doc.id}')">Comprar Cuenta</button>
-                        `;
-                        grid.appendChild(card);
-                    });
-                })
-                .catch((error) => {
-                    console.error("Error al obtener cuentas: ", error);
-                    grid.innerHTML = '<p style="color: #f87171; font-size: 13px; grid-column: span 3; text-align: center; padding: 40px 0;">Error al conectar con la base de datos.</p>';
-                });
-        }
-
-        function comprarCuenta(id) {
-            alert("Iniciando compra para la cuenta ID: " + id);
-        }
+        [ligaActual, divActual, ligaDeseada, divDeseada].forEach(el => {
+            el.addEventListener('change', actualizarBoost);
+        });
 
         actualizarBoost();
     </script>
