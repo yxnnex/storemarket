@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store </title>
+    <title>Nexus Store</title>
     <style>
         * {
             box-sizing: border-box;
@@ -76,7 +76,6 @@
             border-color: #f3ba2f;
         }
 
-        /* CONTENEDORES DE LAS SECCIONES */
         .tab-content {
             display: none;
         }
@@ -327,7 +326,31 @@
             line-height: 1.4;
         }
 
-        .btn-pagar {
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-pagar-paypal {
+            width: 100%;
+            background-color: #0070ba;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-pagar-paypal:hover {
+            background-color: #005ea6;
+        }
+
+        .btn-pagar-alias {
             width: 100%;
             background-color: #22c55e;
             color: white;
@@ -335,12 +358,12 @@
             padding: 12px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: background-color 0.2s;
         }
 
-        .btn-pagar:hover {
+        .btn-pagar-alias:hover {
             background-color: #16a34a;
         }
     </style>
@@ -363,7 +386,6 @@
         <div id="seccion-cuentas" class="tab-content active">
             <h2 class="section-title">⚔️ Cuentas Disponibles</h2>
             <div id="grid-cuentas" class="grid-cuentas">
-                <!-- Se cargan dinámicamente desde Firebase -->
                 <p style="color: #94a3b8;">Cargando catálogo...</p>
             </div>
         </div>
@@ -438,11 +460,14 @@
                 <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com" required>
             </div>
 
-            <button id="btn-ir-pagar" class="btn-pagar">Ir a Medios de Pago</button>
+            <div class="payment-options">
+                <button id="btn-pagar-paypal" class="btn-pagar-paypal">💳 Pagar con PayPal</button>
+                <button id="btn-pagar-alias" class="btn-pagar-alias">🏦 Pagar por Alias / Transferencia</button>
+            </div>
         </div>
     </div>
 
-    <!-- Script de Firebase y lógica de pestañas -->
+    <!-- Script de Firebase y lógica de la tienda -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -479,7 +504,8 @@
         const modalCerrar = document.getElementById('modal-cerrar');
         const modalTitulo = document.getElementById('modal-titulo');
         const modalTexto = document.getElementById('modal-texto');
-        const btnIrPagar = document.getElementById('btn-ir-pagar');
+        const btnPagarPaypal = document.getElementById('btn-pagar-paypal');
+        const btnPagarAlias = document.getElementById('btn-pagar-alias');
 
         let itemSeleccionado = null;
 
@@ -506,7 +532,7 @@
                                 <div class="cuenta-detalles-info">
                                     <span>⚔️ Campeones: ${c.championCount || 'N/A'}</span>
                                     <span>🏆 Rango: ${c.currentRank || 'Unranked'}</span>
-                                    <span>💎 RP: ${c.riotPoints || '0'}</span>
+                                    <span>💎 EA: ${c.riotPoints || '0'}</span>
                                 </div>
                             </div>
                             <div class="cuenta-footer">
@@ -594,15 +620,25 @@
             }
         });
 
-        // Ir a la parte de pagos
-        btnIrPagar.addEventListener('click', () => {
+        // Botón Pago PayPal
+        btnPagarPaypal.addEventListener('click', () => {
             const email = document.getElementById('email-cliente').value;
             if (!email) {
                 alert("Por favor ingresa tu correo electrónico.");
                 return;
             }
+            alert(`Redirigiendo a PayPal para ${itemSeleccionado.titulo} (USD $${itemSeleccionado.precio}) - Correo: ${email}`);
+            modalPago.classList.remove('active');
+        });
 
-            alert(`¡Genial! Redirigiendo a pasarela de pago para: ${itemSeleccionado.titulo} (Cliente: ${email})`);
+        // Botón Pago Alias / Transferencia
+        btnPagarAlias.addEventListener('click', () => {
+            const email = document.getElementById('email-cliente').value;
+            if (!email) {
+                alert("Por favor ingresa tu correo electrónico.");
+                return;
+            }
+            alert(`Instrucciones de pago por Alias/Transferencia para ${itemSeleccionado.titulo} (USD $${itemSeleccionado.precio}) enviadas a: ${email}`);
             modalPago.classList.remove('active');
         });
 
