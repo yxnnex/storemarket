@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Tienda y Boost</title>
+    <title>Nexus Store - Plataforma Pro</title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +20,7 @@
 
         header {
             text-align: center;
-            padding: 30px 0 20px 0;
+            padding: 25px 0 15px 0;
             border-bottom: 1px solid #1f2430;
             margin-bottom: 25px;
         }
@@ -41,16 +41,16 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
         }
 
-        /* SISTEMA DE PESTAÑAS (TABS) */
+        /* NAVEGACIÓN PRINCIPAL (TABS TIENDA / BOOST / ADMIN) */
         .tabs-nav {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
@@ -58,10 +58,10 @@
             background-color: #12141c;
             border: 1px solid #1f2430;
             color: #94a3b8;
-            padding: 12px 25px;
+            padding: 10px 22px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -85,15 +85,185 @@
             display: block;
         }
 
-        .section-title {
-            font-size: 1.5rem;
+        /* SUB-MENÚ DE TIPO DE BOOST */
+        .boost-types-nav {
+            display: flex;
+            gap: 10px;
             margin-bottom: 20px;
-            color: #f8fafc;
-            border-left: 4px solid #f3ba2f;
-            padding-left: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        /* CUENTAS GRID */
+        .boost-type-btn {
+            background-color: #161b26;
+            border: 1px solid #2a3245;
+            color: #94a3b8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .boost-type-btn.active {
+            background-color: #ffffff;
+            color: #0b0e14;
+            border-color: #ffffff;
+            font-weight: bold;
+        }
+
+        /* LAYOUT DE LA CALCULADORA DE BOOST (3 COLUMNAS) */
+        .boost-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 340px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .boost-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .boost-card {
+            background-color: #12141c;
+            border: 1px solid #1f2430;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        /* CABECERA CON ESCUDO DE RANGO */
+        .rank-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background-color: #1a1f2c;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #2a3245;
+        }
+
+        .rank-emblem {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        .rank-info span {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rank-info h3 {
+            font-size: 1.15rem;
+            color: #f8fafc;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 11px;
+            background-color: #1a1f2c;
+            border: 1px solid #2a3245;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #f3ba2f;
+        }
+
+        /* PANEL LATERAL DE PERSONALIZACIÓN */
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .mode-btn {
+            background-color: #1a1f2c;
+            border: 1px solid #2a3245;
+            color: #94a3b8;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background-color: #38bdf8;
+            color: #0b0e14;
+            border-color: #38bdf8;
+        }
+
+        .toggle-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1a1f2c;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid #2a3245;
+            color: #cbd5e1;
+        }
+
+        .boost-total {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #f3ba2f;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .btn-contratar {
+            width: 100%;
+            background-color: #f3ba2f;
+            color: #0b0e14;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-contratar:hover {
+            background-color: #e0a822;
+        }
+
+        /* CATÁLOGO DE CUENTAS GRID */
         .grid-cuentas {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -186,98 +356,16 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 0.85rem;
-            transition: background-color 0.2s;
         }
 
-        .btn-comprar:hover {
-            background-color: #e0a822;
-        }
-
-        /* SECCIÓN DE ELO / CALCULADORA */
-        .boost-section {
-            background-color: #12141c;
-            border: 1px solid #1f2430;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 50px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .boost-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .boost-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 6px;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 10px;
-            background-color: #1a1f2c;
-            border: 1px solid #2a3245;
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 0.9rem;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #38bdf8;
-        }
-
-        .boost-total {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #38bdf8;
-            margin-top: 20px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .btn-calcular {
-            width: 100%;
-            background-color: #38bdf8;
-            color: #0b0e14;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn-calcular:hover {
-            background-color: #0ea5e9;
-        }
-
-        /* PANEL ADMIN (FORMULARIO DE CARGA) */
+        /* PANEL ADMIN */
         .admin-box {
             background-color: #12141c;
             border: 1px solid #1f2430;
             border-radius: 12px;
             padding: 25px;
             max-width: 600px;
-            margin: 0 auto 50px auto;
+            margin: 0 auto;
         }
 
         .btn-subir {
@@ -290,114 +378,34 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s;
             margin-top: 10px;
         }
 
-        .btn-subir:hover {
-            background-color: #16a34a;
-        }
-
-        /* VENTANA MODAL DE PAGO / COMPRA */
+        /* MODAL DE PAGO */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
         }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-box {
-            background-color: #12141c;
-            border: 1px solid #2a3245;
-            border-radius: 12px;
-            padding: 25px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            position: relative;
+            background-color: #12141c; border: 1px solid #2a3245; border-radius: 12px;
+            padding: 25px; width: 100%; max-width: 450px; position: relative;
         }
-
-        .modal-box h3 {
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            color: #f8fafc;
-        }
-
         .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #94a3b8;
-            font-size: 1.2rem;
-            cursor: pointer;
+            position: absolute; top: 15px; right: 15px; background: none; border: none;
+            color: #94a3b8; font-size: 1.2rem; cursor: pointer;
         }
-
-        .modal-close:hover {
-            color: #ffffff;
-        }
-
-        .modal-info {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
         .payment-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
+            display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
         }
-
         .btn-pagar-paypal {
-            width: 100%;
-            background-color: #0070ba;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
+            background-color: #0070ba; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
         }
-
-        .btn-pagar-paypal:hover {
-            background-color: #005ea6;
-        }
-
         .btn-pagar-alias {
-            width: 100%;
-            background-color: #22c55e;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .btn-pagar-alias:hover {
-            background-color: #16a34a;
+            background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
         }
     </style>
 </head>
@@ -406,147 +414,154 @@
     <div class="container">
         <header>
             <h1>NEXUS <span>STORE</span></h1>
-            <p>Cuentas smurf verificadas y servicio profesional</p>
+            <p>Cuentas smurf verificadas y servicio profesional de Elo Boost</p>
         </header>
 
-        <!-- PESTAÑAS DE NAVEGACIÓN -->
+        <!-- NAVEGACIÓN PRINCIPAL -->
         <div class="tabs-nav">
             <button class="tab-btn active" data-target="seccion-cuentas">⚔️ Cuentas Disponibles</button>
-            <button class="tab-btn" data-target="seccion-boost">📊 Boost / Elo</button>
+            <button class="tab-btn" data-target="seccion-boost">📊 Boost Pro</button>
             <button class="tab-btn" data-target="seccion-admin" style="border-color: #22c55e; color: #22c55e;">⚙️ Panel Admin</button>
         </div>
 
-        <!-- SECCIÓN 1: CUENTAS -->
+        <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
         <div id="seccion-cuentas" class="tab-content active">
-            <h2 class="section-title">⚔️ Cuentas Disponibles</h2>
+            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #f3ba2f; padding-left: 10px;">Cuentas Verificadas</h2>
             <div id="grid-cuentas" class="grid-cuentas">
                 <p style="color: #94a3b8;">Cargando catálogo...</p>
             </div>
         </div>
 
-        <!-- SECCIÓN 2: ELO / CALCULADORA -->
+        <!-- SECCIÓN 2: BOOST PRO (ESTILO PLATAFORMA AVANZADA) -->
         <div id="seccion-boost" class="tab-content">
-            <div class="boost-section">
-                <h2 class="section-title" style="margin-bottom: 20px; border-left-color: #38bdf8;">Calculadora de Elo Boost</h2>
-                <div class="boost-grid">
-                    <div>
-                        <h3 style="font-size: 1rem; color: #38bdf8; margin-bottom: 12px;">Tu Situación Actual</h3>
-                        <div class="form-group">
-                            <label>Liga Actual</label>
-                            <select id="liga-actual">
-                                <option value="hierro">Hierro</option>
-                                <option value="bronce">Bronce</option>
-                                <option value="plata">Plata</option>
-                                <option value="oro">Oro</option>
-                                <option value="platino">Platino</option>
-                                <option value="esmeralda">Esmeralda</option>
-                                <option value="diamante">Diamante</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>División Actual</label>
-                            <select id="division-actual">
-                                <option value="4">División IV (0-25 LP)</option>
-                                <option value="3">División III (26-50 LP)</option>
-                                <option value="2">División II (51-75 LP)</option>
-                                <option value="1">División I (76-100 LP)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 style="font-size: 1rem; color: #38bdf8; margin-bottom: 12px;">Tu Objetivo</h3>
-                        <div class="form-group">
-                            <label>Liga Deseada</label>
-                            <select id="liga-deseada">
-                                <option value="hierro">Hierro</option>
-                                <option value="bronce">Bronce</option>
-                                <option value="plata">Plata</option>
-                                <option value="oro">Oro</option>
-                                <option value="platino">Platino</option>
-                                <option value="esmeralda" selected>Esmeralda</option>
-                                <option value="diamante">Diamante</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>División Deseada</label>
-                            <select id="division-deseada">
-                                <option value="4">División IV</option>
-                                <option value="3">División III</option>
-                                <option value="2">División II</option>
-                                <option value="1">División I</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="boost-total">Precio Estimado: <span id="precio-boost">USD $0</span></div>
-                <button class="btn-calcular" id="btn-contratar-boost">Contratar Servicio</button>
+            <!-- Submenú de Tipos de Boost -->
+            <div class="boost-types-nav">
+                <button class="boost-type-btn active">Impulso de rango</button>
+                <button class="boost-type-btn">Partidas de posicionamiento</button>
+                <button class="boost-type-btn">Victorias netas</button>
             </div>
-        </div>
 
-        <!-- SECCIÓN 3: PANEL ADMIN (SUBIR CUENTAS) -->
-        <div id="seccion-admin" class="tab-content">
-            <div class="admin-box">
-                <h2 class="section-title" style="margin-bottom: 15px; border-left-color: #22c55e;">Subir Nueva Cuenta</h2>
-                <form id="form-subir-cuenta">
-                    <div class="form-group">
-                        <label>Título de la Cuenta</label>
-                        <input type="text" id="admin-titulo" placeholder="Ej: Cuenta Smurf Lv 35 - Unranked" required>
+            <div class="boost-layout">
+                <!-- Columna 1: Rango Actual -->
+                <div class="boost-card">
+                    <div class="rank-header">
+                        <img id="img-actual" class="rank-emblem" src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/iron.png" alt="Rango Actual">
+                        <div class="rank-info">
+                            <span>Rango actual</span>
+                            <h3 id="txt-actual">Hierro IV</h3>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Servidor</label>
-                        <select id="admin-server">
-                            <option value="LAS">LAS</option>
-                            <option value="LAN">LAN</option>
-                            <option value="NA">NA</option>
-                            <option value="BR">BR</option>
+                        <label>Liga Actual</label>
+                        <select id="liga-actual">
+                            <option value="hierro">Hierro</option>
+                            <option value="bronce">Bronce</option>
+                            <option value="plata">Plata</option>
+                            <option value="oro">Oro</option>
+                            <option value="platino">Platino</option>
+                            <option value="esmeralda">Esmeralda</option>
+                            <option value="diamante">Diamante</option>
+                            <option value="master">Master</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Cantidad de Campeones</label>
-                        <input type="text" id="admin-campeones" placeholder="Ej: 20+" required>
+                        <label>División</label>
+                        <select id="division-actual">
+                            <option value="4">División IV</option>
+                            <option value="3">División III</option>
+                            <option value="2">División II</option>
+                            <option value="1">División I</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Rango Deseado -->
+                <div class="boost-card">
+                    <div class="rank-header">
+                        <img id="img-deseado" class="rank-emblem" src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/emerald.png" alt="Rango Deseado">
+                        <div class="rank-info">
+                            <span>Rango deseado</span>
+                            <h3 id="txt-deseado">Esmeralda IV</h3>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Rango Actual</label>
-                        <input type="text" id="admin-rango" placeholder="Ej: Unranked (MMR Alto)" required>
+                        <label>Liga Deseada</label>
+                        <select id="liga-deseada">
+                            <option value="hierro">Hierro</option>
+                            <option value="bronce">Bronce</option>
+                            <option value="plata">Plata</option>
+                            <option value="oro">Oro</option>
+                            <option value="platino">Platino</option>
+                            <option value="esmeralda" selected>Esmeralda</option>
+                            <option value="diamante">Diamante</option>
+                            <option value="master">Master</option>
+                            <option value="challenger">Challenger</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>Cantidad de EA (Esencia Azul)</label>
-                        <input type="text" id="admin-ea" placeholder="Ej: 45000" required>
+                        <label>División Deseada</label>
+                        <select id="division-deseada">
+                            <option value="4">División IV</option>
+                            <option value="3">División III</option>
+                            <option value="2">División II</option>
+                            <option value="1">División I</option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label>Precio en USD ($)</label>
-                        <input type="number" step="0.01" id="admin-precio" placeholder="Ej: 12.99" required>
+                </div>
+
+                <!-- Columna 3: Personalizar Pedido y Precio -->
+                <div class="boost-card">
+                    <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc;">PERSONALIZAR PEDIDO</h3>
+                    <div class="mode-selector">
+                        <div class="mode-btn active">Solo</div>
+                        <div class="mode-btn">Duo</div>
                     </div>
-                    <div class="form-group">
-                        <label>URL de la Imagen</label>
-                        <input type="url" id="admin-imagen" placeholder="https://i.imgur.com/tuimagen.jpg" required>
+                    <div class="options-group">
+                        <div class="toggle-option"><span>Transmisión en vivo</span> <input type="checkbox" style="width: auto;"></div>
+                        <div class="toggle-option"><span>Prioridad máxima</span> <input type="checkbox" style="width: auto;"></div>
                     </div>
-                    <button type="submit" class="btn-subir">🚀 Publicar Cuenta en la Tienda</button>
+                    <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
+                    <button class="btn-contratar" id="btn-contratar-boost">Obtener oferta</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: PANEL ADMIN -->
+        <div id="seccion-admin" class="tab-content">
+            <div class="admin-box">
+                <h2 style="font-size: 1.3rem; margin-bottom: 15px; color: #22c55e;">Subir Cuenta Nueva</h2>
+                <form id="form-subir-cuenta">
+                    <div class="form-group"><label>Título</label><input type="text" id="admin-titulo" required></div>
+                    <div class="form-group"><label>Servidor</label><select id="admin-server"><option value="LAS">LAS</option><option value="LAN">LAN</option><option value="NA">NA</option></select></div>
+                    <div class="form-group"><label>Campeones</label><input type="text" id="admin-campeones" required></div>
+                    <div class="form-group"><label>Rango Actual</label><input type="text" id="admin-rango" required></div>
+                    <div class="form-group"><label>EA (Esencia Azul)</label><input type="text" id="admin-ea" required></div>
+                    <div class="form-group"><label>Precio USD</label><input type="number" step="0.01" id="admin-precio" required></div>
+                    <div class="form-group"><label>URL de Imagen</label><input type="url" id="admin-imagen" required></div>
+                    <button type="submit" class="btn-subir">Publicar Cuenta</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- VENTANA MODAL DE PAGO -->
+    <!-- MODAL DE PAGO -->
     <div id="modal-pago" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-cerrar" class="modal-close">&times;</button>
-            <h3 id="modal-titulo">Finalizar Compra</h3>
-            <div id="modal-texto" class="modal-info"></div>
-            
+            <h3 id="modal-titulo" style="margin-bottom: 15px; color: #f8fafc;">Finalizar Pago</h3>
+            <div id="modal-texto" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px;"></div>
             <div class="form-group">
-                <label>Tu Correo Electrónico (para enviarte los datos)</label>
+                <label>Correo Electrónico</label>
                 <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com" required>
             </div>
-
             <div class="payment-options">
-                <button id="btn-pagar-paypal" class="btn-pagar-paypal">💳 Pagar con PayPal</button>
-                <button id="btn-pagar-alias" class="btn-pagar-alias">🏦 Pagar por Alias / Transferencia</button>
+                <button id="btn-pagar-paypal" class="btn-pagar-paypal">Pagar con PayPal</button>
+                <button id="btn-pagar-alias" class="btn-pagar-alias">Pagar por Alias / Transferencia</button>
             </div>
         </div>
     </div>
 
-    <!-- Script de Firebase y lógica de la tienda -->
+    <!-- SCRIPT DE LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -563,91 +578,150 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Lógica de Pestañas (Tabs)
+        // Pestañas (Tabs)
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 tabBtns.forEach(b => b.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
-
                 btn.classList.add('active');
-                const targetId = btn.getAttribute('data-target');
-                document.getElementById(targetId).classList.add('active');
+                document.getElementById(btn.getAttribute('data-target')).classList.add('active');
             });
         });
 
-        const gridCuentas = document.getElementById('grid-cuentas');
-        const modalPago = document.getElementById('modal-pago');
-        const modalCerrar = document.getElementById('modal-cerrar');
-        const modalTitulo = document.getElementById('modal-titulo');
-        const modalTexto = document.getElementById('modal-texto');
-        const btnPagarPaypal = document.getElementById('btn-pagar-paypal');
-        const btnPagarAlias = document.getElementById('btn-pagar-alias');
+        // Escudos oficiales de Community Dragon para cada rango
+        const rangosEmblemas = {
+            hierro: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/iron.png",
+            bronce: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/bronze.png",
+            plata: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/silver.png",
+            oro: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/gold.png",
+            platino: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/platinum.png",
+            esmeralda: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/emerald.png",
+            diamante: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/diamond.png",
+            master: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/master.png",
+            challenger: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/challenger.png"
+        };
 
+        // Lógica de cálculo de Elo y actualización de escudos
+        const ligaActual = document.getElementById('liga-actual');
+        const divActual = document.getElementById('division-actual');
+        const ligaDeseada = document.getElementById('liga-deseada');
+        const divDeseada = document.getElementById('division-deseada');
+        
+        const imgActual = document.getElementById('img-actual');
+        const txtActual = document.getElementById('txt-actual');
+        const imgDeseado = document.getElementById('img-deseado');
+        const txtDeseado = document.getElementById('txt-deseado');
+        const precioBoost = document.getElementById('precio-boost');
+
+        const valoresLigas = { hierro: 1, bronce: 2, plata: 3, oro: 4, platino: 5, esmeralda: 6, diamante: 7, master: 8, challenger: 9 };
+
+        function actualizarBoost() {
+            const lAct = ligaActual.value;
+            const dAct = divActual.value;
+            const lDes = ligaDeseada.value;
+            const dDes = divDeseada.value;
+
+            // Actualizar imágenes y textos dinámicos con escudos oficiales
+            imgActual.src = rangosEmblemas[lAct];
+            txtActual.textContent = `${lAct.charAt(0).toUpperCase() + lAct.slice(1)} Div. ${dAct}`;
+
+            imgDeseado.src = rangosEmblemas[lDes];
+            txtDeseado.textContent = `${lDes.charAt(0).toUpperCase() + lDes.slice(1)} Div. ${dDes}`;
+
+            // Cálculo matemático de precio
+            const scoreActual = (valoresLigas[lAct] * 4) + (5 - parseInt(dAct));
+            const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
+            const diff = scoreDeseado - scoreActual;
+
+            let precio = diff > 0 ? diff * 4.5 : 0;
+            precioBoost.textContent = precio.toFixed(2);
+            return precio;
+        }
+
+        [ligaActual, divActual, ligaDeseada, divDeseada].forEach(el => el.addEventListener('change', actualizarBoost));
+        actualizarBoost();
+
+        // Modal y pasarela de pago
+        const modalPago = document.getElementById('modal-pago');
+        const modalTexto = document.getElementById('modal-texto');
         let itemSeleccionado = null;
 
-        // Cargar Catálogo desde Firebase
+        document.getElementById('btn-contratar-boost').addEventListener('click', () => {
+            const precio = actualizarBoost();
+            if (precio <= 0) {
+                alert("El rango deseado debe ser mayor al actual.");
+                return;
+            }
+            itemSeleccionado = {
+                titulo: `Boost de ${ligaActual.value} a ${ligaDeseada.value}`,
+                precio: precio.toFixed(2)
+            };
+            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total: <b style="color: #f3ba2f;">USD $${itemSeleccionado.precio}</b>`;
+            modalPago.classList.add('active');
+        });
+
+        document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
+
+        document.getElementById('btn-pagar-paypal').addEventListener('click', () => {
+            const email = document.getElementById('email-cliente').value;
+            if(!email) { alert("Ingresa tu correo"); return; }
+            alert(`Redirigiendo a PayPal para ${itemSeleccionado.titulo} (USD $${itemSeleccionado.precio})`);
+            modalPago.classList.remove('active');
+        });
+
+        document.getElementById('btn-pagar-alias').addEventListener('click', () => {
+            const email = document.getElementById('email-cliente').value;
+            if(!email) { alert("Ingresa tu correo"); return; }
+            alert(`Datos de transferencia enviados a ${email}`);
+            modalPago.classList.remove('active');
+        });
+
+        // Cargar catálogo de cuentas de Firebase
         async function cargarCatalogo() {
+            const grid = document.getElementById('grid-cuentas');
             try {
-                const querySnapshot = await getDocs(collection(db, "skin"));
-                gridCuentas.innerHTML = "";
-
-                if (querySnapshot.empty) {
-                    gridCuentas.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas cargadas por el momento.</p>";
-                    return;
-                }
-
-                querySnapshot.forEach((docSnap) => {
-                    const c = docSnap.data();
+                const snapshot = await getDocs(collection(db, "skin"));
+                grid.innerHTML = "";
+                if(snapshot.empty) { grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas cargadas.</p>"; return; }
+                
+                snapshot.forEach(doc => {
+                    const c = doc.data();
                     const card = document.createElement('div');
                     card.className = 'cuenta-card';
                     card.innerHTML = `
-                        <img src="${c.imageUrl || 'https://via.placeholder.com/300x160'}" class="cuenta-img" alt="Cuenta">
+                        <img src="${c.imageUrl}" class="cuenta-img" alt="Cuenta">
                         <div class="cuenta-body">
                             <div>
-                                <span class="cuenta-server">${c.server || 'LAS'}</span>
-                                <h3 class="cuenta-titulo">${c.title || 'Cuenta Smurf'}</h3>
+                                <span class="cuenta-server">${c.server}</span>
+                                <h3 class="cuenta-titulo">${c.title}</h3>
                                 <div class="cuenta-detalles-info">
-                                    <span>⚔️ Campeones: ${c.championCount || 'N/A'}</span>
-                                    <span>🏆 Rango: ${c.currentRank || 'Unranked'}</span>
-                                    <span>💎 EA: ${c.riotPoints || '0'}</span>
+                                    <span>⚔️ Campeones: ${c.championCount}</span>
+                                    <span>🏆 Rango: ${c.currentRank}</span>
+                                    <span>💎 EA: ${c.riotPoints}</span>
                                 </div>
                             </div>
                             <div class="cuenta-footer">
-                                <span class="cuenta-precio">USD $${c.price || '0'}</span>
+                                <span class="cuenta-precio">USD $${c.price}</span>
                                 <button class="btn-comprar">Comprar</button>
                             </div>
                         </div>
                     `;
-
                     card.addEventListener('click', () => {
-                        itemSeleccionado = {
-                            tipo: 'cuenta',
-                            titulo: c.title,
-                            precio: c.price
-                        };
-                        modalTitulo.textContent = "🛒 Comprar Cuenta";
-                        modalTexto.innerHTML = `Estás a un paso de adquirir: <b>${c.title}</b>.<br>Precio final: <b style="color: #f3ba2f;">USD $${c.price}</b>`;
+                        itemSeleccionado = { titulo: c.title, precio: c.price };
+                        modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #f3ba2f;">USD $${c.price}</b>`;
                         modalPago.classList.add('active');
                     });
-
-                    gridCuentas.appendChild(card);
+                    grid.appendChild(card);
                 });
-
-            } catch (error) {
-                console.error(error);
-                gridCuentas.innerHTML = "<p style='color: #ef4444;'>Error al cargar las cuentas desde la base de datos.</p>";
-            }
+            } catch(e) { console.error(e); }
         }
 
-        // Subir Nueva Cuenta a Firebase
-        const formSubirCuenta = document.getElementById('form-subir-cuenta');
-        formSubirCuenta.addEventListener('submit', async (e) => {
+        // Subir cuenta admin
+        document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            const nuevaCuenta = {
+            const nueva = {
                 title: document.getElementById('admin-titulo').value,
                 server: document.getElementById('admin-server').value,
                 championCount: document.getElementById('admin-campeones').value,
@@ -656,97 +730,10 @@
                 price: parseFloat(document.getElementById('admin-precio').value),
                 imageUrl: document.getElementById('admin-imagen').value
             };
-
-            try {
-                await addDoc(collection(db, "skin"), nuevaCuenta);
-                alert("¡Cuenta publicada con éxito en la tienda!");
-                formSubirCuenta.reset();
-                cargarCatalogo();
-                document.querySelector('[data-target="seccion-cuentas"]').click();
-            } catch (error) {
-                console.error("Error al subir la cuenta:", error);
-                alert("Hubo un error al subir la cuenta a Firebase.");
-            }
-        });
-
-        // Lógica de cálculo de elos en dólares
-        const selectLigaActual = document.getElementById('liga-actual');
-        const selectDivActual = document.getElementById('division-actual');
-        const selectLigaDeseada = document.getElementById('liga-deseada');
-        const selectDivDeseada = document.getElementById('division-deseada');
-        const spanPrecioBoost = document.getElementById('precio-boost');
-        const btnContratarBoost = document.getElementById('btn-contratar-boost');
-
-        const valoresLigas = { hierro: 1, bronce: 2, plata: 3, oro: 4, platino: 5, esmeralda: 6, diamante: 7 };
-
-        function calcularElo() {
-            const lAct = valoresLigas[selectLigaActual.value];
-            const dAct = parseInt(selectDivActual.value);
-            const lDes = valoresLigas[selectLigaDeseada.value];
-            const dDes = parseInt(selectDivDeseada.value);
-
-            const scoreActual = (lAct * 4) + (5 - dAct);
-            const scoreDeseado = (lDes * 4) + (5 - dDes);
-            const diff = scoreDeseado - scoreActual;
-
-            let precio = diff > 0 ? diff * 3.5 : 0;
-            spanPrecioBoost.textContent = `USD $${precio.toFixed(2)}`;
-            return precio;
-        }
-
-        [selectLigaActual, selectDivActual, selectLigaDeseada, selectDivDeseada].forEach(sel => {
-            sel.addEventListener('change', calcularElo);
-        });
-
-        calcularElo();
-
-        btnContratarBoost.addEventListener('click', () => {
-            const precio = calcularElo();
-            if (precio <= 0) {
-                alert("El elo deseado debe ser mayor al actual.");
-                return;
-            }
-            itemSeleccionado = {
-                tipo: 'elo',
-                titulo: `Subida de Elo de ${selectLigaActual.value} (Div. ${selectDivActual.value}) a ${selectLigaDeseada.value} (Div. ${selectDivDeseada.value})`,
-                precio: precio.toFixed(2)
-            };
-            modalTitulo.textContent = "📊 Contratar Servicio de Elos";
-            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b>.<br>Total a abonar: <b style="color: #38bdf8;">USD $${itemSeleccionado.precio}</b>`;
-            modalPago.classList.add('active');
-        });
-
-        // Cerrar Modal
-        modalCerrar.addEventListener('click', () => {
-            modalPago.classList.remove('active');
-        });
-
-        modalPago.addEventListener('click', (e) => {
-            if (e.target === modalPago) {
-                modalPago.classList.remove('active');
-            }
-        });
-
-        // Botón Pago PayPal
-        btnPagarPaypal.addEventListener('click', () => {
-            const email = document.getElementById('email-cliente').value;
-            if (!email) {
-                alert("Por favor ingresa tu correo electrónico.");
-                return;
-            }
-            alert(`Redirigiendo a PayPal para ${itemSeleccionado.titulo} (USD $${itemSeleccionado.precio}) - Correo: ${email}`);
-            modalPago.classList.remove('active');
-        });
-
-        // Botón Pago Alias / Transferencia
-        btnPagarAlias.addEventListener('click', () => {
-            const email = document.getElementById('email-cliente').value;
-            if (!email) {
-                alert("Por favor ingresa tu correo electrónico.");
-                return;
-            }
-            alert(`Instrucciones de pago por Alias/Transferencia para ${itemSeleccionado.titulo} (USD $${itemSeleccionado.precio}) enviadas a: ${email}`);
-            modalPago.classList.remove('active');
+            await addDoc(collection(db, "skin"), nueva);
+            alert("¡Cuenta publicada!");
+            e.target.reset();
+            cargarCatalogo();
         });
 
         cargarCatalogo();
