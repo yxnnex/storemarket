@@ -27,13 +27,13 @@
             margin: 0 auto;
         }
 
-        /* HEADER PROFESIONAL: TÍTULO A LA IZQUIERDA, PESTAÑAS A LA DERECHA */
+        /* HEADER PROFESIONAL: TÍTULO A LA IZQUIERDA, PESTAÑAS ESTILO DROPDOWN A LA DERECHA */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 25px;
-            background: rgba(18, 20, 28, 0.65);
+            background: rgba(18, 20, 28, 0.55);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -59,12 +59,12 @@
             font-size: 0.85rem;
         }
 
-        /* PESTAÑAS SUPERIORES ESTILIZADAS */
+        /* PESTAÑAS SUPERIORES ESTILIZADAS CON FLECHITA */
         .tabs-nav {
             display: flex;
-            gap: 8px;
-            background: rgba(11, 14, 20, 0.5);
-            padding: 6px;
+            gap: 6px;
+            background: rgba(11, 14, 20, 0.6);
+            padding: 5px;
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
@@ -73,12 +73,21 @@
             background: transparent;
             border: none;
             color: #94a3b8;
-            padding: 8px 18px;
+            padding: 8px 16px;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn::after {
+            content: "⌄";
+            font-size: 0.9rem;
+            color: #64748b;
         }
 
         .tab-btn:hover {
@@ -90,6 +99,10 @@
             background-color: #f3ba2f;
             color: #0b0e14;
             box-shadow: 0 0 15px rgba(243, 186, 47, 0.3);
+        }
+
+        .tab-btn.active::after {
+            color: #0b0e14;
         }
 
         .tab-content {
@@ -416,38 +429,6 @@
             background-color: #e0a822;
         }
 
-        /* PANEL ADMIN ESTILO GLASS */
-        .admin-box {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 28px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .btn-subir {
-            width: 100%;
-            background-color: #22c55e;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
-            transition: background-color 0.2s;
-        }
-
-        .btn-subir:hover {
-            background-color: #16a34a;
-        }
-
         /* MODAL DE PAGO ESTILO GLASS */
         .modal-overlay {
             position: fixed;
@@ -491,7 +472,7 @@
 <body>
 
     <div class="container">
-        <!-- HEADER -->
+        <!-- HEADER CON PESTAÑAS DROPDOWN -->
         <header>
             <div class="logo-area">
                 <h1>NEXUS <span>STORE</span></h1>
@@ -500,7 +481,6 @@
             <nav class="tabs-nav">
                 <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
                 <button class="tab-btn" data-target="seccion-boost">Boost Pro</button>
-                <button class="tab-btn" data-target="seccion-admin">Panel Admin</button>
             </nav>
         </header>
 
@@ -624,23 +604,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- SECCIÓN 3: PANEL ADMIN -->
-        <div id="seccion-admin" class="tab-content">
-            <div class="admin-box">
-                <h2 style="font-size: 1.3rem; margin-bottom: 15px; color: #22c55e;">Subir Cuenta Nueva</h2>
-                <form id="form-subir-cuenta">
-                    <div class="form-group"><label>Título</label><input type="text" id="admin-titulo" required></div>
-                    <div class="form-group"><label>Servidor</label><select id="admin-server"><option value="LAS">LAS</option><option value="LAN">LAN</option><option value="NA">NA</option></select></div>
-                    <div class="form-group"><label>Campeones</label><input type="text" id="admin-campeones" required></div>
-                    <div class="form-group"><label>Rango Actual</label><input type="text" id="admin-rango" required></div>
-                    <div class="form-group"><label>EA (Esencia Azul)</label><input type="text" id="admin-ea" required></div>
-                    <div class="form-group"><label>Precio USD</label><input type="number" step="0.01" id="admin-precio" required></div>
-                    <div class="form-group"><label>URL de Imagen</label><input type="url" id="admin-imagen" required></div>
-                    <button type="submit" class="btn-subir">Publicar Cuenta</button>
-                </form>
-            </div>
-        </div>
     </div>
 
     <!-- MODAL DE PAGO -->
@@ -663,7 +626,7 @@
     <!-- SCRIPT DE LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
@@ -744,14 +707,21 @@
             const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
             const diff = scoreDeseado - scoreActual;
 
-            let precio = diff > 0 ? diff * 4.5 : 0;
+            // ==========================================
+            // CONFIGURACIÓN DE PRECIOS DEL BOOST
+            // ==========================================
+            let tarifaPorDivision = 4.5; // Modificá este número para ajustar el precio base por división
+            let precio = diff > 0 ? diff * tarifaPorDivision : 0;
             
+            // Incremento por Duo Q (ej: 30% más)
             if (modoSeleccionado === 'duo') {
                 precio *= 1.3;
             }
 
-            if (document.getElementById('chk-streaming').checked) precio += 5;
-            if (document.getElementById('chk-offline').checked) precio += 3;
+            // Costos adicionales por extras
+            if (document.getElementById('chk-streaming').checked) precio += 5; // Transmisión en vivo (+5 USD)
+            if (document.getElementById('chk-offline').checked) precio += 3;    // Modo Offline (+3 USD)
+            // ==========================================
 
             precioBoost.textContent = precio.toFixed(2);
             return precio;
@@ -798,6 +768,7 @@
             modalPago.classList.remove('active');
         });
 
+        // Cargar catálogo de cuentas
         async function cargarCatalogo() {
             const grid = document.getElementById('grid-cuentas');
             try {
@@ -836,23 +807,6 @@
                 });
             } catch(e) { console.error(e); }
         }
-
-        document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nueva = {
-                title: document.getElementById('admin-titulo').value,
-                server: document.getElementById('admin-server').value,
-                championCount: document.getElementById('admin-campeones').value,
-                currentRank: document.getElementById('admin-rango').value,
-                riotPoints: document.getElementById('admin-ea').value,
-                price: parseFloat(document.getElementById('admin-precio').value),
-                imageUrl: document.getElementById('admin-imagen').value
-            };
-            await addDoc(collection(db, "skin"), nueva);
-            alert("¡Cuenta publicada!");
-            e.target.reset();
-            cargarCatalogo();
-        });
 
         cargarCatalogo();
     </script>
