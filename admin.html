@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Panel Protegido</title>
+    <title>Nexus Store - Panel Admin Pro</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,266 +13,166 @@
         }
 
         body {
-            background-color: #0b0e14;
+            background-color: #07090e;
             color: #ffffff;
-            padding: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 20px;
             min-height: 100vh;
         }
 
-        .admin-container {
-            background-color: #12141c;
-            border: 1px solid #1f2430;
-            border-radius: 12px;
-            padding: 30px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        h2 {
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            margin-bottom: 30px;
+        }
+
+        h1 span { color: #f3ba2f; }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-grid { grid-template-columns: 1fr; }
+        }
+
+        .admin-box {
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .admin-box h2 {
+            font-size: 1.2rem;
             margin-bottom: 20px;
-            font-size: 1.5rem;
-            color: #f8fafc;
-            text-align: center;
-        }
-
-        h2 span {
-            color: #f3ba2f;
+            color: #22c55e;
+            border-left: 4px solid #22c55e;
+            padding-left: 10px;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #94a3b8;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
-        input, select {
+        select, input {
             width: 100%;
-            padding: 12px;
-            background-color: #1a1f2c;
-            border: 1px solid #2a3245;
+            padding: 10px;
+            background: rgba(11, 14, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             color: #ffffff;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
 
-        input:focus, select:focus {
+        select:focus, input:focus {
             outline: none;
             border-color: #f3ba2f;
         }
 
-        button {
+        .btn-subir {
             width: 100%;
-            padding: 12px;
-            background-color: #f3ba2f;
-            color: #0b0e14;
+            background-color: #22c55e;
+            color: white;
             border: none;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 1rem;
             font-weight: bold;
+            font-size: 0.95rem;
             cursor: pointer;
             margin-top: 10px;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s;
         }
 
-        button:hover {
-            background-color: #e0a822;
-        }
+        .btn-subir:hover { background-color: #16a34a; }
 
-        .btn-secundario {
-            background-color: #334155;
-            color: #ffffff;
-            margin-top: 5px;
-        }
-        .btn-secundario:hover {
-            background-color: #475569;
-        }
-
-        .mensaje {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .user-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        .btn-volver {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
             font-size: 0.85rem;
-            color: #94a3b8;
-            border-bottom: 1px solid #1f2430;
-            padding-bottom: 10px;
+            font-weight: bold;
         }
-
-        .btn-logout {
-            background-color: #ef4444;
-            color: white;
-            width: auto;
-            padding: 6px 12px;
-            margin: 0;
-            font-size: 0.8rem;
-        }
-        .btn-logout:hover {
-            background-color: #dc2626;
-        }
-
-        .lista-admin {
-            margin-top: 30px;
-            border-top: 1px solid #1f2430;
-            padding-top: 20px;
-        }
-
-        .item-cuenta-admin {
-            background-color: #1a1f2c;
-            border: 1px solid #2a3245;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .item-info h4 {
-            font-size: 0.95rem;
-            color: #f8fafc;
-            margin-bottom: 4px;
-        }
-
-        .item-info p {
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-
-        .item-acciones {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-accion {
-            padding: 6px 10px;
-            font-size: 0.75rem;
-            width: auto;
-            margin: 0;
-        }
-
-        .btn-editar {
-            background-color: #38bdf8;
-            color: #0b0e14;
-        }
-
-        .btn-eliminar {
-            background-color: #ef4444;
-            color: white;
-        }
+        .btn-volver:hover { background: rgba(255, 255, 255, 0.15); }
     </style>
 </head>
 <body>
 
-    <div class="admin-container">
-        <!-- SECCIÓN DE LOGIN -->
-        <div id="seccion-login">
-            <h2>🔐 ACCESO <span>ADMIN</span></h2>
-            <form id="form-login">
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" id="login-email" placeholder="tu-correo@admin.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="login-password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" id="btn-login">Ingresar al Panel</button>
-            </form>
-            <div id="mensaje-login" class="mensaje" style="color: #ef4444;"></div>
-        </div>
+    <div class="container">
+        <header>
+            <h1>NEXUS <span>ADMIN</span></h1>
+            <a href="index.html" class="btn-volver">Ver Tienda ➔</a>
+        </header>
 
-        <!-- SECCIÓN DEL PANEL -->
-        <div id="seccion-panel" class="hidden">
-            <div class="user-info">
-                <span id="user-email-display"></span>
-                <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
+        <div class="admin-grid">
+            <!-- CAJA 1: SUBIR CUENTA -->
+            <div class="admin-box">
+                <h2>Publicar Cuenta</h2>
+                <form id="form-subir-cuenta">
+                    <div class="form-group"><label>Título</label><input type="text" id="admin-titulo" required></div>
+                    <div class="form-group"><label>Servidor</label><select id="admin-server"><option value="LAS">LAS</option><option value="LAN">LAN</option><option value="NA">NA</option></select></div>
+                    <div class="form-group"><label>Campeones</label><input type="text" id="admin-campeones" required></div>
+                    <div class="form-group"><label>Rango Actual</label><input type="text" id="admin-rango" required></div>
+                    <div class="form-group"><label>EA (Esencia Azul)</label><input type="text" id="admin-ea" required></div>
+                    <div class="form-group"><label>Precio USD</label><input type="number" step="0.01" id="admin-precio" required></div>
+                    <div class="form-group"><label>URL de Imagen</label><input type="url" id="admin-imagen" required></div>
+                    <button type="submit" class="btn-subir">Publicar Cuenta</button>
+                </form>
             </div>
 
-            <h2 id="titulo-modo">⚡ GESTIONAR <span>CUENTA</span></h2>
-            
-            <form id="form-cuenta">
-                <input type="hidden" id="cuenta-id">
-                <input type="hidden" id="imageUrl-actual">
-
-                <div class="form-group">
-                    <label>Servidor</label>
-                    <select id="server" required>
-                        <option value="LAS">LAS (Latinoamérica Sur)</option>
-                        <option value="LAN">LAN (Latinoamérica Norte)</option>
-                        <option value="NA">NA (North America)</option>
-                        <option value="EUW">EUW (Europe West)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Imagen de la Cuenta (Sube un archivo desde tu PC)</label>
-                    <input type="file" id="imageFile" accept="image/*">
-                </div>
-
-                <div class="form-group">
-                    <label>Cantidad de Campeones</label>
-                    <input type="text" id="championCount" placeholder="Ej: 30 campeones" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Rango Actual</label>
-                    <input type="text" id="currentRank" placeholder="Ej: Platino IV / Unranked" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Esencia Azul (EA)</label>
-                    <input type="text" id="riotPoints" placeholder="Ej: 20000 EA" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Título de la Cuenta</label>
-                    <input type="text" id="title" placeholder="Ej: Cuenta Smurf Nivel 30 - Yone Main" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Precio en USD (Ej: 15.50)</label>
-                    <input type="number" step="0.01" id="price" placeholder="Ej: 15" required>
-                </div>
-
-                <button type="submit" id="btn-publicar">Publicar Cuenta Nueva</button>
-                <button type="button" id="btn-cancelar-edicion" class="btn-secundario hidden">Cancelar Edición</button>
-            </form>
-
-            <div id="mensaje-estado" class="mensaje"></div>
-
-            <div class="lista-admin">
-                <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #f8fafc;">📋 Cuentas Existentes (Editar / Borrar)</h3>
-                <div id="contenedor-cuentas-admin">
-                    <p style="color: #94a3b8; font-size: 0.85rem;">Cargando listado...</p>
-                </div>
+            <!-- CAJA 2: CONFIGURAR PRECIOS DE BOOST -->
+            <div class="admin-box">
+                <h2>Tarifas de Boost Pro</h2>
+                <form id="form-guardar-tarifas">
+                    <div class="form-group">
+                        <label>Tarifa Base por División (Hierro a Oro)</label>
+                        <input type="number" step="0.5" id="tarifa-baja" value="4.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tarifa Base por División (Platino a Esmeralda)</label>
+                        <input type="number" step="0.5" id="tarifa-media" value="6.50" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tarifa Base por División (Diamante a Maestro+)</label>
+                        <input type="number" step="0.5" id="tarifa-alta" value="12.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Recargo por LP Bajo (17-19 LP)</label>
+                        <input type="number" step="0.05" id="recargo-lp" value="1.20" required>
+                    </div>
+                    <button type="submit" class="btn-subir" style="background-color: #f3ba2f; color: #0b0e14;">Guardar Tarifas</button>
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- SCRIPT DE LÓGICA ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
@@ -285,204 +185,45 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
-        const auth = getAuth(app);
 
-        const seccionLogin = document.getElementById('seccion-login');
-        const seccionPanel = document.getElementById('seccion-panel');
-        const formLogin = document.getElementById('form-login');
-        const mensajeLogin = document.getElementById('mensaje-login');
-        const userEmailDisplay = document.getElementById('user-email-display');
-        const btnLogout = document.getElementById('btn-logout');
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                seccionLogin.classList.add('hidden');
-                seccionPanel.classList.remove('hidden');
-                userEmailDisplay.textContent = `Admin: ${user.email}`;
-                cargarCuentasAdmin();
-            } else {
-                seccionPanel.classList.add('hidden');
-                seccionLogin.classList.remove('hidden');
-            }
-        });
-
-        formLogin.addEventListener('submit', async (e) => {
+        // Subir cuenta nueva
+        document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            mensajeLogin.textContent = "";
-
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                console.error(error);
-                mensajeLogin.textContent = "Credenciales incorrectas o usuario no registrado.";
-            }
-        });
-
-        btnLogout.addEventListener('click', async () => {
-            await signOut(auth);
-        });
-
-        const formCuenta = document.getElementById('form-cuenta');
-        const mensajeEstado = document.getElementById('mensaje-estado');
-        const cuentaIdInput = document.getElementById('cuenta-id');
-        const imageUrlActual = document.getElementById('imageUrl-actual');
-        const btnPublicar = document.getElementById('btn-publicar');
-        const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion');
-        const tituloModo = document.getElementById('titulo-modo');
-        const contenedorCuentasAdmin = document.getElementById('contenedor-cuentas-admin');
-
-        async function cargarCuentasAdmin() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "skin"));
-                contenedorCuentasAdmin.innerHTML = "";
-
-                if (querySnapshot.empty) {
-                    contenedorCuentasAdmin.innerHTML = "<p style='color: #94a3b8; font-size: 0.85rem;'>No hay cuentas cargadas.</p>";
-                    return;
-                }
-
-                querySnapshot.forEach((docSnap) => {
-                    const c = docSnap.data();
-                    const id = docSnap.id;
-
-                    const div = document.createElement('div');
-                    div.className = 'item-cuenta-admin';
-                    div.innerHTML = `
-                        <div class="item-info">
-                            <h4>${c.title || 'Sin título'}</h4>
-                            <p>${c.server} | EA: ${c.riotPoints || '0'} | USD $${c.price}</p>
-                        </div>
-                        <div class="item-acciones">
-                            <button type="button" class="btn-accion btn-editar" data-id="${id}">Editar</button>
-                            <button type="button" class="btn-accion btn-eliminar" data-id="${id}">Borrar</button>
-                        </div>
-                    `;
-                    contenedorCuentasAdmin.appendChild(div);
-                });
-
-                document.querySelectorAll('.btn-editar').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.target.getAttribute('data-id');
-                        const querySnapshot = await getDocs(collection(db, "skin"));
-                        querySnapshot.forEach((docSnap) => {
-                            if (docSnap.id === id) {
-                                const c = docSnap.data();
-                                cuentaIdInput.value = id;
-                                imageUrlActual.value = c.imageUrl || '';
-                                document.getElementById('server').value = c.server || 'LAS';
-                                document.getElementById('championCount').value = c.championCount || '';
-                                document.getElementById('currentRank').value = c.currentRank || '';
-                                document.getElementById('riotPoints').value = c.riotPoints || '';
-                                document.getElementById('title').value = c.title || '';
-                                document.getElementById('price').value = c.price || '';
-
-                                btnPublicar.textContent = "Guardar Cambios";
-                                tituloModo.innerHTML = "✏️ EDITAR <span>CUENTA</span>";
-                                btnCancelarEdicion.classList.remove('hidden');
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }
-                        });
-                    });
-                });
-
-                document.querySelectorAll('.btn-eliminar').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.target.getAttribute('data-id');
-                        if (confirm("¿Estás segura de que querés eliminar esta cuenta?")) {
-                            try {
-                                await deleteDoc(doc(db, "skin", id));
-                                cargarCuentasAdmin();
-                                mensajeEstado.style.color = "#38bdf8";
-                                mensajeEstado.textContent = "Cuenta eliminada correctamente.";
-                            } catch (err) {
-                                console.error(err);
-                                alert("Error al eliminar la cuenta.");
-                            }
-                        }
-                    });
-                });
-
-            } catch (error) {
-                console.error(error);
-                contenedorCuentasAdmin.innerHTML = "<p style='color: #ef4444; font-size: 0.85rem;'>Error al cargar el listado.</p>";
-            }
-        }
-
-        btnCancelarEdicion.addEventListener('click', () => {
-            formCuenta.reset();
-            cuentaIdInput.value = "";
-            imageUrlActual.value = "";
-            btnPublicar.textContent = "Publicar Cuenta Nueva";
-            tituloModo.innerHTML = "⚡ GESTIONAR <span>CUENTA</span>";
-            btnCancelarEdicion.classList.add('hidden');
-            mensajeEstado.textContent = "";
-        });
-
-        formCuenta.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            btnPublicar.disabled = true;
-            btnPublicar.textContent = "Subiendo imagen y guardando...";
-
-            const idEdicion = cuentaIdInput.value;
-            const imageFile = document.getElementById('imageFile').files[0];
-            let imageUrl = imageUrlActual.value;
-
-            try {
-                // Si seleccionó un archivo nuevo, lo subimos a Firebase Storage
-                if (imageFile) {
-                    const storageRef = ref(storage, `cuentas/${Date.now()}_${imageFile.name}`);
-                    const snapshot = await uploadBytes(storageRef, imageFile);
-                    imageUrl = await getDownloadURL(snapshot.ref);
-                } else if (!idEdicion && !imageFile) {
-                    alert("Por favor selecciona una imagen para la cuenta.");
-                    btnPublicar.disabled = false;
-                    btnPublicar.textContent = "Publicar Cuenta Nueva";
-                    return;
-                }
-
-                const datosCuenta = {
-                    server: document.getElementById('server').value,
-                    imageUrl: imageUrl,
-                    championCount: document.getElementById('championCount').value,
-                    currentRank: document.getElementById('currentRank').value,
-                    riotPoints: document.getElementById('riotPoints').value, // Aquí se guarda la Esencia Azul (EA)
-                    title: document.getElementById('title').value,
-                    price: document.getElementById('price').value
+                const nueva = {
+                    title: document.getElementById('admin-titulo').value,
+                    server: document.getElementById('admin-server').value,
+                    championCount: document.getElementById('admin-campeones').value,
+                    currentRank: document.getElementById('admin-rango').value,
+                    riotPoints: document.getElementById('admin-ea').value,
+                    price: parseFloat(document.getElementById('admin-precio').value),
+                    imageUrl: document.getElementById('admin-imagen').value
                 };
+                await addDoc(collection(db, "skin"), nueva);
+                alert("¡Cuenta publicada con éxito!");
+                e.target.reset();
+            } catch (err) {
+                console.error(err);
+                alert("Error al publicar la cuenta.");
+            }
+        });
 
-                if (idEdicion) {
-                    const cuentaRef = doc(db, "skin", idEdicion);
-                    await updateDoc(cuentaRef, datosCuenta);
-                    mensajeEstado.style.color = "#38bdf8";
-                    mensajeEstado.textContent = "¡Cuenta actualizada con éxito!";
-                } else {
-                    await addDoc(collection(db, "skin"), datosCuenta);
-                    mensajeEstado.style.color = "#38bdf8";
-                    mensajeEstado.textContent = "¡Cuenta publicada con éxito en la tienda!";
-                }
-
-                formCuenta.reset();
-                cuentaIdInput.value = "";
-                imageUrlActual.value = "";
-                btnPublicar.textContent = "Publicar Cuenta Nueva";
-                tituloModo.innerHTML = "⚡ GESTIONAR <span>CUENTA</span>";
-                btnCancelarEdicion.classList.add('hidden');
-                cargarCuentasAdmin();
-
-            } catch (error) {
-                console.error("Error al guardar: ", error);
-                mensajeEstado.style.color = "#ef4444";
-                mensajeEstado.textContent = "Error: No tenés permisos, falta configurar Storage o falló la conexión.";
-            } finally {
-                btnPublicar.disabled = false;
-                if (!cuentaIdInput.value) {
-                    btnPublicar.textContent = "Publicar Cuenta Nueva";
-                } else {
-                    btnPublicar.textContent = "Guardar Cambios";
-                }
+        // Guardar tarifas de boost en Firebase
+        document.getElementById('form-guardar-tarifas').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const tarifas = {
+                    baja: parseFloat(document.getElementById('tarifa-baja').value),
+                    media: parseFloat(document.getElementById('tarifa-media').value),
+                    alta: parseFloat(document.getElementById('tarifa-alta').value),
+                    multiplicadorLpBajo: parseFloat(document.getElementById('recargo-lp').value)
+                };
+                // Guardamos la configuración en un documento fijo llamado "configuracion/tarifasBoost"
+                await setDoc(doc(db, "configuracion", "tarifasBoost"), tarifas);
+                alert("¡Tarifas de Boost actualizadas correctamente!");
+            } catch (err) {
+                console.error(err);
+                alert("Error al guardar las tarifas.");
             }
         });
     </script>
