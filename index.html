@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Cuentas y Boosting</title>
+    <title>Nexus Store - Cuentas y Elos</title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,9 +20,9 @@
 
         header {
             text-align: center;
-            padding: 30px 0;
+            padding: 30px 0 20px 0;
             border-bottom: 1px solid #1f2430;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         header h1 {
@@ -43,6 +43,46 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        /* SISTEMA DE PESTAÑAS (TABS) */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            background-color: #12141c;
+            border: 1px solid #1f2430;
+            color: #94a3b8;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: #f3ba2f;
+            color: #ffffff;
+        }
+
+        .tab-btn.active {
+            background-color: #f3ba2f;
+            color: #0b0e14;
+            border-color: #f3ba2f;
+        }
+
+        /* CONTENEDORES DE LAS SECCIONES */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .section-title {
@@ -153,7 +193,7 @@
             background-color: #e0a822;
         }
 
-        /* SECCIÓN BOOSTING */
+        /* SECCIÓN DE ELO / CALCULADORA */
         .boost-section {
             background-color: #12141c;
             border: 1px solid #1f2430;
@@ -206,6 +246,24 @@
             color: #f3ba2f;
             margin-top: 15px;
             margin-bottom: 15px;
+        }
+
+        .btn-calcular {
+            width: 100%;
+            background-color: #f3ba2f;
+            color: #0b0e14;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-calcular:hover {
+            background-color: #e0a822;
         }
 
         /* VENTANA MODAL DE PAGO / COMPRA */
@@ -292,69 +350,79 @@
     <div class="container">
         <header>
             <h1>NEXUS <span>STORE</span></h1>
-            <p>Cuentas smurf verificadas y servicio de Cooaching / Boosting profesional</p>
+            <p>Cuentas smurf verificadas y servicio profesional</p>
         </header>
 
-        <!-- SECCIÓN DE CUENTAS -->
-        <h2 class="section-title">⚔️ Cuentas Disponibles</h2>
-        <div id="grid-cuentas" class="grid-cuentas">
-            <!-- Se cargan dinámicamente desde Firebase -->
-            <p style="color: #94a3b8;">Cargando catálogo...</p>
+        <!-- PESTAÑAS DE NAVEGACIÓN -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" data-target="seccion-cuentas">⚔️ Cuentas Disponibles</button>
+            <button class="tab-btn" data-target="seccion-boost">📊 Calculadora de Elos</button>
         </div>
 
-        <!-- SECCIÓN DE BOOSTING / ELO -->
-        <div class="boost-section">
-            <h2 class="section-title" style="margin-bottom: 15px; border-left-color: #38bdf8;">📈 Calculadora de Boosting</h2>
-            <div class="boost-grid">
-                <div>
-                    <div class="form-group">
-                        <label>Liga Actual</label>
-                        <select id="liga-actual">
-                            <option value="hierro">Hierro</option>
-                            <option value="bronce">Bronce</option>
-                            <option value="plata">Plata</option>
-                            <option value="oro">Oro</option>
-                            <option value="platino">Platino</option>
-                            <option value="esmeralda">Esmeralda</option>
-                            <option value="diamante">Diamante</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>División Actual</label>
-                        <select id="division-actual">
-                            <option value="4">División IV</option>
-                            <option value="3">División III</option>
-                            <option value="2">División II</option>
-                            <option value="1">División I</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="form-group">
-                        <label>Liga Deseada</label>
-                        <select id="liga-deseada">
-                            <option value="hierro">Hierro</option>
-                            <option value="bronce">Bronce</option>
-                            <option value="plata">Plata</option>
-                            <option value="oro">Oro</option>
-                            <option value="platino">Platino</option>
-                            <option value="esmeralda" selected>Esmeralda</option>
-                            <option value="diamante">Diamante</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>División Deseada</label>
-                        <select id="division-deseada">
-                            <option value="4">División IV</option>
-                            <option value="3">División III</option>
-                            <option value="2">División II</option>
-                            <option value="1">División I</option>
-                        </select>
-                    </div>
-                </div>
+        <!-- SECCIÓN 1: CUENTAS -->
+        <div id="seccion-cuentas" class="tab-content active">
+            <h2 class="section-title">⚔️ Cuentas Disponibles</h2>
+            <div id="grid-cuentas" class="grid-cuentas">
+                <!-- Se cargan dinámicamente desde Firebase -->
+                <p style="color: #94a3b8;">Cargando catálogo...</p>
             </div>
-            <div class="boost-total">Estimado: <span id="precio-boost">ARS 0</span></div>
-            <button class="btn-comprar" id="btn-contratar-boost" style="width: 100%; padding: 12px; font-size: 1rem;">Contratar Servicio</button>
+        </div>
+
+        <!-- SECCIÓN 2: ELO / CALCULADORA -->
+        <div id="seccion-boost" class="tab-content">
+            <div class="boost-section">
+                <h2 class="section-title" style="margin-bottom: 15px; border-left-color: #38bdf8;">📊 Calculadora de Elos</h2>
+                <div class="boost-grid">
+                    <div>
+                        <div class="form-group">
+                            <label>Selecciona tu elo</label>
+                            <select id="liga-actual">
+                                <option value="hierro">Hierro</option>
+                                <option value="bronce">Bronce</option>
+                                <option value="plata">Plata</option>
+                                <option value="oro">Oro</option>
+                                <option value="platino">Platino</option>
+                                <option value="esmeralda">Esmeralda</option>
+                                <option value="diamante">Diamante</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tus LP</label>
+                            <select id="division-actual">
+                                <option value="4">División IV (0-25 LP)</option>
+                                <option value="3">División III (26-50 LP)</option>
+                                <option value="2">División II (51-75 LP)</option>
+                                <option value="1">División I (76-100 LP)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label>Elo deseado</label>
+                            <select id="liga-deseada">
+                                <option value="hierro">Hierro</option>
+                                <option value="bronce">Bronce</option>
+                                <option value="plata">Plata</option>
+                                <option value="oro">Oro</option>
+                                <option value="platino">Platino</option>
+                                <option value="esmeralda" selected>Esmeralda</option>
+                                <option value="diamante">Diamante</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>División Deseada</label>
+                            <select id="division-deseada">
+                                <option value="4">División IV</option>
+                                <option value="3">División III</option>
+                                <option value="2">División II</option>
+                                <option value="1">División I</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="boost-total">Estimado: <span id="precio-boost">USD $0</span></div>
+                <button class="btn-calcular" id="btn-contratar-boost">Calcular / Contratar</button>
+            </div>
         </div>
     </div>
 
@@ -374,7 +442,7 @@
         </div>
     </div>
 
-    <!-- Script de Firebase y renderizado -->
+    <!-- Script de Firebase y lógica de pestañas -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -390,6 +458,21 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Lógica de Pestañas (Tabs)
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                const targetId = btn.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
 
         const gridCuentas = document.getElementById('grid-cuentas');
         const modalPago = document.getElementById('modal-pago');
@@ -427,13 +510,12 @@
                                 </div>
                             </div>
                             <div class="cuenta-footer">
-                                <span class="cuenta-precio">ARS $${c.price || '0'}</span>
+                                <span class="cuenta-precio">USD $${c.price || '0'}</span>
                                 <button class="btn-comprar">Comprar</button>
                             </div>
                         </div>
                     `;
 
-                    // Al hacer clic en la tarjeta o botón de comprar, abrir modal estilizado
                     card.addEventListener('click', () => {
                         itemSeleccionado = {
                             tipo: 'cuenta',
@@ -441,7 +523,7 @@
                             precio: c.price
                         };
                         modalTitulo.textContent = "🛒 Comprar Cuenta";
-                        modalTexto.innerHTML = `Estás a un paso de adquirir: <b>${c.title}</b>.<br>Precio final: <b style="color: #f3ba2f;">ARS $${c.price}</b>`;
+                        modalTexto.innerHTML = `Estás a un paso de adquirir: <b>${c.title}</b>.<br>Precio final: <b style="color: #f3ba2f;">USD $${c.price}</b>`;
                         modalPago.classList.add('active');
                     });
 
@@ -454,7 +536,7 @@
             }
         }
 
-        // Lógica del calculador de Boosting sencillo
+        // Lógica de cálculo de elos en dólares
         const selectLigaActual = document.getElementById('liga-actual');
         const selectDivActual = document.getElementById('division-actual');
         const selectLigaDeseada = document.getElementById('liga-deseada');
@@ -464,41 +546,40 @@
 
         const valoresLigas = { hierro: 1, bronce: 2, plata: 3, oro: 4, platino: 5, esmeralda: 6, diamante: 7 };
 
-        function calcularBoost() {
+        function calcularElo() {
             const lAct = valoresLigas[selectLigaActual.value];
             const dAct = parseInt(selectDivActual.value);
             const lDes = valoresLigas[selectLigaDeseada.value];
             const dDes = parseInt(selectDivDeseada.value);
 
-            // Cálculo simple basado en diferencias de divisiones
             const scoreActual = (lAct * 4) + (5 - dAct);
             const scoreDeseado = (lDes * 4) + (5 - dDes);
             const diff = scoreDeseado - scoreActual;
 
-            let precio = diff > 0 ? diff * 3500 : 0;
-            spanPrecioBoost.textContent = `ARS $${precio}`;
+            let precio = diff > 0 ? diff * 3.5 : 0;
+            spanPrecioBoost.textContent = `USD $${precio.toFixed(2)}`;
             return precio;
         }
 
         [selectLigaActual, selectDivActual, selectLigaDeseada, selectDivDeseada].forEach(sel => {
-            sel.addEventListener('change', calcularBoost);
+            sel.addEventListener('change', calcularElo);
         });
 
-        calcularBoost();
+        calcularElo();
 
         btnContratarBoost.addEventListener('click', () => {
-            const precio = calcularBoost();
+            const precio = calcularElo();
             if (precio <= 0) {
-                alert("La división deseada debe ser mayor a la actual.");
+                alert("El elo deseado debe ser mayor al actual.");
                 return;
             }
             itemSeleccionado = {
-                tipo: 'boost',
-                titulo: `Boost de ${selectLigaActual.value} ${selectDivActual.value} a ${selectLigaDeseada.value} ${selectDivDeseada.value}`,
-                precio: precio
+                tipo: 'elo',
+                titulo: `Subida de Elo de ${selectLigaActual.value} (Div. ${selectDivActual.value}) a ${selectLigaDeseada.value} (Div. ${selectDivDeseada.value})`,
+                precio: precio.toFixed(2)
             };
-            modalTitulo.textContent = "📈 Contratar Boosting";
-            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b>.<br>Total a abonar: <b style="color: #f3ba2f;">ARS $${precio}</b>`;
+            modalTitulo.textContent = "📊 Contratar Servicio de Elos";
+            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b>.<br>Total a abonar: <b style="color: #f3ba2f;">USD $${itemSeleccionado.precio}</b>`;
             modalPago.classList.add('active');
         });
 
@@ -513,7 +594,7 @@
             }
         });
 
-        // Ir a la parte de pagos (Simulación de redirección a pasarela o contacto)
+        // Ir a la parte de pagos
         btnIrPagar.addEventListener('click', () => {
             const email = document.getElementById('email-cliente').value;
             if (!email) {
@@ -521,8 +602,7 @@
                 return;
             }
 
-            // Aquí podés redirigir a tu link de pago de MercadoPago, WhatsApp o pasarela
-            alert(`¡Genial! Redirigiendo a pasarela de pago segura para: ${itemSeleccionado.titulo} (Cliente: ${email})`);
+            alert(`¡Genial! Redirigiendo a pasarela de pago para: ${itemSeleccionado.titulo} (Cliente: ${email})`);
             modalPago.classList.remove('active');
         });
 
