@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Cuentas de LoL y Mentorías</title>
+    <title>Nexus Store - Cuentas de LoL</title>
     <style>
         * {
             box-sizing: border-box;
@@ -130,19 +130,18 @@
         </div>
     </section>
 
-    <!-- Script de conexión a Firebase y renderizado de la tienda -->
+    <!-- Script de conexión a Firebase con tus datos reales -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ⚠️ REEMPLAZÁ ESTOS DATOS CON LOS REALES DE TU CONSOLA DE FIREBASE ⚠️
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_PROYECTO.firebaseapp.com",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_PROYECTO.appspot.com",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
+            apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
+            authDomain: "store-51d80.firebaseapp.com",
+            projectId: "store-51d80",
+            storageBucket: "store-51d80.firebasestorage.app",
+            messagingSenderId: "695612329327",
+            appId: "1:695612329327:web:298cea611bd736e3a36c9a"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -152,7 +151,6 @@
             const contenedor = document.getElementById('contenedor-cuentas');
 
             try {
-                // Consulta la colección "skin" en tu Cloud Firestore
                 const querySnapshot = await getDocs(collection(db, "skin"));
                 
                 if (querySnapshot.empty) {
@@ -160,11 +158,10 @@
                     return;
                 }
 
-                contenedor.innerHTML = ""; // Limpia el mensaje de carga
+                contenedor.innerHTML = ""; 
 
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
-                    const docId = docSnap.id;
 
                     const card = document.createElement('div');
                     card.className = 'account-card';
@@ -189,7 +186,6 @@
                         </div>
                     `;
 
-                    // Acción al hacer clic en la tarjeta
                     card.addEventListener('click', () => {
                         alert(`Seleccionaste la cuenta: ${titulo} - Precio: ARS ${precio}`);
                     });
