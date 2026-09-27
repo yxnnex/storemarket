@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusStore - Cuentas y Mentoría LoL</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Fuente moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- HEADER / NAVEGACIÓN -->
+    <header class="navbar">
+        <div class="logo">⚡ NEXUS<span>STORE</span></div>
+        <nav>
+            <a href="#cuentas" class="active">Cuentas Smurf</a>
+            <a href="#boost">Optimización Táctica</a>
+            <a href="#soporte" class="btn-ticket">Abrir Ticket / Soporte</a>
+        </nav>
+    </header>
+
+    <!-- SECCIÓN 1: TIENDA DE CUENTAS -->
+    <section id="cuentas" class="container">
+        <div class="section-title">
+            <h2>Cuentas Disponibles</h2>
+            <p>Entrega rápida tras verificación de pago por ticket.</p>
+        </div>
+
+        <div class="grid-cuentas">
+            <!-- Ejemplo de Tarjeta de Cuenta 1 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80" alt="Cuenta LoL">
+                <div class="card-content">
+                    <h3>Smurf Nivel 45 - Unrated</h3>
+                    <ul class="stats">
+                        <li>🔵 55,000 Esencia Azul</li>
+                        <li>✨ 12 Skins (Incluye Épica)</li>
+                        <li>🛡️ Sin Honor Restringido</li>
+                    </ul>
+                    <div class="price-row">
+                        <span class="price">$15.00 USD</span>
+                        <a href="https://www.paypal.com/paypalme/tuusuario/15" target="_blank" class="btn-buy" onclick="alertaPago()">Comprar con PayPal</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejemplo de Tarjeta de Cuenta 2 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=500&q=80" alt="Cuenta LoL">
+                <div class="card-content">
+                    <h3>Smurf Nivel 32 - Oro IV</h3>
+                    <ul class="stats">
+                        <li>🔵 40,000 Esencia Azul</li>
+                        <li>✨ 8 Skins (Con Legado)</li>
+                        <li>🛡️ MMR Saludable</li>
+                    </ul>
+                    <div class="price-row">
+                        <span class="price">$22.00 USD</span>
+                        <a href="https://www.paypal.com/paypalme/tuusuario/22" target="_blank" class="btn-buy" onclick="alertaPago()">Comprar con PayPal</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: CALCULADORA DE BOOST / ENTRENAMIENTO -->
+    <section id="boost" class="boost-section">
+        <div class="boost-card">
+            <h2>Optimización y Mentoría de Rangos</h2>
+            <p>Selecciona tu estado actual y hasta dónde deseas llegar. El precio se ajustará automáticamente.</p>
+
+            <div class="boost-form">
+                <div class="form-group">
+                    <label>Elo Actual:</label>
+                    <select id="currentTier" onchange="calcularPrecio()">
+                        <option value="1">Hierro</option>
+                        <option value="2">Bronce</option>
+                        <option value="3">Plata</option>
+                        <option value="4" selected>Oro</option>
+                        <option value="5">Platino</option>
+                        <option value="6">Esmeralda</option>
+                        <option value="7">Diamante</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Elo Deseado:</label>
+                    <select id="desiredTier" onchange="calcularPrecio()">
+                        <option value="1">Hierro</option>
+                        <option value="2">Bronce</option>
+                        <option value="3">Plata</option>
+                        <option value="4">Oro</option>
+                        <option value="5" selected>Platino</option>
+                        <option value="6">Esmeralda</option>
+                        <option value="7">Diamante</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="price-box">
+                <h3>Total Estimado: $<span id="totalPrice">40</span> USD</h3>
+                <a href="#soporte" class="btn-buy" style="text-align: center; display: block; margin-top: 10px;">Solicitar Servicio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: POLÍTICA DE SEGURIDAD / TICKETS -->
+    <section id="soporte" class="support-banner">
+        <div class="container">
+            <h3>⚠️ Importante sobre los pagos y entregas</h3>
+            <p>Para evitar fraudes, las compras por PayPal requieren validación manual. Al realizar el pago, recuerda guardar tu comprobante y <strong>abrir un ticket de soporte en Discord o en nuestra sección de contacto</strong> para recibir tus credenciales de forma segura. Los reembolsos automáticos están inhabilitados.</p>
+        </div>
+    </section>
+
+    <!-- SCRIPTS DE FUNCIONALIDAD -->
+    <script>
+        // Tarifa base que puedes ajustar cuando quieras
+        const precioPorDivision = 10; 
+
+        function calcularPrecio() {
+            let eloActual = parseInt(document.getElementById('currentTier').value);
+            let eloDeseado = parseInt(document.getElementById('desiredTier').value);
+
+            let diferencia = eloDeseado - eloActual;
+
+            if (diferencia <= 0) {
+                document.getElementById('totalPrice').innerText = "0";
+                return;
+            }
+
+            // Suposición de 4 divisiones por elo
+            let total = diferencia * 4 * (precioPorDivision / 4); 
+            document.getElementById('totalPrice').innerText = total;
+        }
+
+        function alertaPago() {
+            alert("¡Aviso importante!\n\nUna vez realizado el pago en PayPal, abre un ticket en nuestra sección de soporte para que te entreguemos los datos de la cuenta de forma privada.");
+        }
+    </script>
+
+</body>
+</html>
