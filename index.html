@@ -18,63 +18,67 @@
             padding: 20px;
         }
 
-        header {
-            text-align: center;
-            padding: 25px 0 15px 0;
-            border-bottom: 1px solid #1f2430;
-            margin-bottom: 25px;
-        }
-
-        header h1 {
-            font-size: 2.2rem;
-            color: #f8fafc;
-        }
-
-        header h1 span {
-            color: #f3ba2f;
-        }
-
-        header p {
-            color: #94a3b8;
-            margin-top: 5px;
-            font-size: 0.95rem;
-        }
-
         .container {
             max-width: 1250px;
             margin: 0 auto;
         }
 
-        /* NAVEGACIÓN PRINCIPAL (TABS TIENDA / BOOST / ADMIN) */
+        /* HEADER PROFESIONAL: TÍTULO A LA IZQUIERDA, PESTAÑAS A LA DERECHA */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #1f2430;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-area h1 {
+            font-size: 1.8rem;
+            color: #f8fafc;
+        }
+
+        .logo-area h1 span {
+            color: #f3ba2f;
+        }
+
+        .logo-area p {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        /* PESTAÑAS SUPERIORES ESTILIZADAS */
         .tabs-nav {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
+            gap: 8px;
+            background-color: #12141c;
+            padding: 6px;
+            border-radius: 10px;
+            border: 1px solid #1f2430;
         }
 
         .tab-btn {
-            background-color: #12141c;
-            border: 1px solid #1f2430;
+            background: transparent;
+            border: none;
             color: #94a3b8;
-            padding: 10px 22px;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .tab-btn:hover {
-            border-color: #f3ba2f;
             color: #ffffff;
+            background-color: #1a1f2c;
         }
 
         .tab-btn.active {
             background-color: #f3ba2f;
             color: #0b0e14;
-            border-color: #f3ba2f;
         }
 
         .tab-content {
@@ -412,29 +416,29 @@
 <body>
 
     <div class="container">
+        <!-- HEADER PROFESIONAL CON PESTAÑAS A LA DERECHA -->
         <header>
-            <h1>NEXUS <span>STORE</span></h1>
-            <p>Cuentas smurf verificadas y servicio profesional de Elo Boost</p>
+            <div class="logo-area">
+                <h1>NEXUS <span>STORE</span></h1>
+                <p>Cuentas verificadas y servicio profesional</p>
+            </div>
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
+                <button class="tab-btn" data-target="seccion-boost">Boost Pro</button>
+                <button class="tab-btn" data-target="seccion-admin">Panel Admin</button>
+            </nav>
         </header>
-
-        <!-- NAVEGACIÓN PRINCIPAL -->
-        <div class="tabs-nav">
-            <button class="tab-btn active" data-target="seccion-cuentas">⚔️ Cuentas Disponibles</button>
-            <button class="tab-btn" data-target="seccion-boost">📊 Boost Pro</button>
-            <button class="tab-btn" data-target="seccion-admin" style="border-color: #22c55e; color: #22c55e;">⚙️ Panel Admin</button>
-        </div>
 
         <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
         <div id="seccion-cuentas" class="tab-content active">
-            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #f3ba2f; padding-left: 10px;">Cuentas Verificadas</h2>
+            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #f3ba2f; padding-left: 10px;">Cuentas Disponibles</h2>
             <div id="grid-cuentas" class="grid-cuentas">
                 <p style="color: #94a3b8;">Cargando catálogo...</p>
             </div>
         </div>
 
-        <!-- SECCIÓN 2: BOOST PRO (ESTILO PLATAFORMA AVANZADA) -->
+        <!-- SECCIÓN 2: BOOST PRO -->
         <div id="seccion-boost" class="tab-content">
-            <!-- Submenú de Tipos de Boost -->
             <div class="boost-types-nav">
                 <button class="boost-type-btn active">Impulso de rango</button>
                 <button class="boost-type-btn">Partidas de posicionamiento</button>
@@ -509,7 +513,7 @@
                     </div>
                 </div>
 
-                <!-- Columna 3: Personalizar Pedido y Precio -->
+                <!-- Columna 3: Personalizar Pedido -->
                 <div class="boost-card">
                     <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc;">PERSONALIZAR PEDIDO</h3>
                     <div class="mode-selector">
@@ -578,7 +582,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Pestañas (Tabs)
+        // Pestañas (Tabs) superiores
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         tabBtns.forEach(btn => {
@@ -590,7 +594,7 @@
             });
         });
 
-        // Escudos oficiales de Community Dragon para cada rango
+        // Escudos oficiales actualizados de Community Dragon (funcionan perfecto)
         const rangosEmblemas = {
             hierro: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/iron.png",
             bronce: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/bronze.png",
@@ -603,7 +607,6 @@
             challenger: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/challenger.png"
         };
 
-        // Lógica de cálculo de Elo y actualización de escudos
         const ligaActual = document.getElementById('liga-actual');
         const divActual = document.getElementById('division-actual');
         const ligaDeseada = document.getElementById('liga-deseada');
@@ -623,14 +626,12 @@
             const lDes = ligaDeseada.value;
             const dDes = divDeseada.value;
 
-            // Actualizar imágenes y textos dinámicos con escudos oficiales
             imgActual.src = rangosEmblemas[lAct];
             txtActual.textContent = `${lAct.charAt(0).toUpperCase() + lAct.slice(1)} Div. ${dAct}`;
 
             imgDeseado.src = rangosEmblemas[lDes];
             txtDeseado.textContent = `${lDes.charAt(0).toUpperCase() + lDes.slice(1)} Div. ${dDes}`;
 
-            // Cálculo matemático de precio
             const scoreActual = (valoresLigas[lAct] * 4) + (5 - parseInt(dAct));
             const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
             const diff = scoreDeseado - scoreActual;
@@ -643,7 +644,6 @@
         [ligaActual, divActual, ligaDeseada, divDeseada].forEach(el => el.addEventListener('change', actualizarBoost));
         actualizarBoost();
 
-        // Modal y pasarela de pago
         const modalPago = document.getElementById('modal-pago');
         const modalTexto = document.getElementById('modal-texto');
         let itemSeleccionado = null;
@@ -678,7 +678,6 @@
             modalPago.classList.remove('active');
         });
 
-        // Cargar catálogo de cuentas de Firebase
         async function cargarCatalogo() {
             const grid = document.getElementById('grid-cuentas');
             try {
@@ -718,7 +717,6 @@
             } catch(e) { console.error(e); }
         }
 
-        // Subir cuenta admin
         document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
             e.preventDefault();
             const nueva = {
