@@ -1,194 +1,145 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Cuentas</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<!-- Estilos CSS (podés pasarlos a tu archivo CSS principal) -->
+<style>
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
 
-        body {
-            background-color: #0b0e14;
-            color: #ffffff;
-            padding: 30px;
-        }
+  .account-card {
+    background-color: #12141c;
+    border: 1px solid #1f2430;
+    border-radius: 10px;
+    padding: 20px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+  }
 
-        h1 {
-            margin-bottom: 25px;
-            font-size: 1.8rem;
-            color: #f8fafc;
-            border-bottom: 2px solid #1f2430;
-            padding-bottom: 10px;
-        }
+  .account-card:hover {
+    transform: translateY(-3px);
+    border-color: #f3ba2f;
+  }
 
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
+  .card-header {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 10px;
+  }
 
-        .account-card {
-            background-color: #12141c;
-            border: 1px solid #1f2430;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
+  .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
 
-        .account-card:hover {
-            transform: translateY(-4px);
-            border-color: #f3ba2f;
-        }
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #f8fafc;
+  }
 
-        .card-header {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #1f2430;
+    padding-top: 12px;
+  }
 
-        .card-body {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+  .card-price {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #ffffff;
+  }
 
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #f8fafc;
-        }
+  .card-instant {
+    font-size: 0.85rem;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+</style>
 
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #1f2430;
-            padding-top: 14px;
-        }
+<!-- Contenedor donde se cargarán dinámicamente las cuentas -->
+<div id="contenedor-cuentas" class="store-grid">
+  <!-- Las tarjetas se inyectarán acá automáticamente -->
+</div>
 
-        .card-price {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffffff;
-        }
+<!-- Script de conexión a Firestore y renderizado -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        .card-instant {
-            font-size: 0.85rem;
-            color: #38bdf8;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+  // Reemplazá con tus credenciales reales de Firebase
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_PROYECTO.firebaseapp.com",
+    projectId: "TU_PROJECT_ID",
+    storageBucket: "TU_PROYECTO.appspot.com",
+    messagingSenderId: "TU_MESSAGING_SENDER_ID",
+    appId: "TU_APP_ID"
+  };
 
-        .loading, .mensaje-vacio {
-            color: #94a3b8;
-            font-size: 1rem;
-            grid-column: 1 / -1;
-            padding: 20px 0;
-        }
-    </style>
-</head>
-<body>
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    <h1>NEXUS STORE - Cuentas Disponibles</h1>
+  async function cargarCuentasTienda() {
+    const contenedor = document.getElementById('contenedor-cuentas');
+    contenedor.innerHTML = '<p style="color: #94a3b8;">Cargando cuentas disponibles...</p>';
 
-    <!-- Contenedor donde se cargarán dinámicamente las cuentas -->
-    <div id="contenedor-cuentas" class="store-grid">
-        <div class="loading">Cargando cuentas desde la base de datos...</div>
-    </div>
+    try {
+      const querySnapshot = await getDocs(collection(db, "skin")); // O tu colección de cuentas
+      
+      if (querySnapshot.empty) {
+        contenedor.innerHTML = '<p style="color: #94a3b8;">No hay cuentas disponibles en este momento.</p>';
+        return;
+      }
 
-    <!-- Script de conexión a Firebase y renderizado -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+      contenedor.innerHTML = ""; // Limpiar mensaje de carga
 
-        // ⚠️ REEMPLAZÁ ESTOS DATOS CON LOS DE TU CONSOLA DE FIREBASE ⚠️
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_PROYECTO.firebaseapp.com",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_PROYECTO.appspot.com",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
-        };
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const docId = docSnap.id;
 
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        // Estructura visual de cada tarjeta basada en tu ejemplo
+        const card = document.createElement('div');
+        card.className = 'account-card';
+        card.innerHTML = `
+          <div class="card-header">
+            ${data.server || 'Latin America North'} · ${data.championCount || '1-19'} · ${data.currentRank || 'Unranked'} · RP: ${data.riotPoints || '0-999'}
+          </div>
+          <div class="card-body">
+            <div class="card-title">${data.title || 'Cuenta Nivel 30 Handleveled'}</div>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">ARS ${data.price || '0.00'}</div>
+            <div class="card-instant">⏱ Instant</div>
+          </div>
+        `;
 
-        async function cargarCuentasTienda() {
-            const contenedor = document.getElementById('contenedor-cuentas');
+        // Evento al hacer clic en la tarjeta (para abrir los detalles o la pasarela)
+        card.addEventListener('click', () => {
+          verDetallesCuenta(docId, data);
+        });
 
-            try {
-                // Hacemos la consulta a la colección "skin" (o la que uses)
-                const querySnapshot = await getDocs(collection(db, "skin"));
-                
-                if (querySnapshot.empty) {
-                    contenedor.innerHTML = '<div class="mensaje-vacio">No hay cuentas disponibles en este momento.</div>';
-                    return;
-                }
+        contenedor.appendChild(card);
+      });
 
-                // Limpiar el contenedor antes de inyectar
-                contenedor.innerHTML = "";
+    } catch (error) {
+      console.error("Error al cargar las cuentas:", error);
+      contenedor.innerHTML = '<p style="color: #ef4444;">Hubo un error al cargar las cuentas.</p>';
+    }
+  }
 
-                querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const docId = docSnap.id;
+  function verDetallesCuenta(id, data) {
+    // Acá podés redirigir a una vista de detalle o abrir un modal con la info completa (Servidor, Garantía, Skins, etc.)
+    console.log("Abriendo detalles de la cuenta:", id, data);
+    alert(`Seleccionaste la cuenta: ${data.title} - Precio: ARS ${data.price}`);
+  }
 
-                    // Estructura de la tarjeta basada en las referencias visuales
-                    const card = document.createElement('div');
-                    card.className = 'account-card';
-                    
-                    // Datos por defecto por si algún campo viene vacío en Firestore
-                    const servidor = data.server || 'Latin America North';
-                    const campeones = data.championCount || '1-19';
-                    const rango = data.currentRank || 'Unranked';
-                    const rp = data.riotPoints || '0-999';
-                    const titulo = data.title || 'Cuenta Nivel 30 Handleveled';
-                    const precio = data.price || '0.00';
-
-                    card.innerHTML = `
-                        <div class="card-header">
-                            ${servidor} · ${campeones} · ${rango} · RP: ${rp}
-                        </div>
-                        <div class="card-body">
-                            <div class="card-title">${titulo}</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-price">ARS ${precio}</div>
-                            <div class="card-instant">⏱ Instant</div>
-                        </div>
-                    `;
-
-                    // Evento al hacer clic en la tarjeta (aquí puedes abrir el modal de detalles y pago)
-                    card.addEventListener('click', () => {
-                        abrirDetallesCuenta(docId, data);
-                    });
-
-                    contenedor.appendChild(card);
-                });
-
-            } catch (error) {
-                console.error("Error al cargar las cuentas:", error);
-                contenedor.innerHTML = '<div class="mensaje-vacio" style="color: #ef4444;">Hubo un error al conectar con la base de datos.</div>';
-            }
-        }
-
-        function abrirDetallesCuenta(id, data) {
-            // Aquí programaremos el modal con la vista detallada y el botón de "Buy now"
-            alert(`Seleccionaste la cuenta ID: ${id}\nTítulo: ${data.title}\nPrecio: ARS ${data.price}`);
-        }
-
-        // Ejecutar al cargar la página
-        document.addEventListener("DOMContentLoaded", cargarCuentasTienda);
-    </script>
-</body>
-</html>
+  document.addEventListener("DOMContentLoaded", cargarCuentasTienda);
+</script>
