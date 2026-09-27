@@ -151,8 +151,8 @@
         }
 
         .rank-emblem {
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
         }
 
@@ -165,30 +165,43 @@
         }
 
         .rank-info h3 {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: #f8fafc;
             font-weight: bold;
         }
 
-        .form-group {
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1.2fr;
+            gap: 10px;
             margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 10px;
         }
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #94a3b8;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         select, input {
             width: 100%;
-            padding: 11px;
+            padding: 10px;
             background-color: #1a1f2c;
             border: 1px solid #2a3245;
             border-radius: 8px;
             color: #ffffff;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         select:focus, input:focus {
@@ -200,7 +213,7 @@
         .options-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
@@ -240,6 +253,14 @@
             font-size: 0.85rem;
             border: 1px solid #2a3245;
             color: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .toggle-option input {
+            width: 16px;
+            height: 16px;
+            accent-color: #f3ba2f;
+            cursor: pointer;
         }
 
         .boost-total {
@@ -416,7 +437,7 @@
 <body>
 
     <div class="container">
-        <!-- HEADER CON TÍTULO A LA IZQUIERDA Y PESTAÑAS A LA DERECHA -->
+        <!-- HEADER -->
         <header>
             <div class="logo-area">
                 <h1>NEXUS <span>STORE</span></h1>
@@ -452,30 +473,36 @@
                         <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
                         <div class="rank-info">
                             <span>Rango actual</span>
-                            <h3 id="txt-actual">Hierro IV</h3>
+                            <h3 id="txt-actual">Hierro Div. 4</h3>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Liga Actual</label>
-                        <select id="liga-actual">
-                            <option value="Hierro">Hierro</option>
-                            <option value="Bronce">Bronce</option>
-                            <option value="Plata">Plata</option>
-                            <option value="Oro">Oro</option>
-                            <option value="Platino">Platino</option>
-                            <option value="Esmeralda">Esmeralda</option>
-                            <option value="Diamante">Diamante</option>
-                            <option value="Maestro">Maestro</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>División</label>
-                        <select id="division-actual">
-                            <option value="4">División IV</option>
-                            <option value="3">División III</option>
-                            <option value="2">División II</option>
-                            <option value="1">División I</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Liga Actual</label>
+                            <select id="liga-actual">
+                                <option value="Hierro">Hierro</option>
+                                <option value="Bronce">Bronce</option>
+                                <option value="Plata">Plata</option>
+                                <option value="Oro">Oro</option>
+                                <option value="Platino">Platino</option>
+                                <option value="Esmeralda">Esmeralda</option>
+                                <option value="Diamante">Diamante</option>
+                                <option value="Maestro">Maestro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>División</label>
+                            <select id="division-actual">
+                                <option value="4">Div. IV</option>
+                                <option value="3">Div. III</option>
+                                <option value="2">Div. II</option>
+                                <option value="1">Div. I</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>LP (opcional)</label>
+                            <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
+                        </div>
                     </div>
                 </div>
 
@@ -485,44 +512,59 @@
                         <img id="img-deseado" class="rank-emblem" src="Esmeralda.png" alt="Rango Deseado">
                         <div class="rank-info">
                             <span>Rango deseado</span>
-                            <h3 id="txt-deseado">Esmeralda IV</h3>
+                            <h3 id="txt-deseado">Esmeralda Div. 4</h3>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Liga Deseada</label>
-                        <select id="liga-deseada">
-                            <option value="Hierro">Hierro</option>
-                            <option value="Bronce">Bronce</option>
-                            <option value="Plata">Plata</option>
-                            <option value="Oro">Oro</option>
-                            <option value="Platino">Platino</option>
-                            <option value="Esmeralda" selected>Esmeralda</option>
-                            <option value="Diamante">Diamante</option>
-                            <option value="Maestro">Maestro</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>División Deseada</label>
-                        <select id="division-deseada">
-                            <option value="4">División IV</option>
-                            <option value="3">División III</option>
-                            <option value="2">División II</option>
-                            <option value="1">División I</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Liga Deseada</label>
+                            <select id="liga-deseada">
+                                <option value="Hierro">Hierro</option>
+                                <option value="Bronce">Bronce</option>
+                                <option value="Plata">Plata</option>
+                                <option value="Oro">Oro</option>
+                                <option value="Platino">Platino</option>
+                                <option value="Esmeralda" selected>Esmeralda</option>
+                                <option value="Diamante">Diamante</option>
+                                <option value="Maestro">Maestro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>División</label>
+                            <select id="division-deseada">
+                                <option value="4">Div. IV</option>
+                                <option value="3">Div. III</option>
+                                <option value="2">Div. II</option>
+                                <option value="1">Div. I</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>LP (opcional)</label>
+                            <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
+                        </div>
                     </div>
                 </div>
 
                 <!-- Columna 3: Personalizar Pedido -->
                 <div class="boost-card">
                     <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc;">PERSONALIZAR PEDIDO</h3>
+                    
                     <div class="mode-selector">
-                        <div class="mode-btn active">Solo</div>
-                        <div class="mode-btn">Duo</div>
+                        <div class="mode-btn active" data-mode="solo">Solo Q</div>
+                        <div class="mode-btn" data-mode="duo">Duo</div>
                     </div>
+
                     <div class="options-group">
-                        <div class="toggle-option"><span>Transmisión en vivo</span> <input type="checkbox" style="width: auto;"></div>
-                        <div class="toggle-option"><span>Prioridad máxima</span> <input type="checkbox" style="width: auto;"></div>
+                        <label class="toggle-option">
+                            <span>Transmisión en vivo</span> 
+                            <input type="checkbox" id="chk-streaming">
+                        </label>
+                        <label class="toggle-option">
+                            <span>Modo Offline</span> 
+                            <input type="checkbox" id="chk-offline">
+                        </label>
                     </div>
+
                     <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
                     <button class="btn-contratar" id="btn-contratar-boost">Obtener oferta</button>
                 </div>
@@ -593,7 +635,18 @@
             });
         });
 
-        // Diccionario de imágenes apuntando a los archivos sueltos en la raíz
+        // Selector Solo / Duo
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        let modoSeleccionado = 'solo';
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                modoSeleccionado = btn.getAttribute('data-mode');
+                actualizarBoost();
+            });
+        });
+
         const rangosEmblemas = {
             Hierro: "Hierro.png",
             Bronce: "Bronce.webp",
@@ -607,8 +660,11 @@
 
         const ligaActual = document.getElementById('liga-actual');
         const divActual = document.getElementById('division-actual');
+        const lpActual = document.getElementById('lp-actual');
+        
         const ligaDeseada = document.getElementById('liga-deseada');
         const divDeseada = document.getElementById('division-deseada');
+        const lpDeseado = document.getElementById('lp-deseado');
         
         const imgActual = document.getElementById('img-actual');
         const txtActual = document.getElementById('txt-actual');
@@ -622,7 +678,7 @@
             const lAct = ligaActual.value;
             const dAct = divActual.value;
             const lDes = ligaDeseada.value;
-            const dDes = divDeseada.value;
+            const dDes = divisionDeseada.value;
 
             imgActual.src = rangosEmblemas[lAct] || "Hierro.png";
             txtActual.textContent = `${lAct} Div. ${dAct}`;
@@ -635,11 +691,25 @@
             const diff = scoreDeseado - scoreActual;
 
             let precio = diff > 0 ? diff * 4.5 : 0;
+            
+            // Si es Duo Q, sube un 30% el precio
+            if (modoSeleccionado === 'duo') {
+                precio *= 1.3;
+            }
+
+            // Extras (Transmisión o Modo Offline)
+            if (document.getElementById('chk-streaming').checked) precio += 5;
+            if (document.getElementById('chk-offline').checked) precio += 3;
+
             precioBoost.textContent = precio.toFixed(2);
             return precio;
         }
 
-        [ligaActual, divActual, ligaDeseada, divDeseada].forEach(el => el.addEventListener('change', actualizarBoost));
+        [ligaActual, divActual, lpActual, ligaDeseada, divDeseada, lpDeseado, document.getElementById('chk-streaming'), document.getElementById('chk-offline')].forEach(el => {
+            el.addEventListener('change', actualizarBoost);
+            el.addEventListener('input', actualizarBoost);
+        });
+
         actualizarBoost();
 
         const modalPago = document.getElementById('modal-pago');
@@ -653,7 +723,7 @@
                 return;
             }
             itemSeleccionado = {
-                titulo: `Boost de ${ligaActual.value} a ${ligaDeseada.value}`,
+                titulo: `Boost (${modoSeleccionado.toUpperCase()}) de ${ligaActual.value} Div.${divActual.value} a ${ligaDeseada.value} Div.${divDeseada.value}`,
                 precio: precio.toFixed(2)
             };
             modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total: <b style="color: #f3ba2f;">USD $${itemSeleccionado.precio}</b>`;
