@@ -13,9 +13,13 @@
         }
 
         body {
-            background-color: #0b0e14;
+            background-color: #07090e;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(243, 186, 47, 0.06) 0px, transparent 50%);
             color: #ffffff;
             padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
@@ -28,16 +32,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #1f2430;
+            padding: 20px 25px;
+            background: rgba(18, 20, 28, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
             margin-bottom: 30px;
             flex-wrap: wrap;
             gap: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         .logo-area h1 {
             font-size: 1.8rem;
             color: #f8fafc;
+            letter-spacing: 0.5px;
         }
 
         .logo-area h1 span {
@@ -53,32 +63,33 @@
         .tabs-nav {
             display: flex;
             gap: 8px;
-            background-color: #12141c;
+            background: rgba(11, 14, 20, 0.5);
             padding: 6px;
             border-radius: 10px;
-            border: 1px solid #1f2430;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .tab-btn {
             background: transparent;
             border: none;
             color: #94a3b8;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 6px;
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
 
         .tab-btn:hover {
             color: #ffffff;
-            background-color: #1a1f2c;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .tab-btn.active {
             background-color: #f3ba2f;
             color: #0b0e14;
+            box-shadow: 0 0 15px rgba(243, 186, 47, 0.3);
         }
 
         .tab-content {
@@ -93,16 +104,17 @@
         .boost-types-nav {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .boost-type-btn {
-            background-color: #161b26;
-            border: 1px solid #2a3245;
+            background: rgba(18, 20, 28, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             color: #94a3b8;
-            padding: 8px 16px;
+            padding: 9px 20px;
             border-radius: 20px;
             font-size: 0.85rem;
             cursor: pointer;
@@ -117,7 +129,7 @@
             font-weight: bold;
         }
 
-        /* LAYOUT DE LA CALCULADORA DE BOOST (3 COLUMNAS) */
+        /* LAYOUT DE LA CALCULADORA DE BOOST (3 COLUMNAS) ESTILO GLASS */
         .boost-layout {
             display: grid;
             grid-template-columns: 1fr 1fr 340px;
@@ -132,36 +144,40 @@
         }
 
         .boost-card {
-            background-color: #12141c;
-            border: 1px solid #1f2430;
-            border-radius: 12px;
-            padding: 22px;
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* CABECERA CON ESCUDO DE RANGO */
+        /* CABECERA CON ESCUDO DE RANGO ESTILO GLASS */
         .rank-header {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
-            background-color: #1a1f2c;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #2a3245;
+            background: rgba(11, 14, 20, 0.4);
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .rank-emblem {
             width: 50px;
             height: 50px;
             object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
         }
 
         .rank-info span {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #94a3b8;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .rank-info h3 {
@@ -172,7 +188,7 @@
 
         .form-row {
             display: grid;
-            grid-template-columns: 2fr 2fr 1.2fr;
+            grid-template-columns: 1.5fr 1.3fr 1fr;
             gap: 10px;
             margin-bottom: 15px;
         }
@@ -189,24 +205,27 @@
 
         label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #94a3b8;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-weight: 500;
         }
 
         select, input {
             width: 100%;
             padding: 10px;
-            background-color: #1a1f2c;
-            border: 1px solid #2a3245;
+            background: rgba(11, 14, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             color: #ffffff;
             font-size: 0.85rem;
+            transition: border-color 0.2s;
         }
 
         select:focus, input:focus {
             outline: none;
             border-color: #f3ba2f;
+            box-shadow: 0 0 8px rgba(243, 186, 47, 0.25);
         }
 
         /* PANEL LATERAL DE PERSONALIZACIÓN */
@@ -225,8 +244,8 @@
         }
 
         .mode-btn {
-            background-color: #1a1f2c;
-            border: 1px solid #2a3245;
+            background: rgba(11, 14, 20, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             color: #94a3b8;
             padding: 10px;
             border-radius: 8px;
@@ -241,17 +260,18 @@
             background-color: #38bdf8;
             color: #0b0e14;
             border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
         }
 
         .toggle-option {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #1a1f2c;
-            padding: 10px 14px;
+            background: rgba(11, 14, 20, 0.4);
+            padding: 11px 14px;
             border-radius: 8px;
             font-size: 0.85rem;
-            border: 1px solid #2a3245;
+            border: 1px solid rgba(255, 255, 255, 0.04);
             color: #cbd5e1;
             cursor: pointer;
         }
@@ -269,6 +289,7 @@
             color: #f3ba2f;
             text-align: center;
             margin: 15px 0;
+            text-shadow: 0 0 10px rgba(243, 186, 47, 0.2);
         }
 
         .btn-contratar {
@@ -281,14 +302,16 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(243, 186, 47, 0.2);
         }
 
         .btn-contratar:hover {
             background-color: #e0a822;
+            transform: translateY(-1px);
         }
 
-        /* CATÁLOGO DE CUENTAS GRID */
+        /* CATÁLOGO DE CUENTAS GRID (ESTILO GLASS) */
         .grid-cuentas {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -297,19 +320,23 @@
         }
 
         .cuenta-card {
-            background-color: #12141c;
-            border: 1px solid #1f2430;
-            border-radius: 12px;
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
             overflow: hidden;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             cursor: pointer;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         .cuenta-card:hover {
-            transform: translateY(-4px);
-            border-color: #f3ba2f;
+            transform: translateY(-5px);
+            border-color: rgba(243, 186, 47, 0.4);
+            box-shadow: 0 12px 40px 0 rgba(243, 186, 47, 0.1);
         }
 
         .cuenta-img {
@@ -320,7 +347,7 @@
         }
 
         .cuenta-body {
-            padding: 15px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -329,13 +356,14 @@
 
         .cuenta-server {
             font-size: 0.75rem;
-            background-color: #1a1f2c;
+            background: rgba(56, 189, 248, 0.15);
             color: #38bdf8;
             padding: 3px 8px;
             border-radius: 4px;
             width: fit-content;
             margin-bottom: 8px;
             font-weight: bold;
+            border: 1px solid rgba(56, 189, 248, 0.2);
         }
 
         .cuenta-titulo {
@@ -362,7 +390,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid #1f2430;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding-top: 12px;
         }
 
@@ -381,16 +409,24 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 0.85rem;
+            transition: background-color 0.2s;
         }
 
-        /* PANEL ADMIN */
+        .btn-comprar:hover {
+            background-color: #e0a822;
+        }
+
+        /* PANEL ADMIN ESTILO GLASS */
         .admin-box {
-            background-color: #12141c;
-            border: 1px solid #1f2430;
-            border-radius: 12px;
-            padding: 25px;
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 28px;
             max-width: 600px;
             margin: 0 auto;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         .btn-subir {
@@ -403,35 +439,53 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
+            transition: background-color 0.2s;
         }
 
-        /* MODAL DE PAGO */
+        .btn-subir:hover {
+            background-color: #16a34a;
+        }
+
+        /* MODAL DE PAGO ESTILO GLASS */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background: rgba(7, 9, 14, 0.8);
+            backdrop-filter: blur(8px);
             display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
         .modal-box {
-            background-color: #12141c; border: 1px solid #2a3245; border-radius: 12px;
-            padding: 25px; width: 100%; max-width: 450px; position: relative;
+            background: rgba(18, 20, 28, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 28px; width: 100%; max-width: 450px; position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
+
         .modal-close {
             position: absolute; top: 15px; right: 15px; background: none; border: none;
             color: #94a3b8; font-size: 1.2rem; cursor: pointer;
         }
+        .modal-close:hover { color: #ffffff; }
+
         .payment-options {
             display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
         }
         .btn-pagar-paypal {
             background-color: #0070ba; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
         }
+        .btn-pagar-paypal:hover { background-color: #005ea6; }
+
         .btn-pagar-alias {
             background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
         }
+        .btn-pagar-alias:hover { background-color: #16a34a; }
     </style>
 </head>
 <body>
@@ -500,7 +554,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>LP (opcional)</label>
+                            <label>LP (opc.)</label>
                             <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
                         </div>
                     </div>
@@ -539,7 +593,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>LP (opcional)</label>
+                            <label>LP (opc.)</label>
                             <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
                         </div>
                     </div>
@@ -678,7 +732,7 @@
             const lAct = ligaActual.value;
             const dAct = divActual.value;
             const lDes = ligaDeseada.value;
-            const dDes = divisionDeseada.value;
+            const dDes = divDeseada.value;
 
             imgActual.src = rangosEmblemas[lAct] || "Hierro.png";
             txtActual.textContent = `${lAct} Div. ${dAct}`;
@@ -692,12 +746,10 @@
 
             let precio = diff > 0 ? diff * 4.5 : 0;
             
-            // Si es Duo Q, sube un 30% el precio
             if (modoSeleccionado === 'duo') {
                 precio *= 1.3;
             }
 
-            // Extras (Transmisión o Modo Offline)
             if (document.getElementById('chk-streaming').checked) precio += 5;
             if (document.getElementById('chk-offline').checked) precio += 3;
 
