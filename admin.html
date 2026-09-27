@@ -28,7 +28,7 @@
             border-radius: 12px;
             padding: 30px;
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
@@ -87,6 +87,15 @@
             background-color: #e0a822;
         }
 
+        .btn-secundario {
+            background-color: #334155;
+            color: #ffffff;
+            margin-top: 5px;
+        }
+        .btn-secundario:hover {
+            background-color: #475569;
+        }
+
         .mensaje {
             margin-top: 15px;
             text-align: center;
@@ -119,6 +128,57 @@
         .btn-logout:hover {
             background-color: #dc2626;
         }
+
+        /* LISTADO DE CUENTAS EN ADMIN */
+        .lista-admin {
+            margin-top: 30px;
+            border-top: 1px solid #1f2430;
+            padding-top: 20px;
+        }
+
+        .item-cuenta-admin {
+            background-color: #1a1f2c;
+            border: 1px solid #2a3245;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-info h4 {
+            font-size: 0.95rem;
+            color: #f8fafc;
+            margin-bottom: 4px;
+        }
+
+        .item-info p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .item-acciones {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-accion {
+            padding: 6px 10px;
+            font-size: 0.75rem;
+            width: auto;
+            margin: 0;
+        }
+
+        .btn-editar {
+            background-color: #38bdf8;
+            color: #0b0e14;
+        }
+
+        .btn-eliminar {
+            background-color: #ef4444;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -148,9 +208,12 @@
                 <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
             </div>
 
-            <h2>⚡ SUBIR <span>CUENTA</span></h2>
+            <h2 id="titulo-modo">⚡ GESTIONAR <span>CUENTA</span></h2>
             
             <form id="form-cuenta">
+                <!-- Campo oculto para saber si estamos editando un ID existente -->
+                <input type="hidden" id="cuenta-id">
+
                 <div class="form-group">
                     <label>Servidor</label>
                     <select id="server" required>
@@ -187,21 +250,30 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Precio en ARS (Solo números)</label>
-                    <input type="number" id="price" placeholder="Ej: 15000" required>
+                    <label>Precio en USD (Ej: 15.50)</label>
+                    <input type="number" step="0.01" id="price" placeholder="Ej: 15" required>
                 </div>
 
-                <button type="submit" id="btn-publicar">Publicar Cuenta</button>
+                <button type="submit" id="btn-publicar">Publicar Cuenta Nueva</button>
+                <button type="button" id="btn-cancelar-edicion" class="btn-secundario hidden">Cancelar Edición</button>
             </form>
 
             <div id="mensaje-estado" class="mensaje"></div>
+
+            <!-- LISTADO DE CUENTAS PARA EDITAR / BORRAR -->
+            <div class="lista-admin">
+                <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #f8fafc;">📋 Cuentas Existentes (Editar / Borrar)</h3>
+                <div id="contenedor-cuentas-admin">
+                    <p style="color: #94a3b8; font-size: 0.85rem;">Cargando listado...</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Script de autenticación y lógica -->
+    <!-- Script de autenticación, CRUD y lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -229,6 +301,7 @@
                 seccionLogin.classList.add('hidden');
                 seccionPanel.classList.remove('hidden');
                 userEmailDisplay.textContent = `Admin: ${user.email}`;
+                cargarCuentasAdmin();
             } else {
                 seccionPanel.classList.add('hidden');
                 seccionLogin.classList.remove('hidden');
@@ -255,14 +328,110 @@
 
         const formCuenta = document.getElementById('form-cuenta');
         const mensajeEstado = document.getElementById('mensaje-estado');
+        const cuentaIdInput = document.getElementById('cuenta-id');
+        const btnPublicar = document.getElementById('btn-publicar');
+        const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion');
+        const tituloModo = document.getElementById('titulo-modo');
+        const contenedorCuentasAdmin = document.getElementById('contenedor-cuentas-admin');
 
+        // Función para listar las cuentas en el panel admin y permitir editarlas o borrarlas
+        async function cargarCuentasAdmin() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "skin"));
+                contenedorCuentasAdmin.innerHTML = "";
+
+                if (querySnapshot.empty) {
+                    contenedorCuentasAdmin.innerHTML = "<p style='color: #94a3b8; font-size: 0.85rem;'>No hay cuentas cargadas.</p>";
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    const c = docSnap.data();
+                    const id = docSnap.id;
+
+                    const div = document.createElement('div');
+                    div.className = 'item-cuenta-admin';
+                    div.innerHTML = `
+                        <div class="item-info">
+                            <h4>${c.title || 'Sin título'}</h4>
+                            <p>${c.server} | Rango: ${c.currentRank} | USD $${c.price}</p>
+                        </div>
+                        <div class="item-acciones">
+                            <button type="button" class="btn-accion btn-editar" data-id="${id}">Editar</button>
+                            <button type="button" class="btn-accion btn-eliminar" data-id="${id}">Borrar</button>
+                        </div>
+                    `;
+                    contenedorCuentasAdmin.appendChild(div);
+                });
+
+                // Asignar eventos a los botones de Editar
+                document.querySelectorAll('.btn-editar').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        const querySnapshot = await getDocs(collection(db, "skin"));
+                        querySnapshot.forEach((docSnap) => {
+                            if (docSnap.id === id) {
+                                const c = docSnap.data();
+                                cuentaIdInput.value = id;
+                                document.getElementById('server').value = c.server || 'LAS';
+                                document.getElementById('imageUrl').value = c.imageUrl || '';
+                                document.getElementById('championCount').value = c.championCount || '';
+                                document.getElementById('currentRank').value = c.currentRank || '';
+                                document.getElementById('riotPoints').value = c.riotPoints || '';
+                                document.getElementById('title').value = c.title || '';
+                                document.getElementById('price').value = c.price || '';
+
+                                btnPublicar.textContent = "Guardar Cambios";
+                                tituloModo.innerHTML = "✏️ EDITAR <span>CUENTA</span>";
+                                btnCancelarEdicion.classList.remove('hidden');
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                        });
+                    });
+                });
+
+                // Asignar eventos a los botones de Eliminar
+                document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        if (confirm("¿Estás segura de que querés eliminar esta cuenta?")) {
+                            try {
+                                await deleteDoc(doc(db, "skin", id));
+                                cargarCuentasAdmin();
+                                mensajeEstado.style.color = "#38bdf8";
+                                mensajeEstado.textContent = "Cuenta eliminada correctamente.";
+                            } catch (err) {
+                                console.error(err);
+                                alert("Error al eliminar la cuenta.");
+                            }
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error(error);
+                contenedorCuentasAdmin.innerHTML = "<p style='color: #ef4444; font-size: 0.85rem;'>Error al cargar el listado.</p>";
+            }
+        }
+
+        // Botón cancelar edición
+        btnCancelarEdicion.addEventListener('click', () => {
+            formCuenta.reset();
+            cuentaIdInput.value = "";
+            btnPublicar.textContent = "Publicar Cuenta Nueva";
+            tituloModo.innerHTML = "⚡ GESTIONAR <span>CUENTA</span>";
+            btnCancelarEdicion.classList.add('hidden');
+            mensajeEstado.textContent = "";
+        });
+
+        // Guardar (Crear nuevo o actualizar existente)
         formCuenta.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-publicar');
-            btn.disabled = true;
-            btn.textContent = "Publicando...";
+            btnPublicar.disabled = true;
+            btnPublicar.textContent = "Guardando...";
 
-            const nuevaCuenta = {
+            const idEdicion = cuentaIdInput.value;
+            const datosCuenta = {
                 server: document.getElementById('server').value,
                 imageUrl: document.getElementById('imageUrl').value,
                 championCount: document.getElementById('championCount').value,
@@ -273,17 +442,37 @@
             };
 
             try {
-                await addDoc(collection(db, "skin"), nuevaCuenta);
-                mensajeEstado.style.color = "#38bdf8";
-                mensajeEstado.textContent = "¡Cuenta publicada con éxito en la tienda!";
+                if (idEdicion) {
+                    // Actualizar cuenta existente
+                    const cuentaRef = doc(db, "skin", idEdicion);
+                    await updateDoc(cuentaRef, datosCuenta);
+                    mensajeEstado.style.color = "#38bdf8";
+                    mensajeEstado.textContent = "¡Cuenta actualizada con éxito!";
+                } else {
+                    // Crear cuenta nueva
+                    await addDoc(collection(db, "skin"), datosCuenta);
+                    mensajeEstado.style.color = "#38bdf8";
+                    mensajeEstado.textContent = "¡Cuenta publicada con éxito en la tienda!";
+                }
+
                 formCuenta.reset();
+                cuentaIdInput.value = "";
+                btnPublicar.textContent = "Publicar Cuenta Nueva";
+                tituloModo.innerHTML = "⚡ GESTIONAR <span>CUENTA</span>";
+                btnCancelarEdicion.classList.add('hidden');
+                cargarCuentasAdmin();
+
             } catch (error) {
                 console.error("Error al guardar: ", error);
                 mensajeEstado.style.color = "#ef4444";
                 mensajeEstado.textContent = "Error: No tenés permisos o falló la conexión.";
             } finally {
-                btn.disabled = false;
-                btn.textContent = "Publicar Cuenta";
+                btnPublicar.disabled = false;
+                if (!cuentaIdInput.value) {
+                    btnPublicar.textContent = "Publicar Cuenta Nueva";
+                } else {
+                    btnPublicar.textContent = "Guardar Cambios";
+                }
             }
         });
     </script>
