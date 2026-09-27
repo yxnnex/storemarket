@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store</title>
+    <title>Nexus Store - Plataforma Pro</title>
     <style>
         * {
             box-sizing: border-box;
@@ -355,6 +355,7 @@
             text-align: center;
             margin-bottom: 12px;
             display: none;
+            line-height: 1.4;
             animation: pulse 1.5s infinite;
         }
 
@@ -500,11 +501,11 @@
         <header>
             <div class="logo-area">
                 <h1>NEXUS <span>STORE</span></h1>
-                <p> </p>
+                <p>Cuentas verificadas y servicio profesional</p>
             </div>
             <nav class="tabs-nav">
                 <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
-                <button class="tab-btn" data-target="seccion-boost">Boost </button>
+                <button class="tab-btn" data-target="seccion-boost">Boost Pro</button>
             </nav>
         </header>
 
@@ -634,9 +635,7 @@
                     </div>
 
                     <!-- BANNER DE ALERTA DE OFERTA PARA LIGA ENTERA -->
-                    <div id="promo-banner" class="promo-banner">
-                        🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Descuento aplicado por subir toda la liga.
-                    </div>
+                    <div id="promo-banner" class="promo-banner"></div>
 
                     <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
                     <button class="btn-contratar" id="btn-contratar-boost">Obtener oferta</button>
@@ -751,7 +750,6 @@
             const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
             const diff = scoreDeseado - scoreActual;
 
-            // Tarifa base: $7 por división en Oro (y escalada según el elo)
             let tarifaPorDivision = 7.00;
             if (lAct === "Hierro" || lAct === "Bronce") tarifaPorDivision = 5.00;
             if (lAct === "Platino" || lAct === "Esmeralda") tarifaPorDivision = 9.00;
@@ -759,7 +757,6 @@
 
             let precioDivisiones = diff > 0 ? diff * tarifaPorDivision : 0;
 
-            // Ajuste por ganancia de LP
             const multiplicadorLp = {
                 '17-19': 1.20,
                 '19-22': 1.10,
@@ -768,27 +765,22 @@
             };
             let precio = precioDivisiones * (multiplicadorLp[lpGanancia.value] || 1.0);
 
-            // =========================================================
-            // DETECCIÓN AUTOMÁTICA DE LIGA ENTERA (Ej: de Div. IV a Div. I en el mismo rango)
-            // =========================================================
+            // DETECCIÓN AUTOMÁTICA DE LIGA ENTERA (IV a I)
             let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1");
 
             if (esLigaCompleta) {
-                // Porcentaje de descuento progresivo según el elo (mayor elo = mayor % de descuento)
                 let porcentajeDescuento = 0.05; // 5% en Hierro/Bronce
                 if (lAct === "Plata" || lAct === "Oro") porcentajeDescuento = 0.08; // 8%
                 if (lAct === "Platino" || lAct === "Esmeralda") porcentajeDescuento = 0.12; // 12%
                 if (lAct === "Diamante") porcentajeDescuento = 0.15; // 15%
 
-                // Regla especial para Hierro: en lugar de restar un porcentaje alto, se le restan $2 fijos
                 let descuentoMonto = (lAct === "Hierro") ? 2.00 : (precio * porcentajeDescuento);
-                
                 precio -= descuentoMonto;
 
                 let indexLigaActual = ligasOrden.indexOf(lAct);
-                let siguienteLiga = ligasOrden[indexLigaActual + 1] || "Siguiente Rango";
+                let siguienteLiga = ligasOrden[indexLigaActual + 1] || "la siguiente liga";
 
-                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Si contratas el impulso de una liga entera de <b>${lAct} IV</b> a <b>${lAct} I</b> (¡a un paso de ${siguienteLiga}!), se aplica tu descuento especial.`;
+                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ¡Obtienes un descuento especial!`;
                 promoBanner.style.display = "block";
                 btnContratar.textContent = `¡Aprovechar Oferta de ${lAct}!`;
             } else {
