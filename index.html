@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store</title>
+    <title>Nexus Store - Tienda y Boost</title>
     <style>
         * {
             box-sizing: border-box;
@@ -51,6 +51,7 @@
             justify-content: center;
             gap: 15px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
@@ -199,12 +200,15 @@
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .boost-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
         }
 
         @media (max-width: 768px) {
@@ -236,20 +240,21 @@
 
         select:focus, input:focus {
             outline: none;
-            border-color: #f3ba2f;
+            border-color: #38bdf8;
         }
 
         .boost-total {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            color: #f3ba2f;
-            margin-top: 15px;
+            color: #38bdf8;
+            margin-top: 20px;
             margin-bottom: 15px;
+            text-align: center;
         }
 
         .btn-calcular {
             width: 100%;
-            background-color: #f3ba2f;
+            background-color: #38bdf8;
             color: #0b0e14;
             border: none;
             padding: 12px;
@@ -262,7 +267,35 @@
         }
 
         .btn-calcular:hover {
-            background-color: #e0a822;
+            background-color: #0ea5e9;
+        }
+
+        /* PANEL ADMIN (FORMULARIO DE CARGA) */
+        .admin-box {
+            background-color: #12141c;
+            border: 1px solid #1f2430;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 0 auto 50px auto;
+        }
+
+        .btn-subir {
+            width: 100%;
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-subir:hover {
+            background-color: #16a34a;
         }
 
         /* VENTANA MODAL DE PAGO / COMPRA */
@@ -379,7 +412,8 @@
         <!-- PESTAÑAS DE NAVEGACIÓN -->
         <div class="tabs-nav">
             <button class="tab-btn active" data-target="seccion-cuentas">⚔️ Cuentas Disponibles</button>
-            <button class="tab-btn" data-target="seccion-boost">Boost</button>
+            <button class="tab-btn" data-target="seccion-boost">📊 Boost / Elo</button>
+            <button class="tab-btn" data-target="seccion-admin" style="border-color: #22c55e; color: #22c55e;">⚙️ Panel Admin</button>
         </div>
 
         <!-- SECCIÓN 1: CUENTAS -->
@@ -393,11 +427,12 @@
         <!-- SECCIÓN 2: ELO / CALCULADORA -->
         <div id="seccion-boost" class="tab-content">
             <div class="boost-section">
-                <h2 class="section-title" style="margin-bottom: 15px; border-left-color: #38bdf8;">Boost</h2>
+                <h2 class="section-title" style="margin-bottom: 20px; border-left-color: #38bdf8;">Calculadora de Elo Boost</h2>
                 <div class="boost-grid">
                     <div>
+                        <h3 style="font-size: 1rem; color: #38bdf8; margin-bottom: 12px;">Tu Situación Actual</h3>
                         <div class="form-group">
-                            <label>Selecciona tu elo</label>
+                            <label>Liga Actual</label>
                             <select id="liga-actual">
                                 <option value="hierro">Hierro</option>
                                 <option value="bronce">Bronce</option>
@@ -409,7 +444,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Tus LP</label>
+                            <label>División Actual</label>
                             <select id="division-actual">
                                 <option value="4">División IV (0-25 LP)</option>
                                 <option value="3">División III (26-50 LP)</option>
@@ -419,8 +454,9 @@
                         </div>
                     </div>
                     <div>
+                        <h3 style="font-size: 1rem; color: #38bdf8; margin-bottom: 12px;">Tu Objetivo</h3>
                         <div class="form-group">
-                            <label>Elo deseado</label>
+                            <label>Liga Deseada</label>
                             <select id="liga-deseada">
                                 <option value="hierro">Hierro</option>
                                 <option value="bronce">Bronce</option>
@@ -442,8 +478,51 @@
                         </div>
                     </div>
                 </div>
-                <div class="boost-total">Estimado: <span id="precio-boost">USD $0</span></div>
-                <button class="btn-calcular" id="btn-contratar-boost">Calcular / Contratar</button>
+                <div class="boost-total">Precio Estimado: <span id="precio-boost">USD $0</span></div>
+                <button class="btn-calcular" id="btn-contratar-boost">Contratar Servicio</button>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: PANEL ADMIN (SUBIR CUENTAS) -->
+        <div id="seccion-admin" class="tab-content">
+            <div class="admin-box">
+                <h2 class="section-title" style="margin-bottom: 15px; border-left-color: #22c55e;">Subir Nueva Cuenta</h2>
+                <form id="form-subir-cuenta">
+                    <div class="form-group">
+                        <label>Título de la Cuenta</label>
+                        <input type="text" id="admin-titulo" placeholder="Ej: Cuenta Smurf Lv 35 - Unranked" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Servidor</label>
+                        <select id="admin-server">
+                            <option value="LAS">LAS</option>
+                            <option value="LAN">LAN</option>
+                            <option value="NA">NA</option>
+                            <option value="BR">BR</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad de Campeones</label>
+                        <input type="text" id="admin-campeones" placeholder="Ej: 20+" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rango Actual</label>
+                        <input type="text" id="admin-rango" placeholder="Ej: Unranked (MMR Alto)" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad de EA (Esencia Azul)</label>
+                        <input type="text" id="admin-ea" placeholder="Ej: 45000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio en USD ($)</label>
+                        <input type="number" step="0.01" id="admin-precio" placeholder="Ej: 12.99" required>
+                    </div>
+                    <div class="form-group">
+                        <label>URL de la Imagen</label>
+                        <input type="url" id="admin-imagen" placeholder="https://i.imgur.com/tuimagen.jpg" required>
+                    </div>
+                    <button type="submit" class="btn-subir">🚀 Publicar Cuenta en la Tienda</button>
+                </form>
             </div>
         </div>
     </div>
@@ -470,7 +549,7 @@
     <!-- Script de Firebase y lógica de la tienda -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
@@ -509,6 +588,7 @@
 
         let itemSeleccionado = null;
 
+        // Cargar Catálogo desde Firebase
         async function cargarCatalogo() {
             try {
                 const querySnapshot = await getDocs(collection(db, "skin"));
@@ -562,6 +642,33 @@
             }
         }
 
+        // Subir Nueva Cuenta a Firebase
+        const formSubirCuenta = document.getElementById('form-subir-cuenta');
+        formSubirCuenta.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nuevaCuenta = {
+                title: document.getElementById('admin-titulo').value,
+                server: document.getElementById('admin-server').value,
+                championCount: document.getElementById('admin-campeones').value,
+                currentRank: document.getElementById('admin-rango').value,
+                riotPoints: document.getElementById('admin-ea').value,
+                price: parseFloat(document.getElementById('admin-precio').value),
+                imageUrl: document.getElementById('admin-imagen').value
+            };
+
+            try {
+                await addDoc(collection(db, "skin"), nuevaCuenta);
+                alert("¡Cuenta publicada con éxito en la tienda!");
+                formSubirCuenta.reset();
+                cargarCatalogo();
+                document.querySelector('[data-target="seccion-cuentas"]').click();
+            } catch (error) {
+                console.error("Error al subir la cuenta:", error);
+                alert("Hubo un error al subir la cuenta a Firebase.");
+            }
+        });
+
         // Lógica de cálculo de elos en dólares
         const selectLigaActual = document.getElementById('liga-actual');
         const selectDivActual = document.getElementById('division-actual');
@@ -605,7 +712,7 @@
                 precio: precio.toFixed(2)
             };
             modalTitulo.textContent = "📊 Contratar Servicio de Elos";
-            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b>.<br>Total a abonar: <b style="color: #f3ba2f;">USD $${itemSeleccionado.precio}</b>`;
+            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b>.<br>Total a abonar: <b style="color: #38bdf8;">USD $${itemSeleccionado.precio}</b>`;
             modalPago.classList.add('active');
         });
 
