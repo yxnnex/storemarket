@@ -3,134 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Cuentas de LoL</title>
+    <title>Nexus Store - Cuentas y Boosting</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif, Tahoma, Geneva, Verdana;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
             background-color: #0b0e14;
             color: #ffffff;
-            padding: 30px;
+            padding: 20px;
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #1f2430;
-            padding-bottom: 15px;
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #1f2430;
             margin-bottom: 30px;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+        header h1 {
+            font-size: 2.2rem;
             color: #f8fafc;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .logo span {
+        header h1 span {
             color: #f3ba2f;
         }
 
-        h2 {
-            margin-bottom: 10px;
-            font-size: 1.4rem;
+        header p {
+            color: #94a3b8;
+            margin-top: 5px;
+            font-size: 0.95rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
             color: #f8fafc;
+            border-left: 4px solid #f3ba2f;
+            padding-left: 10px;
         }
 
-        .store-grid {
+        /* CUENTAS GRID */
+        .grid-cuentas {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            margin-bottom: 50px;
         }
 
-        .account-card {
+        .cuenta-card {
             background-color: #12141c;
             border: 1px solid #1f2430;
             border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
+            overflow: hidden;
             transition: transform 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
         }
 
-        .account-card:hover {
+        .cuenta-card:hover {
             transform: translateY(-4px);
             border-color: #f3ba2f;
         }
 
-        .card-header {
-            font-size: 0.8rem;
+        .cuenta-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #1a1f2c;
+        }
+
+        .cuenta-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .cuenta-server {
+            font-size: 0.75rem;
+            background-color: #1a1f2c;
+            color: #38bdf8;
+            padding: 3px 8px;
+            border-radius: 4px;
+            width: fit-content;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .cuenta-titulo {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffffff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .cuenta-detalles-info {
+            font-size: 0.85rem;
             color: #94a3b8;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .card-body {
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #f8fafc;
-        }
-
-        .card-footer {
+        .cuenta-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid #1f2430;
-            padding-top: 14px;
+            padding-top: 12px;
         }
 
-        .card-price {
-            font-size: 1.3rem;
+        .cuenta-precio {
+            font-size: 1.1rem;
             font-weight: bold;
+            color: #f3ba2f;
+        }
+
+        .btn-comprar {
+            background-color: #f3ba2f;
+            color: #0b0e14;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-comprar:hover {
+            background-color: #e0a822;
+        }
+
+        /* SECCIÓN BOOSTING */
+        .boost-section {
+            background-color: #12141c;
+            border: 1px solid #1f2430;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 50px;
+        }
+
+        .boost-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .boost-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1f2c;
+            border: 1px solid #2a3245;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #f3ba2f;
+        }
+
+        .boost-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f3ba2f;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* VENTANA MODAL DE PAGO / COMPRA */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background-color: #12141c;
+            border: 1px solid #2a3245;
+            border-radius: 12px;
+            padding: 25px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .modal-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #f8fafc;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
             color: #ffffff;
         }
 
-        .card-instant {
-            font-size: 0.85rem;
-            color: #38bdf8;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .modal-info {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
 
-        .mensaje-vacio {
-            color: #94a3b8;
+        .btn-pagar {
+            width: 100%;
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
             font-size: 1rem;
-            grid-column: 1 / -1;
-            padding: 20px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-pagar:hover {
+            background-color: #16a34a;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">⚡ NEXUS<span>STORE</span></div>
-    </header>
+    <div class="container">
+        <header>
+            <h1>NEXUS <span>STORE</span></h1>
+            <p>Cuentas smurf verificadas y servicio de Cooaching / Boosting profesional</p>
+        </header>
 
-    <section>
-        <h2>Cuentas Disponibles</h2>
-        <p style="color: #94a3b8;">Entrega rápida tras verificación de pago por ticket.</p>
-
-        <!-- Contenedor donde se cargan dinámicamente las cuentas desde Firestore -->
-        <div id="contenedor-cuentas" class="store-grid">
-            <div class="mensaje-vacio">Cargando cuentas desde la base de datos...</div>
+        <!-- SECCIÓN DE CUENTAS -->
+        <h2 class="section-title">⚔️ Cuentas Disponibles</h2>
+        <div id="grid-cuentas" class="grid-cuentas">
+            <!-- Se cargan dinámicamente desde Firebase -->
+            <p style="color: #94a3b8;">Cargando catálogo...</p>
         </div>
-    </section>
 
-    <!-- Script de conexión a Firebase con tus datos reales -->
+        <!-- SECCIÓN DE BOOSTING / ELO -->
+        <div class="boost-section">
+            <h2 class="section-title" style="margin-bottom: 15px; border-left-color: #38bdf8;">📈 Calculadora de Boosting</h2>
+            <div class="boost-grid">
+                <div>
+                    <div class="form-group">
+                        <label>Liga Actual</label>
+                        <select id="liga-actual">
+                            <option value="hierro">Hierro</option>
+                            <option value="bronce">Bronce</option>
+                            <option value="plata">Plata</option>
+                            <option value="oro">Oro</option>
+                            <option value="platino">Platino</option>
+                            <option value="esmeralda">Esmeralda</option>
+                            <option value="diamante">Diamante</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>División Actual</label>
+                        <select id="division-actual">
+                            <option value="4">División IV</option>
+                            <option value="3">División III</option>
+                            <option value="2">División II</option>
+                            <option value="1">División I</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label>Liga Deseada</label>
+                        <select id="liga-deseada">
+                            <option value="hierro">Hierro</option>
+                            <option value="bronce">Bronce</option>
+                            <option value="plata">Plata</option>
+                            <option value="oro">Oro</option>
+                            <option value="platino">Platino</option>
+                            <option value="esmeralda" selected>Esmeralda</option>
+                            <option value="diamante">Diamante</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>División Deseada</label>
+                        <select id="division-deseada">
+                            <option value="4">División IV</option>
+                            <option value="3">División III</option>
+                            <option value="2">División II</option>
+                            <option value="1">División I</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="boost-total">Estimado: <span id="precio-boost">ARS 0</span></div>
+            <button class="btn-comprar" id="btn-contratar-boost" style="width: 100%; padding: 12px; font-size: 1rem;">Contratar Servicio</button>
+        </div>
+    </div>
+
+    <!-- VENTANA MODAL DE PAGO -->
+    <div id="modal-pago" class="modal-overlay">
+        <div class="modal-box">
+            <button id="modal-cerrar" class="modal-close">&times;</button>
+            <h3 id="modal-titulo">Finalizar Compra</h3>
+            <div id="modal-texto" class="modal-info"></div>
+            
+            <div class="form-group">
+                <label>Tu Correo Electrónico (para enviarte los datos)</label>
+                <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com" required>
+            </div>
+
+            <button id="btn-ir-pagar" class="btn-pagar">Ir a Medios de Pago</button>
+        </div>
+    </div>
+
+    <!-- Script de Firebase y renderizado -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -147,59 +391,142 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function cargarCuentasTienda() {
-            const contenedor = document.getElementById('contenedor-cuentas');
+        const gridCuentas = document.getElementById('grid-cuentas');
+        const modalPago = document.getElementById('modal-pago');
+        const modalCerrar = document.getElementById('modal-cerrar');
+        const modalTitulo = document.getElementById('modal-titulo');
+        const modalTexto = document.getElementById('modal-texto');
+        const btnIrPagar = document.getElementById('btn-ir-pagar');
 
+        let itemSeleccionado = null;
+
+        async function cargarCatalogo() {
             try {
                 const querySnapshot = await getDocs(collection(db, "skin"));
-                
+                gridCuentas.innerHTML = "";
+
                 if (querySnapshot.empty) {
-                    contenedor.innerHTML = '<div class="mensaje-vacio">No hay cuentas disponibles en este momento.</div>';
+                    gridCuentas.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas cargadas por el momento.</p>";
                     return;
                 }
 
-                contenedor.innerHTML = ""; 
-
                 querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-
+                    const c = docSnap.data();
                     const card = document.createElement('div');
-                    card.className = 'account-card';
-                    
-                    const servidor = data.server || 'Latin America North';
-                    const campeones = data.championCount || '1-19';
-                    const rango = data.currentRank || 'Unranked';
-                    const rp = data.riotPoints || '0-999';
-                    const titulo = data.title || 'Cuenta Nivel 30 Handleveled';
-                    const precio = data.price || '0.00';
-
+                    card.className = 'cuenta-card';
                     card.innerHTML = `
-                        <div class="card-header">
-                            ${servidor} · ${campeones} · ${rango} · RP: ${rp}
-                        </div>
-                        <div class="card-body">
-                            <div class="card-title">${titulo}</div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-price">ARS ${precio}</div>
-                            <div class="card-instant">⏱ Instant</div>
+                        <img src="${c.imageUrl || 'https://via.placeholder.com/300x160'}" class="cuenta-img" alt="Cuenta">
+                        <div class="cuenta-body">
+                            <div>
+                                <span class="cuenta-server">${c.server || 'LAS'}</span>
+                                <h3 class="cuenta-titulo">${c.title || 'Cuenta Smurf'}</h3>
+                                <div class="cuenta-detalles-info">
+                                    <span>⚔️ Campeones: ${c.championCount || 'N/A'}</span>
+                                    <span>🏆 Rango: ${c.currentRank || 'Unranked'}</span>
+                                    <span>💎 RP: ${c.riotPoints || '0'}</span>
+                                </div>
+                            </div>
+                            <div class="cuenta-footer">
+                                <span class="cuenta-precio">ARS $${c.price || '0'}</span>
+                                <button class="btn-comprar">Comprar</button>
+                            </div>
                         </div>
                     `;
 
+                    // Al hacer clic en la tarjeta o botón de comprar, abrir modal estilizado
                     card.addEventListener('click', () => {
-                        alert(`Seleccionaste la cuenta: ${titulo} - Precio: ARS ${precio}`);
+                        itemSeleccionado = {
+                            tipo: 'cuenta',
+                            titulo: c.title,
+                            precio: c.price
+                        };
+                        modalTitulo.textContent = "🛒 Comprar Cuenta";
+                        modalTexto.innerHTML = `Estás a un paso de adquirir: <b>${c.title}</b>.<br>Precio final: <b style="color: #f3ba2f;">ARS $${c.price}</b>`;
+                        modalPago.classList.add('active');
                     });
 
-                    contenedor.appendChild(card);
+                    gridCuentas.appendChild(card);
                 });
 
             } catch (error) {
-                console.error("Error al cargar las cuentas:", error);
-                contenedor.innerHTML = '<div class="mensaje-vacio" style="color: #ef4444;">Hubo un error al conectar con la base de datos.</div>';
+                console.error(error);
+                gridCuentas.innerHTML = "<p style='color: #ef4444;'>Error al cargar las cuentas desde la base de datos.</p>";
             }
         }
 
-        document.addEventListener("DOMContentLoaded", cargarCuentasTienda);
+        // Lógica del calculador de Boosting sencillo
+        const selectLigaActual = document.getElementById('liga-actual');
+        const selectDivActual = document.getElementById('division-actual');
+        const selectLigaDeseada = document.getElementById('liga-deseada');
+        const selectDivDeseada = document.getElementById('division-deseada');
+        const spanPrecioBoost = document.getElementById('precio-boost');
+        const btnContratarBoost = document.getElementById('btn-contratar-boost');
+
+        const valoresLigas = { hierro: 1, bronce: 2, plata: 3, oro: 4, platino: 5, esmeralda: 6, diamante: 7 };
+
+        function calcularBoost() {
+            const lAct = valoresLigas[selectLigaActual.value];
+            const dAct = parseInt(selectDivActual.value);
+            const lDes = valoresLigas[selectLigaDeseada.value];
+            const dDes = parseInt(selectDivDeseada.value);
+
+            // Cálculo simple basado en diferencias de divisiones
+            const scoreActual = (lAct * 4) + (5 - dAct);
+            const scoreDeseado = (lDes * 4) + (5 - dDes);
+            const diff = scoreDeseado - scoreActual;
+
+            let precio = diff > 0 ? diff * 3500 : 0;
+            spanPrecioBoost.textContent = `ARS $${precio}`;
+            return precio;
+        }
+
+        [selectLigaActual, selectDivActual, selectLigaDeseada, selectDivDeseada].forEach(sel => {
+            sel.addEventListener('change', calcularBoost);
+        });
+
+        calcularBoost();
+
+        btnContratarBoost.addEventListener('click', () => {
+            const precio = calcularBoost();
+            if (precio <= 0) {
+                alert("La división deseada debe ser mayor a la actual.");
+                return;
+            }
+            itemSeleccionado = {
+                tipo: 'boost',
+                titulo: `Boost de ${selectLigaActual.value} ${selectDivActual.value} a ${selectLigaDeseada.value} ${selectDivDeseada.value}`,
+                precio: precio
+            };
+            modalTitulo.textContent = "📈 Contratar Boosting";
+            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b>.<br>Total a abonar: <b style="color: #f3ba2f;">ARS $${precio}</b>`;
+            modalPago.classList.add('active');
+        });
+
+        // Cerrar Modal
+        modalCerrar.addEventListener('click', () => {
+            modalPago.classList.remove('active');
+        });
+
+        modalPago.addEventListener('click', (e) => {
+            if (e.target === modalPago) {
+                modalPago.classList.remove('active');
+            }
+        });
+
+        // Ir a la parte de pagos (Simulación de redirección a pasarela o contacto)
+        btnIrPagar.addEventListener('click', () => {
+            const email = document.getElementById('email-cliente').value;
+            if (!email) {
+                alert("Por favor ingresa tu correo electrónico.");
+                return;
+            }
+
+            // Aquí podés redirigir a tu link de pago de MercadoPago, WhatsApp o pasarela
+            alert(`¡Genial! Redirigiendo a pasarela de pago segura para: ${itemSeleccionado.titulo} (Cliente: ${email})`);
+            modalPago.classList.remove('active');
+        });
+
+        cargarCatalogo();
     </script>
 </body>
 </html>
