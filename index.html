@@ -416,7 +416,7 @@
 <body>
 
     <div class="container">
-        <!-- HEADER PROFESIONAL CON PESTAÑAS A LA DERECHA -->
+        <!-- HEADER CON TÍTULO A LA IZQUIERDA Y PESTAÑAS A LA DERECHA -->
         <header>
             <div class="logo-area">
                 <h1>NEXUS <span>STORE</span></h1>
@@ -449,7 +449,7 @@
                 <!-- Columna 1: Rango Actual -->
                 <div class="boost-card">
                     <div class="rank-header">
-                        <img id="img-actual" class="rank-emblem" src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/iron.png" alt="Rango Actual">
+                        <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
                         <div class="rank-info">
                             <span>Rango actual</span>
                             <h3 id="txt-actual">Hierro IV</h3>
@@ -458,14 +458,14 @@
                     <div class="form-group">
                         <label>Liga Actual</label>
                         <select id="liga-actual">
-                            <option value="hierro">Hierro</option>
-                            <option value="bronce">Bronce</option>
-                            <option value="plata">Plata</option>
-                            <option value="oro">Oro</option>
-                            <option value="platino">Platino</option>
-                            <option value="esmeralda">Esmeralda</option>
-                            <option value="diamante">Diamante</option>
-                            <option value="master">Master</option>
+                            <option value="Hierro">Hierro</option>
+                            <option value="Bronce">Bronce</option>
+                            <option value="Plata">Plata</option>
+                            <option value="Oro">Oro</option>
+                            <option value="Platino">Platino</option>
+                            <option value="Esmeralda">Esmeralda</option>
+                            <option value="Diamante">Diamante</option>
+                            <option value="Maestro">Maestro</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -482,7 +482,7 @@
                 <!-- Columna 2: Rango Deseado -->
                 <div class="boost-card">
                     <div class="rank-header">
-                        <img id="img-deseado" class="rank-emblem" src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/emerald.png" alt="Rango Deseado">
+                        <img id="img-deseado" class="rank-emblem" src="Esmeralda.png" alt="Rango Deseado">
                         <div class="rank-info">
                             <span>Rango deseado</span>
                             <h3 id="txt-deseado">Esmeralda IV</h3>
@@ -491,15 +491,14 @@
                     <div class="form-group">
                         <label>Liga Deseada</label>
                         <select id="liga-deseada">
-                            <option value="hierro">Hierro</option>
-                            <option value="bronce">Bronce</option>
-                            <option value="plata">Plata</option>
-                            <option value="oro">Oro</option>
-                            <option value="platino">Platino</option>
-                            <option value="esmeralda" selected>Esmeralda</option>
-                            <option value="diamante">Diamante</option>
-                            <option value="master">Master</option>
-                            <option value="challenger">Challenger</option>
+                            <option value="Hierro">Hierro</option>
+                            <option value="Bronce">Bronce</option>
+                            <option value="Plata">Plata</option>
+                            <option value="Oro">Oro</option>
+                            <option value="Platino">Platino</option>
+                            <option value="Esmeralda" selected>Esmeralda</option>
+                            <option value="Diamante">Diamante</option>
+                            <option value="Maestro">Maestro</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -582,7 +581,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Pestañas (Tabs) superiores
+        // Pestañas superiores
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         tabBtns.forEach(btn => {
@@ -594,17 +593,16 @@
             });
         });
 
-        // Escudos oficiales actualizados de Community Dragon (funcionan perfecto)
+        // Diccionario de imágenes apuntando a los archivos sueltos en la raíz
         const rangosEmblemas = {
-            hierro: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/iron.png",
-            bronce: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/bronze.png",
-            plata: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/silver.png",
-            oro: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/gold.png",
-            platino: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/platinum.png",
-            esmeralda: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/emerald.png",
-            diamante: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/diamond.png",
-            master: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/master.png",
-            challenger: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/images/ranked-emblems/challenger.png"
+            Hierro: "Hierro.png",
+            Bronce: "Bronce.webp",
+            Plata: "Plata.png",
+            Oro: "Oro.png",
+            Platino: "Platino.png",
+            Esmeralda: "Esmeralda.png",
+            Diamante: "Diamante.png",
+            Maestro: "Maestro.png"
         };
 
         const ligaActual = document.getElementById('liga-actual');
@@ -618,7 +616,7 @@
         const txtDeseado = document.getElementById('txt-deseado');
         const precioBoost = document.getElementById('precio-boost');
 
-        const valoresLigas = { hierro: 1, bronce: 2, plata: 3, oro: 4, platino: 5, esmeralda: 6, diamante: 7, master: 8, challenger: 9 };
+        const valoresLigas = { Hierro: 1, Bronce: 2, Plata: 3, Oro: 4, Platino: 5, Esmeralda: 6, Diamante: 7, Maestro: 8 };
 
         function actualizarBoost() {
             const lAct = ligaActual.value;
@@ -626,11 +624,11 @@
             const lDes = ligaDeseada.value;
             const dDes = divDeseada.value;
 
-            imgActual.src = rangosEmblemas[lAct];
-            txtActual.textContent = `${lAct.charAt(0).toUpperCase() + lAct.slice(1)} Div. ${dAct}`;
+            imgActual.src = rangosEmblemas[lAct] || "Hierro.png";
+            txtActual.textContent = `${lAct} Div. ${dAct}`;
 
-            imgDeseado.src = rangosEmblemas[lDes];
-            txtDeseado.textContent = `${lDes.charAt(0).toUpperCase() + lDes.slice(1)} Div. ${dDes}`;
+            imgDeseado.src = rangosEmblemas[lDes] || "Hierro.png";
+            txtDeseado.textContent = `${lDes} Div. ${dDes}`;
 
             const scoreActual = (valoresLigas[lAct] * 4) + (5 - parseInt(dAct));
             const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
