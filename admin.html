@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - NexusStore</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0d0f12; color: #fff; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .admin-box { background: #161a23; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; border: 1px solid #262c3a; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        .admin-box h2 { margin-bottom: 20px; color: #00d2ff; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #a0aec0; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; background: #0b0e14; border: 1px solid #2d3748; border-radius: 6px; color: #fff; font-size: 14px; box-sizing: border-box; }
+        .form-group input:focus, .form-group textarea:focus { border-color: #00d2ff; outline: none; }
+        .btn-submit { width: 100%; padding: 12px; background: #00d2ff; color: #0b0e14; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 10px; }
+        .btn-submit:hover { background: #00b4d8; }
+        #mensaje { text-align: center; margin-top: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-box">
+        <h2>⚡ Subir Nueva Cuenta</h2>
+        <form id="cuentaForm">
+            <div class="form-group">
+                <label>Título de la Cuenta (Ej: Smurf Nivel 40 - Unrated)</label>
+                <input type="text" id="titulo" required placeholder="Smurf Nivel 45 - Oro IV">
+            </div>
+            <div class="form-group">
+                <label>Esencia Azul</label>
+                <input type="text" id="esencia" required placeholder="55,000">
+            </div>
+            <div class="form-group">
+                <label>Cantidad de Skins</label>
+                <input type="text" id="skins" required placeholder="12 Skins (Incluye Épica)">
+            </div>
+            <div class="form-group">
+                <label>Detalles / MMR</label>
+                <input type="text" id="detalles" required placeholder="Sin Honor Restringido / MMR Saludable">
+            </div>
+            <div class="form-group">
+                <label>Precio en USD ($)</label>
+                <input type="number" id="precio" required placeholder="15">
+            </div>
+            <div class="form-group">
+                <label>Link de Pago (PayPal.me directo)</label>
+                <input type="text" id="linkPago" required placeholder="https://www.paypal.com/paypalme/tuusuario/15">
+            </div>
+            <div class="form-group">
+                <label>URL de Imagen (Opcional)</label>
+                <input type="text" id="imagen" placeholder="https://images.unsplash.com/...">
+            </div>
+
+            <button type="submit" class="btn-submit" id="btnGuardar">Publicar Cuenta</button>
+        </form>
+        <div id="mensaje"></div>
+    </div>
+
+    <!-- SCRIPT DE ENVÍO A FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // REEMPLAZA ESTAS CREDENCIALES CON LAS TUS FALSAS/REALES DE FIREBASE
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "tu-proyecto.firebaseapp.com",
+            projectId: "tu-proyecto",
+            storageBucket: "tu-proyecto.appspot.com",
+            messagingSenderId: "TU_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('cuentaForm');
+        const mensaje = document.getElementById('mensaje');
+        const btnGuardar = document.getElementById('btnGuardar');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btnGuardar.disabled = true;
+            btnGuardar.innerText = "Guardando...";
+
+            try {
+                await addDoc(collection(db, "cuentas"), {
+                    titulo: document.getElementById('titulo').value,
+                    esencia: document.getElementById('esencia').value,
+                    skins: document.getElementById('skins').value,
+                    detalles: document.getElementById('detalles').value,
+                    precio: document.getElementById('precio').value,
+                    linkPago: document.getElementById('linkPago').value,
+                    imagen: document.getElementById('imagen').value,
+                    fechaCreacion: new Date()
+                });
+
+                mensaje.style.color = "#00ffcc";
+                mensaje.innerText = "¡Cuenta publicada con éxito en la tienda!";
+                form.reset();
+            } catch (error) {
+                console.error("Error al guardar: ", error);
+                mensaje.style.color = "#ff5555";
+                mensaje.innerText = "Hubo un error al guardar la cuenta.";
+            } finally {
+                btnGuardar.disabled = false;
+                btnGuardar.innerText = "Publicar Cuenta";
+            }
+        });
+    </script>
+</body>
+</html>
