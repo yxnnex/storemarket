@@ -4,540 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Store</title>
-    <!-- Firebase SDKs -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDKs (Compat v9) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
-        :root {
-            --bg-main: #0b0e14;
-            --bg-card: #121620;
-            --bg-card-inner: #161b26;
-            --accent: #f3ba2f;
-            --accent-hover: #e0a822;
-            --text-main: #ffffff;
-            --text-muted: #8a9ba8;
-            --border-color: #222b3d;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
+            background-color: #0b0f17;
+            color: #ffffff;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-
-        header {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-card);
-            padding: 15px 30px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 30px;
+        .card-bg {
+            background-color: #111827;
+            border: 1px solid #1f2937;
         }
-
-        .logo-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--accent);
-            letter-spacing: 1px;
+        .input-bg {
+            background-color: #0b0f17;
+            border: 1px solid #1f2937;
         }
-
-        .logo-subtitle {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn:hover, .nav-btn.active-view {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        /* Vistas (Contenedores) */
-        .view-section {
-            display: none;
-            width: 100%;
-            max-width: 1200px;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .view-section.active {
-            display: flex;
-        }
-
-        .tabs-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            justify-content: center;
-        }
-
-        .tab {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 10px 24px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tab.active {
-            background-color: var(--text-main);
-            color: #000;
-            border-color: var(--text-main);
-        }
-
-        .main-container {
-            display: flex;
-            gap: 20px;
-            max-width: 1200px;
-            width: 100%;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Diseño original horizontal para los selectores de rango */
-        .card-selector {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            width: 360px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .card-header-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg-card-inner);
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .card-header-title img {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-        }
-
-        .card-header-title .title-text span {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card-header-title .title-text h3 {
-            font-size: 15px;
-            color: var(--text-main);
-        }
-
-        /* Fila horizontal exacta a la segunda imagen */
-        .inputs-row {
-            display: grid;
-            grid-template-columns: 2fr 1.5fr 1fr;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group label {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        select, input[type="number"] {
-            background-color: var(--bg-card-inner);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 8px 10px;
-            border-radius: 6px;
-            font-size: 13px;
-            outline: none;
-            width: 100%;
-            transition: border-color 0.2s;
-        }
-
-        select:focus, input[type="number"]:focus {
-            border-color: var(--accent);
-        }
-
-        .lp-extra-section {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-top: 5px;
-        }
-
-        .lp-extra-section label {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-align: center;
-        }
-
-        /* Panel derecho con mapa de fondo */
-        .card-checkout-wrapper {
-            position: relative;
-            width: 360px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-card);
-        }
-
-        .lol-map-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.22;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .card-checkout {
-            position: relative;
-            z-index: 2;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            background: rgba(18, 22, 32, 0.88);
-            backdrop-filter: blur(4px);
-            height: 100%;
-        }
-
-        .checkout-title {
-            font-size: 14px;
+        .btn-yellow {
+            background-color: #fbbf24;
+            color: #000000;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-main);
         }
-
-        .mode-selector {
-            display: flex;
-            background: var(--bg-card-inner);
-            border-radius: 8px;
-            padding: 4px;
-            border: 1px solid var(--border-color);
-        }
-
-        .mode-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 8px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .mode-btn.active {
-            background-color: #38bdf8;
-            color: #000;
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--bg-card-inner);
-            padding: 10px 14px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .checkbox-label input {
-            accent-color: var(--accent);
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        .promo-banner {
-            background: linear-gradient(135deg, rgba(243, 186, 47, 0.15), rgba(20, 25, 35, 0.85));
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 11px;
-            line-height: 1.4;
-            color: #fffae6;
-            display: none;
-            text-align: center;
-        }
-
-        .price-display {
-            text-align: center;
-            font-size: 26px;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 0;
-        }
-
-        .submit-btn {
-            background-color: var(--accent);
-            color: #000;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            text-align: center;
-        }
-
-        .submit-btn:hover {
-            background-color: var(--accent-hover);
-        }
-
-        /* Estilos para la sección de Cuentas Firebase */
-        .cuentas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            width: 100%;
-        }
-
-        .cuenta-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .cuenta-card h4 {
-            color: var(--accent);
-            font-size: 18px;
-        }
-
-        .cuenta-card p {
-            color: var(--text-muted);
-            font-size: 13px;
+        .btn-yellow:hover {
+            background-color: #f59e0b;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center p-6">
 
-    <header>
+    <!-- Header / Navbar -->
+    <header class="w-full max-w-6xl flex justify-between items-center mb-8 px-4">
         <div>
-            <div class="logo-title">NEXUS STORE</div>
-            <div class="logo-subtitle">Cuentas sin correo verificado, listas para transferir</div>
+            <h1 class="text-xl font-extrabold tracking-wider text-amber-400">NEXUS STORE</h1>
+            <p class="text-xs text-gray-400">Cuentas sin correo verificado, listas para transferir</p>
         </div>
-        <div class="header-nav">
-            <button class="nav-btn active-view" id="nav-cuentas" onclick="cambiarVista('cuentas')">Cuentas</button>
-            <button class="nav-btn" id="nav-boost" onclick="cambiarVista('boost')">Boost Pro</button>
+        <div class="flex items-center gap-3">
+            <button onclick="switchTab('cuentas')" id="btn-tab-cuentas" class="bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-gray-700">Cuentas</button>
+            <button onclick="switchTab('boost')" id="btn-tab-boost" class="bg-amber-400 text-black px-4 py-2 rounded-lg text-sm font-bold transition border border-amber-500">Boost Pro</button>
         </div>
     </header>
 
-    <!-- VISTA 1: TIENDA DE CUENTAS (FIREBASE) -->
-    <div id="vista-cuentas" class="view-section active">
-        <h2 style="margin-bottom: 20px; color: var(--text-main);">Cuentas Disponibles</h2>
-        <div id="lista-cuentas" class="cuentas-grid">
-            <p style="color: var(--text-muted);">Cargando cuentas desde Firebase...</p>
-        </div>
-    </div>
-
-    <!-- VISTA 2: CALCULADORA DE BOOST -->
-    <div id="vista-boost" class="view-section">
-        <div class="tabs-container">
-            <button class="tab active">Impulso de rango</button>
-            <button class="tab">Partidas de posicionamiento</button>
-            <button class="tab">Victorias netas</button>
+    <!-- SECCIÓN: BOOST PRO (Exacta al diseño original) -->
+    <main id="section-boost" class="w-full max-w-6xl flex flex-col items-center">
+        <!-- Subtabs de Impulso -->
+        <div class="flex bg-gray-900/80 p-1.5 rounded-full border border-gray-800 mb-8 gap-2">
+            <button class="bg-white text-gray-900 px-6 py-2 rounded-full text-sm font-bold shadow">Impulso de rango</button>
+            <button class="text-gray-400 hover:text-white px-6 py-2 rounded-full text-sm font-medium transition">Partidas de posicionamiento</button>
+            <button class="text-gray-400 hover:text-white px-6 py-2 rounded-full text-sm font-medium transition">Victorias netas</button>
         </div>
 
-        <div class="main-container">
-            <!-- Selector Rango Actual -->
-            <div class="card-selector">
-                <div class="card-header-title">
-                    <img id="img-actual" src="Platino.png" alt="Rango Actual">
-                    <div class="title-text">
-                        <span>Rango Actual</span>
-                        <h3 id="txt-actual">Platino Div. IV</h3>
-                    </div>
-                </div>
-
-                <div class="inputs-row">
-                    <div class="form-group">
-                        <label>Liga Actual</label>
-                        <select id="liga-actual">
-                            <option value="Hierro">Hierro</option>
-                            <option value="Bronce">Bronce</option>
-                            <option value="Plata">Plata</option>
-                            <option value="Oro">Oro</option>
-                            <option value="Platino" selected>Platino</option>
-                            <option value="Esmeralda">Esmeralda</option>
-                            <option value="Diamante">Diamante</option>
-                        </select>
+        <!-- Contenedor de las 3 tarjetas de Boost -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+            
+            <!-- Tarjeta 1: Rango Actual -->
+            <div class="card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-6 h-6 rounded-full bg-cyan-900/50 flex items-center justify-center text-cyan-400 text-xs">🛡️</div>
+                        <div>
+                            <span class="text-[10px] uppercase tracking-wider text-gray-400 block font-semibold">RANGO ACTUAL</span>
+                            <span class="text-sm font-bold text-gray-200">Platino Div. 4</span>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>División</label>
-                        <select id="div-actual">
-                            <option value="IV" selected>Div. IV</option>
-                            <option value="III">Div. III</option>
-                            <option value="II">Div. II</option>
-                            <option value="I">Div. I</option>
-                        </select>
-                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                <span>Liga Actual</span>
+                                <span>División</span>
+                                <span>LP (opc.)</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
+                                    <option>Platino</option>
+                                </select>
+                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
+                                    <option>Div. IV</option>
+                                </select>
+                                <input type="number" value="0" class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400 text-center">
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label>LP (opc.)</label>
-                        <input type="number" id="lp-actual" value="0" min="0" max="99">
-                    </div>
-                </div>
-
-                <div class="lp-extra-section">
-                    <label>¿Cuantos LP obtienes x victoria?</label>
-                    <select id="lp-ganancia">
-                        <option value="17-19">17 a 19 LP</option>
-                        <option value="19-22">19 a 22 LP</option>
-                        <option value="22-25" selected>22 a 25 LP</option>
-                        <option value="25-30">25 a 30 LP</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Selector Rango Deseado -->
-            <div class="card-selector">
-                <div class="card-header-title">
-                    <img id="img-deseado" src="Platino.png" alt="Rango Deseado">
-                    <div class="title-text">
-                        <span>Rango Deseado</span>
-                        <h3 id="txt-deseado">Platino Div. I</h3>
-                    </div>
-                </div>
-
-                <div class="inputs-row">
-                    <div class="form-group">
-                        <label>Liga Deseada</label>
-                        <select id="liga-deseada">
-                            <option value="Hierro">Hierro</option>
-                            <option value="Bronce">Bronce</option>
-                            <option value="Plata">Plata</option>
-                            <option value="Oro">Oro</option>
-                            <option value="Platino" selected>Platino</option>
-                            <option value="Esmeralda">Esmeralda</option>
-                            <option value="Diamante">Diamante</option>
-                            <option value="Maestro">Maestro</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>División</label>
-                        <select id="div-deseada">
-                            <option value="IV">Div. IV</option>
-                            <option value="III">Div. III</option>
-                            <option value="II">Div. II</option>
-                            <option value="I" selected>Div. I</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>LP (opc.)</label>
-                        <input type="number" id="lp-deseado" value="0" min="0" max="99">
+                        <div class="pt-4">
+                            <label class="text-[11px] text-gray-400 block text-center mb-2">¿Cuantos LP obtienes x victoria?</label>
+                            <select class="input-bg w-full text-xs rounded-lg p-3 text-white outline-none focus:border-amber-400 border border-amber-500/30">
+                                <option>22 a 25 LP</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Panel de Pedido con el mapa de LoL detrás -->
-            <div class="card-checkout-wrapper">
-                <img src="mapalol.webp" alt="Mapa LoL" class="lol-map-bg">
-                
-                <div class="card-checkout">
-                    <div class="checkout-title">Personalizar Pedido</div>
-
-                    <div class="mode-selector">
-                        <button class="mode-btn active" id="btn-soloq" onclick="setMode('soloq')">Solo Q</button>
-                        <button class="mode-btn" id="btn-duo" onclick="setMode('duo')">Duo</button>
+            <!-- Tarjeta 2: Rango Deseado -->
+            <div class="card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-6 h-6 rounded-full bg-cyan-900/50 flex items-center justify-center text-cyan-400 text-xs">🛡️</div>
+                        <div>
+                            <span class="text-[10px] uppercase tracking-wider text-gray-400 block font-semibold">RANGO DESEADO</span>
+                            <span class="text-sm font-bold text-gray-200">Platino Div. 1</span>
+                        </div>
                     </div>
 
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            Transmisión en vivo
-                            <input type="checkbox" id="chk-streaming" onchange="actualizarBoost()">
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                <span>Liga Deseada</span>
+                                <span>División</span>
+                                <span>LP (opc.)</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
+                                    <option>Platino</option>
+                                </select>
+                                <select class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400">
+                                    <option>Div. I</option>
+                                </select>
+                                <input type="number" value="0" class="input-bg text-xs rounded-lg p-2.5 text-white outline-none focus:border-amber-400 text-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3: Personalizar Pedido (Con banner de oferta) -->
+            <div class="card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl border-gray-800">
+                <div class="space-y-5">
+                    <span class="text-xs uppercase tracking-wider text-gray-400 font-bold block">PERSONALIZAR PEDIDO</span>
+
+                    <!-- Selector Solo Q / Duo -->
+                    <div class="grid grid-cols-2 bg-[#0b0f17] p-1 rounded-xl border border-gray-800">
+                        <button class="bg-cyan-400 text-black text-xs font-bold py-2 rounded-lg shadow">Solo Q</button>
+                        <button class="text-gray-400 text-xs font-semibold py-2 hover:text-white transition">Duo</button>
+                    </div>
+
+                    <!-- Toggles -->
+                    <div class="space-y-3 pt-1">
+                        <label class="flex items-center justify-between text-xs text-gray-300 cursor-pointer">
+                            <span>Transmisión en vivo</span>
+                            <input type="checkbox" class="w-4 h-4 rounded accent-amber-400 bg-gray-900 border-gray-700">
                         </label>
-                        <label class="checkbox-label">
-                            Modo Offline
-                            <input type="checkbox" id="chk-offline" onchange="actualizarBoost()">
+                        <label class="flex items-center justify-between text-xs text-gray-300 cursor-pointer">
+                            <span>Modo Offline</span>
+                            <input type="checkbox" class="w-4 h-4 rounded accent-amber-400 bg-gray-900 border-gray-700">
                         </label>
                     </div>
 
-                    <div id="promo-banner" class="promo-banner"></div>
+                    <!-- Banner de Oferta -->
+                    <div class="relative bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 rounded-xl p-3 text-center">
+                        <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-black text-[9px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider">¡OFERTA LIGA COMPLETA!</span>
+                        <p class="text-[11px] text-gray-300 mt-1 leading-snug">
+                            Estás contratando un impulso en la misma liga, ¡a un paso de <strong class="text-amber-400">Esmeralda IV</strong>! Contratas <strong class="text-amber-400">Esmeralda</strong> ¡Obtienes un descuento especial!
+                        </p>
+                    </div>
+                </div>
 
-                    <div class="price-display" id="precio-boost">USD $23.76</div>
-
-                    <button class="submit-btn" id="btn-contratar">¡Aprovechar Oferta de Platino!</button>
+                <!-- Precio y Botón -->
+                <div class="mt-6 pt-4 border-t border-gray-800/80 text-center">
+                    <div class="text-2xl font-black text-amber-400 mb-3 tracking-tight">USD $23.76</div>
+                    <button class="w-full btn-yellow py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-amber-500/10 transition">
+                        ¡Aprovechar Oferta de Platino!
+                    </button>
                 </div>
             </div>
+
         </div>
-    </div>
+    </main>
+
+    <!-- SECCIÓN: TIENDA DE CUENTAS (Conectada a Firebase) -->
+    <main id="section-cuentas" class="w-full max-w-6xl hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-bold text-amber-400">Cuentas Disponibles en Stock</h2>
+            <span class="text-xs text-gray-400" id="contador-cuentas">Cargando inventario...</span>
+        </div>
+        <div id="grid-cuentas" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Las tarjetas se inyectarán dinámicamente mediante JS -->
+        </div>
+    </main>
 
     <script>
-        // Configuración de Firebase
+        // CONFIGURACIÓN DE FIREBASE (Reemplaza con tus credenciales reales si cambian)
         const firebaseConfig = {
             apiKey: "TU_API_KEY",
             authDomain: "TU_AUTH_DOMAIN",
@@ -547,145 +195,85 @@
             appId: "TU_APP_ID"
         };
 
+        // Inicializar Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
 
-        // Control de vistas (Cuentas vs Boost)
-        function cambiarVista(vista) {
-            document.getElementById('vista-cuentas').classList.toggle('active', vista === 'cuentas');
-            document.getElementById('vista-boost').classList.toggle('active', vista === 'boost');
-            document.getElementById('nav-cuentas').classList.toggle('active-view', vista === 'cuentas');
-            document.getElementById('nav-boost').classList.toggle('active-view', vista === 'boost');
+        // Función para alternar pestañas
+        function switchTab(tab) {
+            const boostSec = document.getElementById('section-boost');
+            const cuentasSec = document.getElementById('section-cuentas');
+            const btnBoost = document.getElementById('btn-tab-boost');
+            const btnCuentas = document.getElementById('btn-tab-cuentas');
 
-            if (vista === 'cuentas') {
+            if (tab === 'cuentas') {
+                boostSec.classList.add('hidden');
+                cuentasSec.classList.remove('hidden');
+                btnCuentas.className = "bg-amber-400 text-black px-4 py-2 rounded-lg text-sm font-bold transition border border-amber-500";
+                btnBoost.className = "bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-gray-700";
                 cargarCuentasFirebase();
-            }
-        }
-
-        // Cargar cuentas desde Firestore
-        function cargarCuentasFirebase() {
-            const contenedor = document.getElementById('lista-cuentas');
-            contenedor.innerHTML = '<p style="color: var(--text-muted);">Cargando cuentas...</p>';
-
-            db.collection("cuentas").get().then((querySnapshot) => {
-                if (querySnapshot.empty) {
-                    contenedor.innerHTML = '<p style="color: var(--text-muted);">No hay cuentas disponibles por el momento.</p>';
-                    return;
-                }
-                contenedor.innerHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    contenedor.innerHTML += `
-                        <div class="cuenta-card">
-                            <h4>${data.titulo || 'Cuenta LoL'}</h4>
-                            <p><b>Esencia Azul:</b> ${data.esencia || 'N/A'}</p>
-                            <p><b>Servidor:</b> ${data.servidor || 'LAN/LAS'}</p>
-                            <p style="color: var(--accent); font-weight: bold; font-size: 16px;">$${data.precio || '0.00'}</p>
-                            <button class="submit-btn" style="padding: 8px; font-size: 13px;">Comprar Cuenta</button>
-                        </div>
-                    `;
-                });
-            }).catch((error) => {
-                contenedor.innerHTML = `<p style="color: #ff4d4d;">Error al cargar cuentas de Firebase: ${error.message}</p>`;
-            });
-        }
-
-        // Lógica de la calculadora de Boost
-        const ligasOrden = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante", "Maestro"];
-        const valoresLigas = { "Hierro": 0, "Bronce": 1, "Plata": 2, "Oro": 3, "Platino": 4, "Esmeralda": 5, "Diamante": 6, "Maestro": 7 };
-        const rangosEmblemas = { "Hierro": "Hierro.png", "Bronce": "Bronce.webp", "Plata": "Plata.png", "Oro": "Oro.png", "Platino": "Platino.png", "Esmeralda": "Esmeralda.png", "Diamante": "Diamante.png", "Maestro": "Maestro.png" };
-
-        let modoSeleccionado = 'soloq';
-
-        const ligaActual = document.getElementById('liga-actual');
-        const divActual = document.getElementById('div-actual');
-        const lpActual = document.getElementById('lp-actual');
-        const lpGanancia = document.getElementById('lp-ganancia');
-        const ligaDeseada = document.getElementById('liga-deseada');
-        const divDeseada = document.getElementById('div-deseada');
-        const lpDeseado = document.getElementById('lp-deseado');
-        const imgActual = document.getElementById('img-actual');
-        const txtActual = document.getElementById('txt-actual');
-        const imgDeseado = document.getElementById('img-deseado');
-        const txtDeseado = document.getElementById('txt-deseado');
-        const promoBanner = document.getElementById('promo-banner');
-        const precioBoost = document.getElementById('precio-boost');
-        const btnContratar = document.getElementById('btn-contratar');
-
-        function setMode(modo) {
-            modoSeleccionado = modo;
-            document.getElementById('btn-soloq').classList.toggle('active', modo === 'soloq');
-            document.getElementById('btn-duo').classList.toggle('active', modo === 'duo');
-            actualizarBoost();
-        }
-
-        function actualizarBoost() {
-            if (!ligaActual) return;
-            const lAct = ligaActual.value;
-            const dAct = divActual.value;
-            const lDes = ligaDeseada.value;
-            const dDes = divDeseada.value;
-
-            imgActual.src = rangosEmblemas[lAct] || "Hierro.png";
-            txtActual.textContent = `${lAct} Div. ${dAct}`;
-            imgDeseado.src = rangosEmblemas[lDes] || "Hierro.png";
-            txtDeseado.textContent = `${lDes} Div. ${dDes}`;
-
-            const scoreActual = (valoresLigas[lAct] * 4) + (5 - parseInt(dAct));
-            const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
-            const diff = scoreDeseado - scoreActual;
-
-            let tarifaPorDivision = 7.00;
-            if (lAct === "Hierro" || lAct === "Bronce") tarifaPorDivision = 5.00;
-            if (lAct === "Platino" || lAct === "Esmeralda") tarifaPorDivision = 9.00;
-            if (lAct === "Diamante") tarifaPorDivision = 12.00;
-
-            let precioDivisiones = diff > 0 ? diff * tarifaPorDivision : 0;
-            const multiplicadorLp = { '17-19': 1.20, '19-22': 1.10, '22-25': 1.00, '25-30': 0.90 };
-            let precio = precioDivisiones * (multiplicadorLp[lpGanancia.value] || 1.0);
-
-            let esMismaLiga = (lAct === lDes);
-            let esSaltoAbaDiv1 = (esMismaLiga && parseInt(dAct) > parseInt(dDes) && dDes === "1");
-
-            if (esSaltoAbaDiv1) {
-                let porcentajeDescuento = 0.05; 
-                if (lAct === "Plata" || lAct === "Oro") porcentajeDescuento = 0.08; 
-                if (lAct === "Platino" || lAct === "Esmeralda") porcentajeDescuento = 0.12; 
-                if (lAct === "Diamante") porcentajeDescuento = 0.15; 
-
-                let descuentoMonto = (lAct === "Hierro") ? 2.00 : (precio * porcentajeDescuento);
-                precio -= descuentoMonto;
-
-                let indexLigaActual = ligasOrden.indexOf(lAct);
-                let siguienteLiga = ligasOrden[indexLigaActual + 1] || "la siguiente liga";
-
-                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>!`;
-                promoBanner.style.display = "block";
-                btnContratar.textContent = `¡Aprovechar Oferta de ${lAct}!`;
             } else {
-                promoBanner.style.display = "none";
-                btnContratar.textContent = "Obtener oferta";
+                cuentasSec.classList.add('hidden');
+                boostSec.classList.remove('hidden');
+                btnBoost.className = "bg-amber-400 text-black px-4 py-2 rounded-lg text-sm font-bold transition border border-amber-500";
+                btnCuentas.className = "bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-semibold transition border border-gray-700";
             }
-
-            if (modoSeleccionado === 'duo') precio *= 1.3;
-            if (document.getElementById('chk-streaming').checked) precio += 5;
-            if (document.getElementById('chk-offline').checked) precio += 3;
-
-            precioBoost.textContent = precio > 0 ? `USD $${precio.toFixed(2)}` : "USD $0.00";
         }
 
-        [ligaActual, divActual, lpActual, lpGanancia, ligaDeseada, divDeseada, lpDeseado].forEach(element => {
-            if (element) {
-                element.addEventListener('change', actualizarBoost);
-                element.addEventListener('input', actualizarBoost);
-            }
-        });
+        // Cargar datos de la colección "cuentas" en Firestore
+        function cargarCuentasFirebase() {
+            const grid = document.getElementById('grid-cuentas');
+            const contador = document.getElementById('contador-cuentas');
+            grid.innerHTML = '<p class="text-gray-400 text-sm col-span-3 text-center py-8">Sincronizando cuentas con la base de datos...</p>';
 
-        // Inicializar datos al cargar la página
-        cargarCuentasFirebase();
-        actualizarBoost();
+            db.collection("cuentas").get()
+                .then((querySnapshot) => {
+                    grid.innerHTML = "";
+                    if (querySnapshot.empty) {
+                        contador.innerText = "0 cuentas disponibles";
+                        grid.innerHTML = '<p class="text-gray-400 text-sm col-span-3 text-center py-8">No hay cuentas cargadas en este momento.</p>';
+                        return;
+                    }
+
+                    contador.innerText = `${querySnapshot.size} cuentas encontradas`;
+                    
+                    querySnapshot.forEach((doc) => {
+                        const cuenta = doc.data();
+                        
+                        // Tarjeta de cuenta individual para la tienda
+                        const tarjeta = document.createElement('div');
+                        tarjeta.className = "card-bg rounded-2xl p-6 flex flex-col justify-between shadow-xl border border-gray-800 hover:border-amber-500/50 transition";
+                        tarjeta.innerHTML = `
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="bg-amber-400/10 text-amber-400 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-amber-400/20">${cuenta.servidor || 'LAS'}</span>
+                                    <span class="text-lg font-black text-white">$${cuenta.precio || '0.00'}</span>
+                                </div>
+                                <h3 class="text-base font-bold text-white mb-2">${cuenta.titulo || 'Cuenta LoL'}</h3>
+                                <p class="text-xs text-gray-400 mb-4">${cuenta.descripcion || 'Sin descripción detallada.'}</p>
+                                <div class="space-y-1.5 text-xs text-gray-300 mb-6 bg-[#0b0f17] p-3 rounded-xl border border-gray-800">
+                                    <div class="flex justify-between"><span>Esencia Azul:</span> <strong class="text-amber-400">${cuenta.esencia || '0'} EA</strong></div>
+                                    <div class="flex justify-between"><span>Nivel:</span> <strong>${cuenta.nivel || 'N/A'}</strong></div>
+                                </div>
+                            </div>
+                            <button onclick="comprarCuenta('${doc.id}')" class="w-full btn-yellow py-2.5 rounded-xl text-xs uppercase tracking-wider shadow transition">
+                                Comprar Cuenta
+                            </button>
+                        `;
+                        grid.appendChild(tarjeta);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error obteniendo cuentas: ", error);
+                    grid.innerHTML = '<p class="text-red-400 text-sm col-span-3 text-center py-8">Error al conectar con la base de datos.</p>';
+                });
+        }
+
+        function comprarCuenta(id) {
+            alert("Redirigiendo al proceso de pago para la cuenta ID: " + id);
+        }
     </script>
 </body>
 </html>
