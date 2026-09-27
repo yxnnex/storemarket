@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexusStore - Cuentas y Mentoría LoL</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Fonts: Google Sans (Inter) y Changa One para títulos -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,55 +22,24 @@
         </nav>
     </header>
 
-    <!-- SECCIÓN 1: TIENDA DE CUENTAS -->
+    <!-- SECCIÓN 1: TIENDA DE CUENTAS (Cargadas desde Firebase) -->
     <section id="cuentas" class="container">
         <div class="section-title">
             <h2>Cuentas Disponibles</h2>
             <p>Entrega rápida tras verificación de pago por ticket.</p>
         </div>
 
-        <div class="grid-cuentas">
-            <!-- Ejemplo de Tarjeta de Cuenta 1 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80" alt="Cuenta LoL">
-                <div class="card-content">
-                    <h3>Smurf Nivel 45 - Unrated</h3>
-                    <ul class="stats">
-                        <li>🔵 55,000 Esencia Azul</li>
-                        <li>✨ 12 Skins (Incluye Épica)</li>
-                        <li>🛡️ Sin Honor Restringido</li>
-                    </ul>
-                    <div class="price-row">
-                        <span class="price">$15.00 USD</span>
-                        <a href="https://www.paypal.com/paypalme/tuusuario/15" target="_blank" class="btn-buy" onclick="alertaPago()">Adquirir</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ejemplo de Tarjeta de Cuenta 2 -->
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=500&q=80" alt="Cuenta LoL">
-                <div class="card-content">
-                    <h3>Smurf Nivel 32 - Oro IV</h3>
-                    <ul class="stats">
-                        <li>🔵 40,000 Esencia Azul</li>
-                        <li>✨ 8 Skins (Con Legado)</li>
-                        <li>🛡️ MMR Saludable</li>
-                    </ul>
-                    <div class="price-row">
-                        <span class="price">$22.00 USD</span>
-                        <a href="https://www.paypal.com/paypalme/tuusuario/22" target="_blank" class="btn-buy" onclick="alertaPago()">Adquirir</a>
-                    </div>
-                </div>
-            </div>
+        <!-- Aquí se inyectarán las cuentas de Firebase -->
+        <div id="gridCuentas" class="grid-cuentas">
+            <p style="text-align: center; grid-column: 1 / -1; color: #888;">Cuentas disponibles cargándose...</p>
         </div>
     </section>
 
-    <!-- SECCIÓN 2: CALCULADORA DE BOOST / ENTRENAMIENTO -->
+    <!-- SECCIÓN 2: CALCULADORA DE BOOST -->
     <section id="boost" class="boost-section">
         <div class="boost-card">
             <h2>Optimización y Mentoría de Rangos</h2>
-            <p>Selecciona tu estado actual y hasta dónde deseas llegar. El precio se ajustará automáticamente.</p>
+            <p>Selecciona tu estado actual y hasta dónde deseas llegar.</p>
 
             <div class="boost-form">
                 <div class="form-group">
@@ -107,39 +76,86 @@
         </div>
     </section>
 
-    <!-- SECCIÓN 3: POLÍTICA DE SEGURIDAD / TICKETS -->
+    <!-- SECCIÓN 3: SOPORTE -->
     <section id="soporte" class="support-banner">
         <div class="container">
             <h3>⚠️ Importante sobre los pagos y entregas</h3>
-            <p>Para evitar fraudes, las compras por PayPal requieren validación manual. Al realizar el pago, recuerda guardar tu comprobante y <strong>abrir un ticket de soporte en Discord o en nuestra sección de contacto</strong> para recibir tus credenciales de forma segura. Los reembolsos automáticos están inhabilitados.</p>
+            <p>Para evitar fraudes, las compras por PayPal requieren validación manual. Abre un ticket de soporte tras realizar tu pago para recibir tus datos.</p>
         </div>
     </section>
 
-    <!-- SCRIPTS DE FUNCIONALIDAD -->
-    <script>
-        // Tarifa base que puedes ajustar cuando quieras
-        const precioPorDivision = 10; 
+    <!-- FIREBASE Y LÓGICA DE CARGA -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // CONFIGURACIÓN DE FIREBASE (Reemplaza con tus credenciales reales)
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "tu-proyecto.firebaseapp.com",
+            projectId: "tu-proyecto",
+            storageBucket: "tu-proyecto.appspot.com",
+            messagingSenderId: "TU_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function cargarCuentas() {
+            const grid = document.getElementById('gridCuentas');
+            try {
+                const querySnapshot = await getDocs(collection(db, "cuentas"));
+                if (querySnapshot.empty) {
+                    grid.innerHTML = `<p style="text-align: center; grid-column: 1 / -1; color: #888;">No hay cuentas disponibles en este momento.</p>`;
+                    return;
+                }
+
+                grid.innerHTML = ""; // Limpiar carga
+                querySnapshot.forEach((doc) => {
+                    const c = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${c.imagen || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=500&q=80'}" alt="Cuenta LoL">
+                        <div class="card-content">
+                            <h3>${c.titulo}</h3>
+                            <ul class="stats">
+                                <li>🔵 ${c.esencia} Esencia Azul</li>
+                                <li>✨ ${c.skins} Skins</li>
+                                <li>🛡️ ${c.detalles || 'Sin penalizaciones'}</li>
+                            </ul>
+                            <div class="price-row">
+                                <span class="price">$${c.precio} USD</span>
+                                <a href="${c.linkPago || '#'}" target="_blank" class="btn-buy" onclick="alert('Una vez pagado, abre ticket.')">Adquirir</a>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Error cargando cuentas:", error);
+                grid.innerHTML = `<p style="text-align: center; grid-column: 1 / -1; color: #ff5555;">Error al conectar con la base de datos.</p>`;
+            }
+        }
+
+        cargarCuentas();
+    </script>
+
+    <!-- SCRIPTS GENERALES -->
+    <script>
+        const precioPorDivision = 10; 
         function calcularPrecio() {
             let eloActual = parseInt(document.getElementById('currentTier').value);
             let eloDeseado = parseInt(document.getElementById('desiredTier').value);
-
             let diferencia = eloDeseado - eloActual;
-
             if (diferencia <= 0) {
                 document.getElementById('totalPrice').innerText = "0";
                 return;
             }
-
-            // Suposición de 4 divisiones por elo
             let total = diferencia * 4 * (precioPorDivision / 4); 
             document.getElementById('totalPrice').innerText = total;
         }
-
-        function alertaPago() {
-            alert("¡Aviso importante!\n\nUna vez realizado el pago en PayPal, abre un ticket en nuestra sección de soporte para que te entreguemos los datos de la cuenta de forma privada.");
-        }
     </script>
-
 </body>
 </html>
