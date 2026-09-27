@@ -1,0 +1,247 @@
+/* Configuración general y paleta de colores gaming/oscura */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #0b0e14;
+    color: #e2e8f0;
+    line-height: 1.6;
+}
+
+/* Barra de navegación */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background-color: #121824;
+    border-bottom: 1px solid #1f293d;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #6366f1;
+}
+
+.navbar nav {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.navbar nav a {
+    text-decoration: none;
+    color: #94a3b8;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.navbar nav a:hover {
+    color: #ffffff;
+}
+
+.btn-ticket {
+    background-color: #1f293d;
+    color: #6366f1 !important;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #3b82f6;
+}
+
+/* Contenedores generales */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    margin-bottom: 30px;
+}
+
+.section-title h2 {
+    font-size: 2rem;
+    color: #ffffff;
+}
+
+.section-title p {
+    color: #94a3b8;
+}
+
+/* Cuadrícula de cuentas (Grid) */
+.grid-cuentas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background-color: #121824;
+    border: 1px solid #1f293d;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #6366f1;
+}
+
+.card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    font-size: 1.1rem;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.stats {
+    list-style: none;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.stats li {
+    margin-bottom: 6px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #1f293d;
+    padding-top: 15px;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #38bdf8;
+}
+
+.btn-buy {
+    background-color: #6366f1;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.btn-buy:hover {
+    background-color: #4f46e5;
+}
+
+/* Sección Calculadora de Boost */
+.boost-section {
+    background: linear-gradient(135deg, #121824 0%, #0f172a 100%);
+    padding: 60px 20px;
+    border-top: 1px solid #1f293d;
+    border-bottom: 1px solid #1f293d;
+    margin-top: 60px;
+}
+
+.boost-card {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #0b0e14;
+    border: 1px solid #1f293d;
+    padding: 40px;
+    border-radius: 12px;
+}
+
+.boost-card h2 {
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.boost-card p {
+    color: #94a3b8;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.boost-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    background-color: #121824;
+    border: 1px solid #1f293d;
+    color: white;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.price-box {
+    background-color: #121824;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #1f293d;
+    text-align: center;
+}
+
+.price-box h3 {
+    color: #ffffff;
+    font-size: 1.4rem;
+}
+
+.price-box span {
+    color: #38bdf8;
+}
+
+/* Banner de advertencia / seguridad */
+.support-banner {
+    background-color: #121824;
+    border-left: 4px solid #f59e0b;
+    padding: 25px;
+    border-radius: 6px;
+    margin-top: 40px;
+}
+
+.support-banner h3 {
+    color: #f59e0b;
+    margin-bottom: 8px;
+}
+
+.support-banner p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
