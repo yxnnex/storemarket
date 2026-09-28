@@ -14,18 +14,29 @@
 
         body {
             background-color: #0b0714;
-            background-image: 
-                radial-gradient(at 15% 15%, rgba(126, 34, 206, 0.22) 0px, transparent 50%),
-                radial-gradient(at 85% 85%, rgba(79, 70, 229, 0.18) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(147, 51, 234, 0.1) 0px, transparent 60%);
             color: #ffffff;
             padding: 20px;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Canvas para el fondo dinámico de partículas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .container {
             max-width: 1250px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         header {
@@ -579,6 +590,9 @@
 </head>
 <body>
 
+    <!-- Canvas para el fondo dinámico -->
+    <canvas id="bg-canvas"></canvas>
+
     <div class="container">
         <header>
             <div class="logo-area">
@@ -770,6 +784,62 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Script para el Fondo Dinámico (Partículas flotantes con Canvas)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.color = Math.random() > 0.5 ? 'rgba(168, 85, 247, 0.35)' : 'rgba(79, 70, 229, 0.3)';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 15000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
         const firebaseConfig = {
             apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
             authDomain: "store-51d80.firebaseapp.com",
@@ -931,13 +1001,12 @@
                 precio: precio.toFixed(2)
             };
             modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total con descuento: <b style="color: #c084fc;">USD $${itemSeleccionado.precio}</b>`;
-            document.getElementById('chk-terminos').checked = false; // Resetear checkbox
+            document.getElementById('chk-terminos').checked = false;
             modalPago.classList.add('active');
         });
 
         document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
 
-        // PAGO VÍA WHATSAPP / ALIAS
         document.getElementById('btn-pagar-alias').addEventListener('click', () => {
             const email = document.getElementById('email-cliente').value;
             const aceptaTerminos = document.getElementById('chk-terminos').checked;
@@ -951,7 +1020,6 @@
             modalPago.classList.remove('active');
         });
 
-        // PAGO DIRECTO A PAYPAL.ME CON TU USUARIO Y MONTO EXACTO
         document.getElementById('btn-pagar-paypal').addEventListener('click', () => {
             const email = document.getElementById('email-cliente').value;
             const aceptaTerminos = document.getElementById('chk-terminos').checked;
@@ -1004,7 +1072,7 @@
                     card.addEventListener('click', () => {
                         itemSeleccionado = { titulo: c.title, precio: c.price };
                         modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #c084fc;">USD $${c.price}</b>`;
-                        document.getElementById('chk-terminos').checked = false; // Resetear checkbox
+                        document.getElementById('chk-terminos').checked = false;
                         modalPago.classList.add('active');
                     });
                     grid.appendChild(card);
