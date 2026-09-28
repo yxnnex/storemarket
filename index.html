@@ -344,7 +344,6 @@
             transform: translateY(-1px);
         }
 
-        /* ESTILOS MODIFICADOS PARA LA OFERTA (AMARILLO / DORADO) */
         .promo-banner {
             background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(202, 138, 4, 0.25));
             border: 1.5px solid rgba(234, 179, 8, 0.6);
@@ -783,7 +782,6 @@
                 promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ¡Obtienes un descuento especial!`;
                 promoBanner.style.display = "block";
                 
-                // Activar estilos amarillos en el botón
                 btnContratar.classList.add('promo-active');
                 btnContratar.textContent = `¡Aprovechar Oferta de ${lAct}!`;
             } else {
@@ -837,10 +835,18 @@
             modalPago.classList.remove('active');
         });
 
+        // REDIRECCIÓN DIRECTA A PAYPAL.ME CON TU USUARIO Y EL MONTO EXACTO
         document.getElementById('btn-pagar-paypal').addEventListener('click', () => {
             const email = document.getElementById('email-cliente').value;
-            if(!email) { alert("Ingresa tu correo electrónico"); return; }
-            alert(`Redirigiendo a PayPal para completar el pago de USD $${itemSeleccionado.precio}`);
+            if(!email) { 
+                alert("Ingresa tu correo electrónico antes de continuar."); 
+                return; 
+            }
+            
+            const monto = itemSeleccionado.precio;
+            const urlPayPal = `https://paypal.me/agustinportii/${monto}USD`;
+            
+            window.open(urlPayPal, '_blank');
             modalPago.classList.remove('active');
         });
 
