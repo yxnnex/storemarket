@@ -1015,7 +1015,7 @@
             if(!aceptaTerminos) { mostrarAlerta("Debes aceptar los Términos y Condiciones de no reembolso."); return; }
             
             const tuNumeroWhatsApp = "59899806108"; 
-            const mensaje = `Hola! Quiero contratar el ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email} (Acepté los términos de no reembolso).`;
+            const mensaje = `Hola! Quiero contratar el servicio: ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email} (Acepté los términos de no reembolso).`;
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
             modalPago.classList.remove('active');
         });
