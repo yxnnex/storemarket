@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda & Boosting</title>
-    <!-- Fuentes y Estilos -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tus estilos originales se mantienen intactos -->
     <style>
         * {
             box-sizing: border-box;
@@ -90,7 +89,6 @@
             display: block;
         }
 
-        /* Estilos Catálogo Cuentas */
         .grid-cuentas {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -180,7 +178,6 @@
             background: #6366f1;
         }
 
-        /* Estilos Calculadora de Boost */
         .boost-container {
             background: rgba(30, 41, 59, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -323,7 +320,6 @@
             transform: scale(1.02);
         }
 
-        /* Modales */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -369,7 +365,6 @@
         .btn-whatsapp { background: #25d366; color: #fff; }
         .btn-paypal { background: #0070ba; color: #fff; }
 
-        /* Alerta personalizada */
         .custom-alert {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -428,9 +423,7 @@
     <main>
         <!-- Sección Cuentas -->
         <div id="seccion-cuentas" class="tab-content active">
-            <div id="grid-cuentas" class="grid-cuentas">
-                <!-- Se llena mediante JS -->
-            </div>
+            <div id="grid-cuentas" class="grid-cuentas"></div>
         </div>
 
         <!-- Sección Boost -->
@@ -581,12 +574,11 @@
         </div>
     </div>
 
-    <!-- Script General y Firebase -->
+    <!-- Lógica de la página con sincronización dinámica de Firebase para las tarifas -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Script para el Fondo Dinámico (Partículas flotantes con Canvas)
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
@@ -654,7 +646,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Funciones globales para el manejo del modal de alerta personalizado
         window.mostrarAlerta = function(mensaje) {
             document.getElementById('customAlertMessage').innerText = mensaje;
             document.getElementById('customAlert').classList.add('active');
@@ -718,7 +709,7 @@
 
         const valoresLigas = { Hierro: 1, Bronce: 2, Plata: 3, Oro: 4, Platino: 5, Esmeralda: 6, Diamante: 7, Maestro: 8 };
 
-        // Objeto para almacenar las tarifas dinámicas que vienen de Firebase
+        // Tarifas por defecto conectadas dinámicamente a Firebase
         let tarifasFirebase = {
             baja: 4.00,
             media: 6.50,
@@ -726,7 +717,6 @@
             multiplicadorLpBajo: 1.20
         };
 
-        // Función para cargar las tarifas desde Firestore en tiempo real
         async function cargarTarifasTienda() {
             try {
                 const docRef = doc(db, "configuracion", "tarifasBoost");
@@ -739,7 +729,7 @@
                     tarifasFirebase.multiplicadorLpBajo = data.multiplicadorLpBajo ?? 1.20;
                 }
             } catch (err) {
-                console.error("Error al cargar tarifas en la tienda:", err);
+                console.error("Error al cargar tarifas:", err);
             }
             actualizarBoost();
         }
@@ -760,7 +750,6 @@
             const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
             const diff = scoreDeseado - scoreActual;
 
-            // Uso de tarifas dinámicas obtenidas desde Firebase
             let tarifaPorDivision = tarifasFirebase.baja;
             if (lAct === "Platino" || lAct === "Esmeralda") tarifaPorDivision = tarifasFirebase.media;
             if (lAct === "Diamante" || lAct === "Maestro") tarifaPorDivision = tarifasFirebase.alta;
@@ -817,7 +806,7 @@
         const grupoEmail = document.getElementById('grupo-email');
         const grupoBoostCampos = document.getElementById('grupo-boost-campos');
         let itemSeleccionado = null;
-        let tipoItemActual = ''; // 'cuenta' o 'boost'
+        let tipoItemActual = '';
 
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
@@ -867,7 +856,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando boost:", e); }
+                } catch(e) { console.error(e); }
 
             } else {
                 const email = document.getElementById('email-cliente').value;
@@ -883,7 +872,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando compra:", e); }
+                } catch(e) { console.error(e); }
             }
             
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
@@ -914,7 +903,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando boost PayPal:", e); }
+                } catch(e) { console.error(e); }
 
             } else {
                 const email = document.getElementById('email-cliente').value;
@@ -931,7 +920,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando compra PayPal:", e); }
+                } catch(e) { console.error(e); }
             }
             
             const monto = itemSeleccionado.precio;
@@ -986,7 +975,6 @@
             } catch(e) { console.error(e); }
         }
 
-        // Inicializar datos al cargar la tienda
         cargarTarifasTienda();
         cargarCatalogo();
     </script>
