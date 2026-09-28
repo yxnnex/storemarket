@@ -1252,13 +1252,12 @@
                         </div>
                     `;
                     
-                    // Aquí se mapea la descripción dinámica que viene de la base de datos (c.description o c.descripcion)
                     card.addEventListener('click', () => {
                         tipoItemActual = 'cuenta';
                         itemSeleccionado = { titulo: c.title, precio: c.price };
                         
-                        // Busca la descripción del panel admin; si escribiste 'descripcion' o 'description' en firebase, lo detectará
-                        const descripcionTexto = c.description || c.descripcion || 'Sin descripción adicional proporcionada.';
+                        // CORRECCIÓN: Se agrega c.descripcionLarga para que lea correctamente lo enviado desde el admin
+                        const descripcionTexto = c.descripcionLarga || c.description || c.descripcion || 'Sin descripción adicional proporcionada.';
 
                         modalDetallesTitulo.textContent = c.title;
                         modalDetallesTexto.innerHTML = `
