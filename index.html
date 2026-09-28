@@ -940,18 +940,23 @@
 
         async function cargarTarifasTienda() {
             try {
+                console.log("Intentando conectar con Firebase para buscar tarifas...");
                 const docRef = doc(db, "configuracion", "tarifasBoost");
                 const docSnap = await getDoc(docRef);
+                
                 if (docSnap.exists()) {
+                    console.log("¡Tarifas encontradas en Firestore!", docSnap.data());
                     const data = docSnap.data();
                     tarifasFirebase.hierroBronce = data.hierroBronce ?? 5.00;
                     tarifasFirebase.plataOro = data.plataOro ?? 7.00;
                     tarifasFirebase.platinoEsmeralda = data.platinoEsmeralda ?? 9.00;
                     tarifasFirebase.diamante = data.diamante ?? 12.00;
                     tarifasFirebase.multiplicadorLpBajo = data.multiplicadorLpBajo ?? 1.20;
+                } else {
+                    console.warn("El documento 'configuracion/tarifasBoost' no existe en Firestore. Usando valores por defecto.");
                 }
             } catch (err) {
-                console.error("Error al cargar tarifas desde Firebase:", err);
+                console.error("Error crítico al cargar tarifas desde Firebase:", err);
             }
             actualizarBoost();
         }
