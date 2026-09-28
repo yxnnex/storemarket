@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -42,17 +42,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-        }
-
-        .admin-box-full {
-            grid-column: 1 / -1;
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         @media (max-width: 768px) {
@@ -60,6 +50,15 @@
         }
 
         .admin-box {
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .admin-box-full {
             background: rgba(18, 20, 28, 0.55);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -129,8 +128,8 @@
         }
         .btn-volver:hover { background: rgba(255, 255, 255, 0.15); }
 
-        /* Estilos para la tabla del historial */
-        .table-responsive {
+        /* Estilos de la tabla de servicios contratados */
+        .table-container {
             overflow-x: auto;
         }
 
@@ -155,14 +154,14 @@
             color: #e2e8f0;
         }
 
-        .badge-estado {
+        .badge {
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 0.75rem;
             font-weight: bold;
         }
-        .badge-pendiente { background: rgba(243, 186, 47, 0.15); color: #f3ba2f; }
-        .badge-completado { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .badge-cuenta { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .badge-boost { background: rgba(243, 186, 47, 0.15); color: #f3ba2f; }
     </style>
 </head>
 <body>
@@ -214,23 +213,22 @@
             </div>
         </div>
 
-        <!-- CAJA 3: HISTORIAL DE SERVICIOS DE BOOST -->
+        <!-- CAJA 3: SERVICIOS CONTRATADOS (PARA CORROBORAR COMPROBANTES) -->
         <div class="admin-box-full">
-            <h2>Historial de Servicios de Boost Solicitados</h2>
-            <div class="table-responsive">
+            <h2>Servicios Contratados (Para Corroborar Comprobantes)</h2>
+            <div class="table-container">
                 <table>
                     <thead>
                         <tr>
+                            <th>Tipo</th>
                             <th>Cliente / Discord</th>
-                            <th>Servidor</th>
-                            <th>Rango Inicial ➔ Deseado</th>
-                            <th>Total ($)</th>
-                            <th>Estado</th>
+                            <th>Detalle del Servicio</th>
+                            <th>Monto</th>
                         </tr>
                     </thead>
-                    <tbody id="tabla-historial-boost">
+                    <tbody id="tabla-servicios">
                         <tr>
-                            <td colspan="5" style="text-align: center; color: #94a3b8;">Cargando historial...</td>
+                            <td colspan="4" style="text-align: center; color: #94a3b8;">Cargando servicios contratados...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -295,49 +293,71 @@
             }
         });
 
-        // Cargar Historial de Servicios de Boost desde Firestore
-        async function cargarHistorialBoost() {
-            const tabla = document.getElementById('tabla-historial-boost');
+        // Cargar Servicios Contratados (Venta de cuentas y Boosts) desde Firestore
+        async function cargarServiciosContratados() {
+            const tabla = document.getElementById('tabla-servicios');
+            let htmlContenido = "";
+
             try {
-                // Asegúrate de que tus pedidos de boost se guarden en una colección llamada "pedidosBoost"
-                const querySnapshot = await getDocs(collection(db, "pedidosBoost"));
+                // 1. Consultar compras de cuentas (Asumimos colección "compras" o "ventas")
+                // Si guardas las compras en otra colección, solo cambia el nombre aquí abajo
+                const snapshotCuentas = await getDocs(collection(db, "compras")).catch(() => ({ empty: true }));
                 
-                if (querySnapshot.empty) {
-                    tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">No hay servicios de boost solicitados todavía.</td></tr>`;
-                    return;
+                if (!snapshotCuentas.empty) {
+                    snapshotCuentas.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        const cliente = data.discord || data.usuario || "Cliente";
+                        const detalle = data.tituloCuenta || data.detalle || "Compra de Cuenta LoL";
+                        const precio = data.precio ? `$${data.precio}` : "N/D";
+
+                        htmlContenido += `
+                            <tr>
+                                <td><span class="badge badge-cuenta">Cuenta</span></td>
+                                <td>${cliente}</td>
+                                <td>${detalle}</td>
+                                <td>${precio}</td>
+                            </tr>
+                        `;
+                    });
                 }
 
-                tabla.innerHTML = "";
-                querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    // Valores por defecto por si alguna propiedad varía
-                    const cliente = data.discord || data.email || "Cliente Anónimo";
-                    const servidor = data.server || "LAS";
-                    const rangoInicio = data.currentRank || "Desconocido";
-                    const rangoFin = data.desiredRank || "Desconocido";
-                    const precio = data.price ? `$${data.price}` : "N/D";
-                    const estado = data.status || "Pendiente";
+                // 2. Consultar servicios de Boost (Colección "pedidosBoost" o "boosts")
+                const snapshotBoosts = await getDocs(collection(db, "pedidosBoost")).catch(() => ({ empty: true }));
 
-                    const badgeClass = estado.toLowerCase() === 'completado' ? 'badge-completado' : 'badge-pendiente';
+                if (!snapshotBoosts.empty) {
+                    snapshotBoosts.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        const cliente = data.discord || data.usuario || "Cliente";
+                        // Ejemplo: "Duo boost de Oro a Platino"
+                        const detalle = data.detalle || `Duo Boost de ${data.currentRank || 'Rango X'} a ${data.desiredRank || 'Rango Y'}`;
+                        const precio = data.price ? `$${data.price}` : (data.precio ? `$${data.precio}` : "N/D");
 
-                    tabla.innerHTML += `
-                        <tr>
-                            <td>${cliente}</td>
-                            <td>${servidor}</td>
-                            <td>${rangoInicio} ➔ ${rangoFin}</td>
-                            <td>${precio}</td>
-                            <td><span class="badge-estado ${badgeClass}">${estado}</span></td>
-                        </tr>
-                    `;
-                });
+                        htmlContenido += `
+                            <tr>
+                                <td><span class="badge badge-boost">Boost</span></td>
+                                <td>${cliente}</td>
+                                <td>${detalle}</td>
+                                <td>${precio}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                // Si no hay nada en ninguna de las dos colecciones
+                if (htmlContenido === "") {
+                    tabla.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">No hay servicios contratados registrados todavía.</td></tr>`;
+                } else {
+                    tabla.innerHTML = htmlContenido;
+                }
+
             } catch (err) {
-                console.error("Error al cargar el historial:", err);
-                tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Error al cargar los datos del historial.</td></tr>`;
+                console.error("Error al cargar los servicios:", err);
+                tabla.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #ef4444;">Error al conectar con la base de datos para los registros.</td></tr>`;
             }
         }
 
-        // Ejecutar al cargar la página
-        window.addEventListener('DOMContentLoaded', cargarHistorialBoost);
+        // Ejecutar al cargar el panel
+        window.addEventListener('DOMContentLoaded', cargarServiciosContratados);
     </script>
 </body>
 </html>
