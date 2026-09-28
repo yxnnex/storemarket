@@ -540,6 +540,41 @@
             accent-color: #a855f7;
             cursor: pointer;
         }
+
+        /* Estilos para el Modal de Alerta Personalizado */
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 7, 20, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+        }
+        .custom-alert-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .custom-alert-box {
+            background: rgba(22, 16, 38, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            padding: 24px; width: 100%; max-width: 380px; text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+        .custom-alert-box h4 {
+            color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px;
+        }
+        .custom-alert-box p {
+            color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4;
+        }
+        .btn-alert-ok {
+            background-color: #a855f7; color: #ffffff; border: none;
+            padding: 10px 24px; border-radius: 8px; font-weight: bold; font-size: 0.9rem;
+            cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+        .btn-alert-ok:hover {
+            background-color: #9333ea;
+        }
     </style>
 </head>
 <body>
@@ -722,6 +757,15 @@
         </div>
     </div>
 
+    <!-- MODAL DE ALERTA PERSONALIZADO -->
+    <div id="customAlert" class="custom-alert-overlay">
+        <div class="custom-alert-box">
+            <h4>Aviso</h4>
+            <p id="customAlertMessage">Mensaje de alerta...</p>
+            <button class="btn-alert-ok" onclick="cerrarAlertaCustom()">Aceptar</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -737,6 +781,16 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Funciones globales para el manejo del modal de alerta personalizado
+        window.mostrarAlerta = function(mensaje) {
+            document.getElementById('customAlertMessage').innerText = mensaje;
+            document.getElementById('customAlert').classList.add('active');
+        }
+
+        window.cerrarAlertaCustom = function() {
+            document.getElementById('customAlert').classList.remove('active');
+        }
 
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -869,7 +923,7 @@
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
             if (precio <= 0) {
-                alert("El rango deseado debe ser mayor al actual.");
+                mostrarAlerta("El rango deseado debe ser mayor al actual.");
                 return;
             }
             itemSeleccionado = {
@@ -888,8 +942,8 @@
             const email = document.getElementById('email-cliente').value;
             const aceptaTerminos = document.getElementById('chk-terminos').checked;
 
-            if(!email) { alert("Ingresa tu correo electrónico"); return; }
-            if(!aceptaTerminos) { alert("Debes aceptar los Términos y Condiciones de no reembolso."); return; }
+            if(!email) { mostrarAlerta("Ingresa tu correo electrónico"); return; }
+            if(!aceptaTerminos) { mostrarAlerta("Debes aceptar los Términos y Condiciones de no reembolso."); return; }
             
             const tuNumeroWhatsApp = "549261XXXXXXXX"; 
             const mensaje = `Hola! Quiero contratar el ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email} (Acepté los términos de no reembolso).`;
@@ -903,11 +957,11 @@
             const aceptaTerminos = document.getElementById('chk-terminos').checked;
 
             if(!email) { 
-                alert("Ingresa tu correo electrónico antes de continuar."); 
+                mostrarAlerta("Ingresa tu correo electrónico antes de continuar."); 
                 return; 
             }
             if(!aceptaTerminos) {
-                alert("Debes aceptar los Términos y Condiciones de no reembolso para continuar.");
+                mostrarAlerta("Debes aceptar los Términos y Condiciones de no reembolso para continuar.");
                 return;
             }
             
