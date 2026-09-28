@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
@@ -44,6 +44,17 @@
             gap: 20px;
         }
 
+        .admin-box-full {
+            grid-column: 1 / -1;
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-top: 20px;
+        }
+
         @media (max-width: 768px) {
             .admin-grid { grid-template-columns: 1fr; }
         }
@@ -57,7 +68,7 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        .admin-box h2 {
+        .admin-box h2, .admin-box-full h2 {
             font-size: 1.2rem;
             margin-bottom: 20px;
             color: #22c55e;
@@ -117,6 +128,41 @@
             font-weight: bold;
         }
         .btn-volver:hover { background: rgba(255, 255, 255, 0.15); }
+
+        /* Estilos para la tabla del historial */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        th {
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        td {
+            color: #e2e8f0;
+        }
+
+        .badge-estado {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .badge-pendiente { background: rgba(243, 186, 47, 0.15); color: #f3ba2f; }
+        .badge-completado { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
     </style>
 </head>
 <body>
@@ -167,12 +213,35 @@
                 </form>
             </div>
         </div>
+
+        <!-- CAJA 3: HISTORIAL DE SERVICIOS DE BOOST -->
+        <div class="admin-box-full">
+            <h2>Historial de Servicios de Boost Solicitados</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente / Discord</th>
+                            <th>Servidor</th>
+                            <th>Rango Inicial ➔ Deseado</th>
+                            <th>Total ($)</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-historial-boost">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #94a3b8;">Cargando historial...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- SCRIPT DE LÓGICA ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
@@ -218,7 +287,6 @@
                     alta: parseFloat(document.getElementById('tarifa-alta').value),
                     multiplicadorLpBajo: parseFloat(document.getElementById('recargo-lp').value)
                 };
-                // Guardamos la configuración en un documento fijo llamado "configuracion/tarifasBoost"
                 await setDoc(doc(db, "configuracion", "tarifasBoost"), tarifas);
                 alert("¡Tarifas de Boost actualizadas correctamente!");
             } catch (err) {
@@ -226,6 +294,50 @@
                 alert("Error al guardar las tarifas.");
             }
         });
+
+        // Cargar Historial de Servicios de Boost desde Firestore
+        async function cargarHistorialBoost() {
+            const tabla = document.getElementById('tabla-historial-boost');
+            try {
+                // Asegúrate de que tus pedidos de boost se guarden en una colección llamada "pedidosBoost"
+                const querySnapshot = await getDocs(collection(db, "pedidosBoost"));
+                
+                if (querySnapshot.empty) {
+                    tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">No hay servicios de boost solicitados todavía.</td></tr>`;
+                    return;
+                }
+
+                tabla.innerHTML = "";
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    // Valores por defecto por si alguna propiedad varía
+                    const cliente = data.discord || data.email || "Cliente Anónimo";
+                    const servidor = data.server || "LAS";
+                    const rangoInicio = data.currentRank || "Desconocido";
+                    const rangoFin = data.desiredRank || "Desconocido";
+                    const precio = data.price ? `$${data.price}` : "N/D";
+                    const estado = data.status || "Pendiente";
+
+                    const badgeClass = estado.toLowerCase() === 'completado' ? 'badge-completado' : 'badge-pendiente';
+
+                    tabla.innerHTML += `
+                        <tr>
+                            <td>${cliente}</td>
+                            <td>${servidor}</td>
+                            <td>${rangoInicio} ➔ ${rangoFin}</td>
+                            <td>${precio}</td>
+                            <td><span class="badge-estado ${badgeClass}">${estado}</span></td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error("Error al cargar el historial:", err);
+                tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Error al cargar los datos del historial.</td></tr>`;
+            }
+        }
+
+        // Ejecutar al cargar la página
+        window.addEventListener('DOMContentLoaded', cargarHistorialBoost);
     </script>
 </body>
 </html>
