@@ -1231,44 +1231,51 @@
                 
                 snapshot.forEach(doc => {
                     const c = doc.data();
+                    
+                    // Sincronización robusta por si los campos usan nombres en español o inglés en Firestore
+                    const titulo = c.titulo || c.title || 'Cuenta sin título';
+                    const servidor = c.servidor || c.server || 'LAN';
+                    const campeones = c.campeones ?? c.championCount ?? '0';
+                    const rango = c.rango || c.currentRank || 'Unranked';
+                    const esencia = c.esenciaAzul || c.riotPoints || '0';
+                    const precio = c.precio || c.price || '0';
+                    const imagen = c.imagen || c.imageUrl || 'https://via.placeholder.com/250';
+                    const descripcionTexto = c.descripcion || c.description || c.detalles || 'Sin descripción adicional proporcionada.';
+
                     const card = document.createElement('div');
                     card.className = 'cuenta-card';
                     card.innerHTML = `
-                        <img src="${c.imageUrl}" class="cuenta-img" alt="Cuenta">
+                        <img src="${imagen}" class="cuenta-img" alt="Cuenta">
                         <div class="cuenta-body">
                             <div>
-                                <span class="cuenta-server">${c.server}</span>
-                                <h3 class="cuenta-titulo">${c.title}</h3>
+                                <span class="cuenta-server">${servidor}</span>
+                                <h3 class="cuenta-titulo">${titulo}</h3>
                                 <div class="cuenta-detalles-info">
-                                    <span>⚔️ Campeones: ${c.championCount}</span>
-                                    <span>🏆 Rango: ${c.currentRank}</span>
-                                    <span>💎 EA: ${c.riotPoints}</span>
+                                    <span>⚔️ Campeones: ${campeones}</span>
+                                    <span>🏆 Rango: ${rango}</span>
+                                    <span>💎 EA: ${esencia}</span>
                                 </div>
                             </div>
                             <div class="cuenta-footer">
-                                <span class="cuenta-precio">USD $${c.price}</span>
+                                <span class="cuenta-precio">USD $${precio}</span>
                                 <button class="btn-comprar">Comprar</button>
                             </div>
                         </div>
                     `;
                     
-                    // Aquí se mapea la descripción dinámica que viene de la base de datos (c.description o c.descripcion)
                     card.addEventListener('click', () => {
                         tipoItemActual = 'cuenta';
-                        itemSeleccionado = { titulo: c.title, precio: c.price };
-                        
-                        // Busca la descripción del panel admin; si escribiste 'descripcion' o 'description' en firebase, lo detectará
-                        const descripcionTexto = c.description || c.descripcion || 'Sin descripción adicional proporcionada.';
+                        itemSeleccionado = { titulo: titulo, precio: precio };
 
-                        modalDetallesTitulo.textContent = c.title;
+                        modalDetallesTitulo.textContent = titulo;
                         modalDetallesTexto.innerHTML = `
-                            🌐 <b>Servidor:</b> ${c.server}<br>
-                            ⚔️ <b>Campeones:</b> ${c.championCount}<br>
-                            🏆 <b>Rango actual:</b> ${c.currentRank}<br>
-                            💎 <b>Esencia Azul (EA):</b> ${c.riotPoints}<br><br>
+                            🌐 <b>Servidor:</b> ${servidor}<br>
+                            ⚔️ <b>Campeones:</b> ${campeones}<br>
+                            🏆 <b>Rango actual:</b> ${rango}<br>
+                            💎 <b>Esencia Azul (EA):</b> ${esencia}<br><br>
                             📜 <b>Descripción detallada:</b><br>
-                            ${descripcionTexto.replace(/\n/g, '<br>')}<br><br>
-                            Precio: <b style="color: #fbbf24;">USD $${c.price}</b>
+                            <div style="background: rgba(11, 14, 20, 0.6); padding: 10px; border-radius: 6px; margin-top: 5px; white-space: pre-wrap;">${descripcionTexto}</div><br>
+                            Precio: <b style="color: #fbbf24;">USD $${precio}</b>
                         `;
                         modalDetalles.classList.add('active');
                     });
