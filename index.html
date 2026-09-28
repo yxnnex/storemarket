@@ -745,9 +745,22 @@
             <h3 id="modal-titulo" style="margin-bottom: 15px; color: #f8fafc;">Finalizar Pago</h3>
             <div id="modal-texto" style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 15px;"></div>
             
-            <div class="form-group">
+            <!-- Campo exclusivo para Cuentas -->
+            <div class="form-group" id="grupo-email">
                 <label>Correo Electrónico</label>
-                <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com" required>
+                <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com">
+            </div>
+
+            <!-- Campos exclusivos para Boost -->
+            <div id="grupo-boost-campos" style="display: none;">
+                <div class="form-group">
+                    <label>ID de LoL (Ej: pepe#LAS)</label>
+                    <input type="text" id="input-lol-id" placeholder="pepe#LAS">
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>User de Discord (Ej: pepe_12)</label>
+                    <input type="text" id="input-discord-user" placeholder="pepe_12">
+                </div>
             </div>
 
             <div class="form-group" style="margin-top: 12px;">
@@ -782,7 +795,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // Script para el Fondo Dinámico (Partículas flotantes con Canvas)
         const canvas = document.getElementById('bg-canvas');
@@ -988,7 +1001,10 @@
 
         const modalPago = document.getElementById('modal-pago');
         const modalTexto = document.getElementById('modal-texto');
+        const grupoEmail = document.getElementById('grupo-email');
+        const grupoBoostCampos = document.getElementById('grupo-boost-campos');
         let itemSeleccionado = null;
+        let tipoItemActual = ''; // 'cuenta' o 'boost'
 
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
@@ -996,10 +1012,16 @@
                 mostrarAlerta("El rango deseado debe ser mayor al actual.");
                 return;
             }
+            tipoItemActual = 'boost';
             itemSeleccionado = {
                 titulo: `Boost (${modoSeleccionado.toUpperCase()}) de ${ligaActual.value} Div.${divActual.value} a ${ligaDeseada.value} Div.${divDeseada.value} [${lpGanancia.value} LP]`,
                 precio: precio.toFixed(2)
             };
+            
+            // Mostrar campos de Boost y ocultar correo
+            grupoEmail.style.display = 'none';
+            grupoBoostCampos.style.display = 'block';
+
             modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total con descuento: <b style="color: #c084fc;">USD $${itemSeleccionado.precio}</b>`;
             document.getElementById('chk-terminos').checked = false;
             modalPago.classList.add('active');
@@ -1007,30 +1029,99 @@
 
         document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
 
-        document.getElementById('btn-pagar-alias').addEventListener('click', () => {
-            const email = document.getElementById('email-cliente').value;
+        document.getElementById('btn-pagar-alias').addEventListener('click', async () => {
             const aceptaTerminos = document.getElementById('chk-terminos').checked;
-
-            if(!email) { mostrarAlerta("Ingresa tu correo electrónico"); return; }
             if(!aceptaTerminos) { mostrarAlerta("Debes aceptar los Términos y Condiciones de no reembolso."); return; }
-            
+
             const tuNumeroWhatsApp = "59899806108"; 
-            const mensaje = `Hola! Quiero contratar el servicio: ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email} (Acepté los términos de no reembolso).`;
+            let mensaje = "";
+
+            if (tipoItemActual === 'boost') {
+                const lolId = document.getElementById('input-lol-id').value;
+                const discordUser = document.getElementById('input-discord-user').value;
+
+                if(!lolId || !discordUser) {
+                    mostrarAlerta("Por favor ingresa tu ID de LoL y tu usuario de Discord.");
+                    return;
+                }
+
+                mensaje = `Hola! Quiero contratar el servicio: ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi ID de LoL es: ${lolId} (Acepté los términos de no reembolso). Mi user de discord es ${discordUser}.`;
+                
+                // Guardar en Firestore para pedidosBoost
+                try {
+                    await addDoc(collection(db, "pedidosBoost"), {
+                        tipo: "Boost",
+                        clienteDiscord: `${discordUser} (LoL: ${lolId})`,
+                        detalle: itemSeleccionado.titulo,
+                        monto: `USD $${itemSeleccionado.precio}`,
+                        fecha: new Date().toISOString()
+                    });
+                } catch(e) { console.error("Error guardando boost:", e); }
+
+            } else {
+                const email = document.getElementById('email-cliente').value;
+                if(!email) { mostrarAlerta("Ingresa tu correo electrónico"); return; }
+
+                mensaje = `Hola! Quiero comprar la cuenta: ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email} (Acepté los términos de no reembolso).`;
+                
+                // Guardar en Firestore para compras de cuentas
+                try {
+                    await addDoc(collection(db, "compras"), {
+                        tipo: "Cuenta",
+                        clienteDiscord: email,
+                        detalle: itemSeleccionado.titulo,
+                        monto: `USD $${itemSeleccionado.precio}`,
+                        fecha: new Date().toISOString()
+                    });
+                } catch(e) { console.error("Error guardando compra:", e); }
+            }
+            
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
             modalPago.classList.remove('active');
         });
 
-        document.getElementById('btn-pagar-paypal').addEventListener('click', () => {
-            const email = document.getElementById('email-cliente').value;
+        document.getElementById('btn-pagar-paypal').addEventListener('click', async () => {
             const aceptaTerminos = document.getElementById('chk-terminos').checked;
-
-            if(!email) { 
-                mostrarAlerta("Ingresa tu correo electrónico antes de continuar."); 
-                return; 
-            }
             if(!aceptaTerminos) {
                 mostrarAlerta("Debes aceptar los Términos y Condiciones para continuar.");
                 return;
+            }
+
+            if (tipoItemActual === 'boost') {
+                const lolId = document.getElementById('input-lol-id').value;
+                const discordUser = document.getElementById('input-discord-user').value;
+
+                if(!lolId || !discordUser) {
+                    mostrarAlerta("Por favor ingresa tu ID de LoL y tu usuario de Discord.");
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, "pedidosBoost"), {
+                        tipo: "Boost",
+                        clienteDiscord: `${discordUser} (LoL: ${lolId})`,
+                        detalle: itemSeleccionado.titulo,
+                        monto: `USD $${itemSeleccionado.precio}`,
+                        fecha: new Date().toISOString()
+                    });
+                } catch(e) { console.error("Error guardando boost PayPal:", e); }
+
+            } else {
+                const email = document.getElementById('email-cliente').value;
+                if(!email) { 
+                    mostrarAlerta("Ingresa tu correo electrónico antes de continuar."); 
+                    return; 
+                }
+
+                try {
+                    await addDoc(collection(db, "compras"), {
+                        tipo: "Cuenta",
+                        clienteDiscord: email,
+                        detalle: itemSeleccionado.titulo,
+                        monto: `USD $${itemSeleccionado.precio}`,
+                        fecha: new Date().toISOString()
+                    });
+                } catch(e) { console.error("Error guardando compra PayPal:", e); }
             }
             
             const monto = itemSeleccionado.precio;
@@ -1070,7 +1161,13 @@
                         </div>
                     `;
                     card.addEventListener('click', () => {
+                        tipoItemActual = 'cuenta';
                         itemSeleccionado = { titulo: c.title, precio: c.price };
+                        
+                        // Mostrar campo email y ocultar boost
+                        grupoEmail.style.display = 'block';
+                        grupoBoostCampos.style.display = 'none';
+
                         modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #c084fc;">USD $${c.price}</b>`;
                         document.getElementById('chk-terminos').checked = false;
                         modalPago.classList.add('active');
