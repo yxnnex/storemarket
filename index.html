@@ -3,220 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Plataforma Pro</title>
+    <title>LP Store - Boost Pro</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
         body {
-            background-color: #07090e;
-            background-image: 
-                radial-gradient(at 10% 20%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
-                radial-gradient(at 90% 80%, rgba(243, 186, 47, 0.06) 0px, transparent 50%);
+            background-color: #0b0e14;
             color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
         .container {
             max-width: 1250px;
+            width: 100%;
             margin: 0 auto;
         }
 
-        /* HEADER PROFESIONAL */
+        /* Navbar / Header expandido */
         header {
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 25px;
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
+            background: rgba(18, 20, 28, 0.55);
+            padding: 20px 25px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-sizing: border-box;
         }
 
-        /* ESTILOS PARA EL LOGO DE IMAGEN */
-        .logo-area {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        header h1 {
+            font-size: 1.8rem;
+            color: #fbbf24;
+            margin: 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        .logo-img {
-            height: 40px; /* Ajusta la altura según prefieras */
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
-        }
-
-        .logo-area p {
-            color: #94a3b8;
+        header p {
             font-size: 0.85rem;
+            color: #8a99ad;
+            margin: 4px 0 0 0;
         }
 
-        /* PESTAÑAS SUPERIORES */
-        .tabs-nav {
-            display: flex;
-            gap: 6px;
-            background: rgba(11, 14, 20, 0.6);
-            padding: 5px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .tab-btn::after {
-            content: "⌄";
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-
-        .tab-btn:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .tab-btn.active {
-            background-color: #f3ba2f;
-            color: #0b0e14;
-            box-shadow: 0 0 15px rgba(243, 186, 47, 0.3);
-        }
-
-        .tab-btn.active::after {
-            color: #0b0e14;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* SUB-MENÚ DE TIPO DE BOOST */
-        .boost-types-nav {
+        .nav-buttons {
             display: flex;
             gap: 10px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            justify-content: center;
         }
 
-        .boost-type-btn {
-            background: rgba(18, 20, 28, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #94a3b8;
-            padding: 9px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+        .nav-btn {
+            background: #0b0e14;
+            border: 1px solid #2d3748;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 600;
             transition: all 0.2s;
         }
 
-        .boost-type-btn.active {
-            background-color: #ffffff;
+        .nav-btn.active {
+            background: #fbbf24;
+            border-color: #fbbf24;
             color: #0b0e14;
-            border-color: #ffffff;
-            font-weight: bold;
         }
 
-        /* LAYOUT DE LA CALCULADORA DE BOOST (3 COLUMNAS) */
+        /* Contenedor Principal (Boost Pro) adaptable */
         .boost-layout {
             display: grid;
             grid-template-columns: 1fr 1fr 340px;
             gap: 20px;
             align-items: start;
+            width: 100%;
         }
 
-        @media (max-width: 1024px) {
-            .boost-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .boost-card {
+        .panel, .checkout-panel {
             background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .rank-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            background: rgba(11, 14, 20, 0.4);
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .rank-emblem {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-        }
-
-        .rank-info span {
-            font-size: 0.7rem;
-            color: #94a3b8;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .rank-info h3 {
-            font-size: 1.1rem;
+        .panel h3, .checkout-panel h3 {
+            font-size: 0.95rem;
             color: #f8fafc;
-            font-weight: bold;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1.5fr 1.3fr 1fr;
-            gap: 10px;
             margin-bottom: 15px;
-        }
-
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            margin-top: 0;
+            text-transform: uppercase;
         }
 
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         label {
@@ -224,7 +110,6 @@
             font-size: 0.78rem;
             color: #94a3b8;
             margin-bottom: 6px;
-            font-weight: 500;
         }
 
         select, input {
@@ -232,661 +117,155 @@
             padding: 10px;
             background: rgba(11, 14, 20, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
             border-radius: 8px;
-            color: #ffffff;
-            font-size: 0.85rem;
-            transition: border-color 0.2s;
+            box-sizing: border-box;
         }
 
-        select:focus, input:focus {
-            outline: none;
-            border-color: #f3ba2f;
-            box-shadow: 0 0 8px rgba(243, 186, 47, 0.25);
-        }
-
-        .lp-gain-container {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            text-align: center;
-        }
-
-        .lp-gain-container label {
-            text-align: center;
-            color: #f3ba2f;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .lp-gain-container select {
-            max-width: 260px;
-            margin: 0 auto;
-            text-align-last: center;
-        }
-
-        /* PANEL LATERAL DE PERSONALIZACIÓN */
-        .options-group {
+        .tabs {
             display: flex;
-            flex-direction: column;
             gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .mode-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
             margin-bottom: 15px;
         }
 
-        .mode-btn {
-            background: rgba(11, 14, 20, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #94a3b8;
+        .tab {
+            flex: 1;
             padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
+            background: #0b0e14;
+            border: 1px solid #2d3748;
+            color: white;
             text-align: center;
-            transition: all 0.2s;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
         }
 
-        .mode-btn.active {
-            background-color: #38bdf8;
-            color: #0b0e14;
+        .tab.active {
+            background: #38bdf8;
             border-color: #38bdf8;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
-        }
-
-        .toggle-option {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(11, 14, 20, 0.4);
-            padding: 11px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #cbd5e1;
-            cursor: pointer;
-        }
-
-        .toggle-option input {
-            width: 16px;
-            height: 16px;
-            accent-color: #f3ba2f;
-            cursor: pointer;
-        }
-
-        .boost-total {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #f3ba2f;
-            text-align: center;
-            margin: 15px 0;
-            text-shadow: 0 0 10px rgba(243, 186, 47, 0.2);
-        }
-
-        .btn-contratar {
-            width: 100%;
-            background-color: #f3ba2f;
             color: #0b0e14;
-            border: none;
-            padding: 13px;
-            border-radius: 8px;
             font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(243, 186, 47, 0.2);
-            text-align: center;
         }
 
-        .btn-contratar:hover {
-            background-color: #e0a822;
-            transform: translateY(-1px);
+        .checkbox-group {
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
         }
 
-        /* ALERTA DE OFERTA ESPECIAL / LIGA COMPLETA */
-        .promo-banner {
+        #promoBanner {
             background: linear-gradient(135deg, rgba(243, 186, 47, 0.2), rgba(56, 189, 248, 0.15));
             border: 1px solid rgba(243, 186, 47, 0.4);
             padding: 12px;
             border-radius: 8px;
             font-size: 0.8rem;
             color: #fef08a;
-            text-align: center;
-            margin-bottom: 12px;
-            display: none;
+            margin: 15px 0;
             line-height: 1.4;
-            animation: pulse 1.5s infinite;
+            display: none;
+            text-align: center;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.8; }
-            50% { opacity: 1; }
-            100% { opacity: 0.8; }
+        .price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fbbf24;
+            text-align: center;
+            margin: 15px 0;
         }
 
-        /* CATÁLOGO DE CUENTAS GRID */
-        .grid-cuentas {
+        .btn-submit {
+            background: #fbbf24;
+            color: #0b0e14;
+            border: none;
+            padding: 13px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        /* Sección de Cuentas (Firebase) */
+        .cuentas-container {
+            width: 100%;
+            display: none;
+        }
+
+        .cuentas-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-bottom: 50px;
+            width: 100%;
         }
 
         .cuenta-card {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 14px;
-            overflow: hidden;
-            transition: all 0.25s ease;
+            background: #121824;
+            border: 1px solid #232d3f;
+            border-radius: 12px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            cursor: pointer;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .cuenta-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(243, 186, 47, 0.4);
-        }
-
-        .cuenta-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #1a1f2c;
-        }
-
-        .cuenta-body {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
             justify-content: space-between;
-        }
-
-        .cuenta-server {
-            font-size: 0.75rem;
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
-            padding: 3px 8px;
-            border-radius: 4px;
-            width: fit-content;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .cuenta-titulo {
-            font-size: 1rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .cuenta-detalles-info {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .cuenta-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 12px;
-        }
-
-        .cuenta-precio {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #f3ba2f;
-        }
-
-        .btn-comprar {
-            background-color: #f3ba2f;
-            color: #0b0e14;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        /* MODAL DE PAGO */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(7, 9, 14, 0.8);
-            backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .modal-box {
-            background: rgba(18, 20, 28, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 28px; width: 100%; max-width: 450px; position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-        }
-
-        .modal-close {
-            position: absolute; top: 15px; right: 15px; background: none; border: none;
-            color: #94a3b8; font-size: 1.2rem; cursor: pointer;
-        }
-
-        .payment-options {
-            display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
-        }
-        .btn-pagar-paypal {
-            background-color: #0070ba; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
-        }
-        .btn-pagar-alias {
-            background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- HEADER -->
+        <!-- Header / Navbar -->
         <header>
-            <div class="logo-area">
-                <img src="lp.png" alt="Nexus Store Logo" class="logo-img">
+            <div>
+                <h1>LP Store</h1>
                 <p>Cuentas verificadas y servicio profesional</p>
             </div>
-            <nav class="tabs-nav">
-                <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
-                <button class="tab-btn" data-target="seccion-boost">Boost Pro</button>
-            </nav>
+            <div class="nav-buttons">
+                <button class="nav-btn active">Cuentas</button>
+                <button class="nav-btn">Boost Pro</button>
+            </div>
         </header>
 
-        <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
-        <div id="seccion-cuentas" class="tab-content active">
-            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #f3ba2f; padding-left: 10px;">Cuentas Disponibles</h2>
-            <div id="grid-cuentas" class="grid-cuentas">
-                <p style="color: #94a3b8;">Cargando catálogo...</p>
+        <!-- Contenedor Boost Pro con los nuevos rangos de LP -->
+        <div class="boost-layout">
+            <!-- Panel 1 -->
+            <div class="panel">
+                <h3>Detalles del Servicio</h3>
+                <div class="form-group">
+                    <label for="lpGanados">¿Cuántos LP obtienes x victoria?</label>
+                    <select id="lpGanados">
+                        <option value="17-19">17 a 19 LP</option>
+                        <option value="20-25">20 a 25 LP</option>
+                        <option value="25-30">25 a 30 LP</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <!-- SECCIÓN 2: BOOST PRO -->
-        <div id="seccion-boost" class="tab-content">
-            <div class="boost-types-nav">
-                <button class="boost-type-btn active">Impulso de rango</button>
-                <button class="boost-type-btn">Partidas de posicionamiento</button>
-                <button class="boost-type-btn">Victorias netas</button>
+            <!-- Panel 2 (Ejemplo extra para completar la grilla) -->
+            <div class="panel">
+                <h3>Opciones Adicionales</h3>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="duoBoost">
+                    <label for="duoBoost" style="display:inline; margin:0;">Duo Boost (+50%)</label>
+                </div>
             </div>
 
-            <div class="boost-layout">
-                <!-- Columna 1: Rango Actual -->
-                <div class="boost-card">
-                    <div class="rank-header">
-                        <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
-                        <div class="rank-info">
-                            <span>Rango actual</span>
-                            <h3 id="txt-actual">Hierro Div. 4</h3>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Liga Actual</label>
-                            <select id="liga-actual">
-                                <option value="Hierro">Hierro</option>
-                                <option value="Bronce">Bronce</option>
-                                <option value="Plata">Plata</option>
-                                <option value="Oro" selected>Oro</option>
-                                <option value="Platino">Platino</option>
-                                <option value="Esmeralda">Esmeralda</option>
-                                <option value="Diamante">Diamante</option>
-                                <option value="Maestro">Maestro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>División</label>
-                            <select id="division-actual">
-                                <option value="4">Div. IV</option>
-                                <option value="3">Div. III</option>
-                                <option value="2">Div. II</option>
-                                <option value="1">Div. I</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>LP (opc.)</label>
-                            <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
-                        </div>
-                    </div>
-
-                    <div class="lp-gain-container">
-                        <label for="lp-ganancia">¿Cuantos LP obtienes x victoria?</label>
-                        <select id="lp-ganancia">
-                            <option value="17-19">17 a 19 LP</option>
-                            <option value="19-22">19 a 22 LP</option>
-                            <option value="22-25" selected>22 a 25 LP</option>
-                            <option value="25-30">25 a 30 LP</option>
-                        </select>
-                    </div>
+            <!-- Checkout Panel -->
+            <div class="checkout-panel">
+                <div>
+                    <h3>Resumen</h3>
+                    <div id="promoBanner">¡Tienes un descuento aplicado!</div>
+                    <div class="price">$0.00</div>
                 </div>
-
-                <!-- Columna 2: Rango Deseado -->
-                <div class="boost-card">
-                    <div class="rank-header">
-                        <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
-                        <div class="rank-info">
-                            <span>Rango deseado</span>
-                            <h3 id="txt-deseado">Oro Div. 1</h3>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Liga Deseada</label>
-                            <select id="liga-deseada">
-                                <option value="Hierro">Hierro</option>
-                                <option value="Bronce">Bronce</option>
-                                <option value="Plata">Plata</option>
-                                <option value="Oro" selected>Oro</option>
-                                <option value="Platino">Platino</option>
-                                <option value="Esmeralda">Esmeralda</option>
-                                <option value="Diamante">Diamante</option>
-                                <option value="Maestro">Maestro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>División</label>
-                            <select id="division-deseada">
-                                <option value="4">Div. IV</option>
-                                <option value="3">Div. III</option>
-                                <option value="2">Div. II</option>
-                                <option value="1" selected>Div. I</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>LP (opc.)</label>
-                            <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Columna 3: Personalizar Pedido -->
-                <div class="boost-card">
-                    <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc;">PERSONALIZAR PEDIDO</h3>
-                    
-                    <div class="mode-selector">
-                        <div class="mode-btn active" data-mode="solo">Solo Q</div>
-                        <div class="mode-btn" data-mode="duo">Duo</div>
-                    </div>
-
-                    <div class="options-group">
-                        <label class="toggle-option">
-                            <span>Transmisión en vivo</span> 
-                            <input type="checkbox" id="chk-streaming">
-                        </label>
-                        <label class="toggle-option">
-                            <span>Modo Offline</span> 
-                            <input type="checkbox" id="chk-offline">
-                        </label>
-                    </div>
-
-                    <!-- BANNER DE ALERTA DE OFERTA PARA LIGA ENTERA -->
-                    <div id="promo-banner" class="promo-banner"></div>
-
-                    <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
-                    <button class="btn-contratar" id="btn-contratar-boost">Obtener oferta</button>
-                </div>
+                <button class="btn-submit">Contratar Servicio</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE PAGO -->
-    <div id="modal-pago" class="modal-overlay">
-        <div class="modal-box">
-            <button id="modal-cerrar" class="modal-close">&times;</button>
-            <h3 id="modal-titulo" style="margin-bottom: 15px; color: #f8fafc;">Finalizar Pago</h3>
-            <div id="modal-texto" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px;"></div>
-            <div class="form-group">
-                <label>Correo Electrónico</label>
-                <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com" required>
-            </div>
-            <div class="payment-options">
-                <button id="btn-pagar-paypal" class="btn-pagar-paypal">Pagar con PayPal</button>
-                <button id="btn-pagar-alias" class="btn-pagar-alias">Pagar por Alias / Transferencia (WhatsApp)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SCRIPT DE LÓGICA -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
-            authDomain: "store-51d80.firebaseapp.com",
-            projectId: "store-51d80",
-            storageBucket: "store-51d80.firebasestorage.app",
-            messagingSenderId: "695612329327",
-            appId: "1:695612329327:web:298cea611bd736e3a36c9a"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Pestañas superiores
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.getAttribute('data-target')).classList.add('active');
-            });
-        });
-
-        // Selector Solo / Duo
-        const modeBtns = document.querySelectorAll('.mode-btn');
-        let modoSeleccionado = 'solo';
-        modeBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                modeBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                modoSeleccionado = btn.getAttribute('data-mode');
-                actualizarBoost();
-            });
-        });
-
-        const rangosEmblemas = {
-            Hierro: "Hierro.png",
-            Bronce: "Bronce.webp",
-            Plata: "Plata.png",
-            Oro: "Oro.png",
-            Platino: "Platino.png",
-            Esmeralda: "Esmeralda.png",
-            Diamante: "Diamante.png",
-            Maestro: "Maestro.png"
-        };
-
-        const ligasOrden = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante", "Maestro"];
-
-        const ligaActual = document.getElementById('liga-actual');
-        const divActual = document.getElementById('division-actual');
-        const lpActual = document.getElementById('lp-actual');
-        const lpGanancia = document.getElementById('lp-ganancia');
-        
-        const ligaDeseada = document.getElementById('liga-deseada');
-        const divDeseada = document.getElementById('division-deseada');
-        const lpDeseado = document.getElementById('lp-deseado');
-        
-        const imgActual = document.getElementById('img-actual');
-        const txtActual = document.getElementById('txt-actual');
-        const imgDeseado = document.getElementById('img-deseado');
-        const txtDeseado = document.getElementById('txt-deseado');
-        const precioBoost = document.getElementById('precio-boost');
-        const promoBanner = document.getElementById('promo-banner');
-        const btnContratar = document.getElementById('btn-contratar-boost');
-
-        const valoresLigas = { Hierro: 1, Bronce: 2, Plata: 3, Oro: 4, Platino: 5, Esmeralda: 6, Diamante: 7, Maestro: 8 };
-
-        function actualizarBoost() {
-            const lAct = ligaActual.value;
-            const dAct = divActual.value;
-            const lDes = ligaDeseada.value;
-            const dDes = divDeseada.value;
-
-            imgActual.src = rangosEmblemas[lAct] || "Hierro.png";
-            txtActual.textContent = `${lAct} Div. ${dAct}`;
-
-            imgDeseado.src = rangosEmblemas[lDes] || "Hierro.png";
-            txtDeseado.textContent = `${lDes} Div. ${dDes}`;
-
-            const scoreActual = (valoresLigas[lAct] * 4) + (5 - parseInt(dAct));
-            const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
-            const diff = scoreDeseado - scoreActual;
-
-            let tarifaPorDivision = 7.00;
-            if (lAct === "Hierro" || lAct === "Bronce") tarifaPorDivision = 5.00;
-            if (lAct === "Platino" || lAct === "Esmeralda") tarifaPorDivision = 9.00;
-            if (lAct === "Diamante") tarifaPorDivision = 12.00;
-
-            let precioDivisiones = diff > 0 ? diff * tarifaPorDivision : 0;
-
-            const multiplicadorLp = {
-                '17-19': 1.20,
-                '19-22': 1.10,
-                '22-25': 1.00,
-                '25-30': 0.90
-            };
-            let precio = precioDivisiones * (multiplicadorLp[lpGanancia.value] || 1.0);
-
-            // DETECCIÓN AUTOMÁTICA DE LIGA ENTERA (IV a I)
-            let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1");
-
-            if (esLigaCompleta) {
-                let porcentajeDescuento = 0.05; // 5% en Hierro/Bronce
-                if (lAct === "Plata" || lAct === "Oro") porcentajeDescuento = 0.08; // 8%
-                if (lAct === "Platino" || lAct === "Esmeralda") porcentajeDescuento = 0.12; // 12%
-                if (lAct === "Diamante") porcentajeDescuento = 0.15; // 15%
-
-                let descuentoMonto = (lAct === "Hierro") ? 2.00 : (precio * porcentajeDescuento);
-                precio -= descuentoMonto;
-
-                let indexLigaActual = ligasOrden.indexOf(lAct);
-                let siguienteLiga = ligasOrden[indexLigaActual + 1] || "la siguiente liga";
-
-                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ¡Obtienes un descuento especial!`;
-                promoBanner.style.display = "block";
-                btnContratar.textContent = `¡Aprovechar Oferta de ${lAct}!`;
-            } else {
-                promoBanner.style.display = "none";
-                btnContratar.textContent = "Obtener oferta";
-            }
-
-            // Extras
-            if (modoSeleccionado === 'duo') precio *= 1.3;
-            if (document.getElementById('chk-streaming').checked) precio += 5;
-            if (document.getElementById('chk-offline').checked) precio += 3;
-
-            precioBoost.textContent = precio > 0 ? precio.toFixed(2) : "0.00";
-            return precio > 0 ? precio : 0;
-        }
-
-        [ligaActual, divActual, lpActual, lpGanancia, ligaDeseada, divDeseada, lpDeseado, document.getElementById('chk-streaming'), document.getElementById('chk-offline')].forEach(el => {
-            el.addEventListener('change', actualizarBoost);
-            el.addEventListener('input', actualizarBoost);
-        });
-
-        actualizarBoost();
-
-        const modalPago = document.getElementById('modal-pago');
-        const modalTexto = document.getElementById('modal-texto');
-        let itemSeleccionado = null;
-
-        document.getElementById('btn-contratar-boost').addEventListener('click', () => {
-            const precio = actualizarBoost();
-            if (precio <= 0) {
-                alert("El rango deseado debe ser mayor al actual.");
-                return;
-            }
-            itemSeleccionado = {
-                titulo: `Boost (${modoSeleccionado.toUpperCase()}) de ${ligaActual.value} Div.${divActual.value} a ${ligaDeseada.value} Div.${divDeseada.value} [${lpGanancia.value} LP]`,
-                precio: precio.toFixed(2)
-            };
-            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total con descuento: <b style="color: #f3ba2f;">USD $${itemSeleccionado.precio}</b>`;
-            modalPago.classList.add('active');
-        });
-
-        document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
-
-        // Pagar por WhatsApp
-        document.getElementById('btn-pagar-alias').addEventListener('click', () => {
-            const email = document.getElementById('email-cliente').value;
-            if(!email) { alert("Ingresa tu correo electrónico"); return; }
-            
-            const tuNumeroWhatsApp = "549261XXXXXXXX"; // Reemplaza con tu número de WhatsApp
-            const mensaje = `Hola! Quiero contratar el ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email}`;
-            window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
-            modalPago.classList.remove('active');
-        });
-
-        document.getElementById('btn-pagar-paypal').addEventListener('click', () => {
-            const email = document.getElementById('email-cliente').value;
-            if(!email) { alert("Ingresa tu correo electrónico"); return; }
-            alert(`Redirigiendo a PayPal para completar el pago de USD $${itemSeleccionado.precio}`);
-            modalPago.classList.remove('active');
-        });
-
-        // Cargar catálogo de cuentas de Firebase
-        async function cargarCatalogo() {
-            const grid = document.getElementById('grid-cuentas');
-            try {
-                const snapshot = await getDocs(collection(db, "skin"));
-                grid.innerHTML = "";
-                if(snapshot.empty) { grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas cargadas.</p>"; return; }
-                
-                snapshot.forEach(doc => {
-                    const c = doc.data();
-                    const card = document.createElement('div');
-                    card.className = 'cuenta-card';
-                    card.innerHTML = `
-                        <img src="${c.imageUrl}" class="cuenta-img" alt="Cuenta">
-                        <div class="cuenta-body">
-                            <div>
-                                <span class="cuenta-server">${c.server}</span>
-                                <h3 class="cuenta-titulo">${c.title}</h3>
-                                <div class="cuenta-detalles-info">
-                                    <span>⚔️ Campeones: ${c.championCount}</span>
-                                    <span>🏆 Rango: ${c.currentRank}</span>
-                                    <span>💎 EA: ${c.riotPoints}</span>
-                                </div>
-                            </div>
-                            <div class="cuenta-footer">
-                                <span class="cuenta-precio">USD $${c.price}</span>
-                                <button class="btn-comprar">Comprar</button>
-                            </div>
-                        </div>
-                    `;
-                    card.addEventListener('click', () => {
-                        itemSeleccionado = { titulo: c.title, precio: c.price };
-                        modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #f3ba2f;">USD $${c.price}</b>`;
-                        modalPago.classList.add('active');
-                    });
-                    grid.appendChild(card);
-                });
-            } catch(e) { console.error(e); }
-        }
-
-        cargarCatalogo();
-    </script>
 </body>
 </html>
