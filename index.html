@@ -5,17 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Store - Plataforma Pro</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
         body {
-            background-color: #0b0714;
+            background-color: #0b0e14;
             color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
@@ -34,25 +32,26 @@
 
         .container {
             max-width: 1250px;
+            width: 100%;
             margin: 0 auto;
             position: relative;
             z-index: 1;
         }
 
         header {
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 25px;
-            background: rgba(22, 16, 38, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-            border-radius: 14px;
             margin-bottom: 30px;
+            background: rgba(18, 20, 28, 0.55);
+            padding: 20px 25px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-sizing: border-box;
             flex-wrap: wrap;
             gap: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
 
         .logo-area {
@@ -69,23 +68,24 @@
         }
 
         .logo-area p {
-            color: #a78bfa;
             font-size: 0.85rem;
+            color: #8a99ad;
+            margin: 4px 0 0 0;
         }
 
         .tabs-nav {
             display: flex;
             gap: 6px;
-            background: rgba(14, 10, 26, 0.7);
+            background: rgba(11, 14, 20, 0.7);
             padding: 5px;
             border-radius: 10px;
-            border: 1px solid rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .tab-btn {
             background: transparent;
             border: none;
-            color: #a78bfa;
+            color: #8a99ad;
             padding: 8px 16px;
             border-radius: 6px;
             font-weight: 600;
@@ -100,22 +100,22 @@
         .tab-btn::after {
             content: "⌄";
             font-size: 0.9rem;
-            color: #8b5cf6;
+            color: #fbbf24;
         }
 
         .tab-btn:hover {
             color: #ffffff;
-            background: rgba(168, 85, 247, 0.1);
+            background: rgba(251, 191, 36, 0.1);
         }
 
         .tab-btn.active {
-            background-color: #a855f7;
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            background-color: #fbbf24;
+            color: #0b0e14;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
         }
 
         .tab-btn.active::after {
-            color: #ffffff;
+            color: #0b0e14;
         }
 
         .tab-content {
@@ -135,10 +135,10 @@
         }
 
         .boost-type-btn {
-            background: rgba(22, 16, 38, 0.6);
+            background: rgba(18, 20, 28, 0.55);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-            color: #a78bfa;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: #8a99ad;
             padding: 9px 20px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -148,11 +148,11 @@
         }
 
         .boost-type-btn.active {
-            background-color: #a855f7;
-            color: #ffffff;
-            border-color: #a855f7;
+            background-color: #fbbf24;
+            color: #0b0e14;
+            border-color: #fbbf24;
             font-weight: bold;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
         }
 
         .boost-layout {
@@ -160,6 +160,7 @@
             grid-template-columns: 1fr 1fr 340px;
             gap: 20px;
             align-items: start;
+            width: 100%;
         }
 
         @media (max-width: 1024px) {
@@ -169,13 +170,15 @@
         }
 
         .boost-card {
-            background: rgba(22, 16, 38, 0.65);
+            background: rgba(18, 20, 28, 0.55);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .rank-header {
@@ -183,10 +186,10 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
-            background: rgba(14, 10, 26, 0.5);
+            background: rgba(11, 14, 20, 0.5);
             padding: 14px;
             border-radius: 12px;
-            border: 1px solid rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .rank-emblem {
@@ -198,7 +201,7 @@
 
         .rank-info span {
             font-size: 0.7rem;
-            color: #a78bfa;
+            color: #8a99ad;
             display: block;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -208,6 +211,7 @@
             font-size: 1.1rem;
             color: #f8fafc;
             font-weight: bold;
+            margin: 0;
         }
 
         .form-row {
@@ -224,44 +228,45 @@
         }
 
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            font-size: 0.78rem;
-            color: #a78bfa;
-            margin-bottom: 6px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
             font-weight: 500;
         }
 
         select, input {
             width: 100%;
-            padding: 10px;
-            background: rgba(14, 10, 26, 0.7);
-            border: 1px solid rgba(168, 85, 247, 0.2);
+            padding: 12px;
+            background: rgba(11, 14, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             color: #ffffff;
             font-size: 0.85rem;
+            box-sizing: border-box;
             transition: border-color 0.2s;
         }
 
         select:focus, input:focus {
             outline: none;
-            border-color: #a855f7;
-            box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+            border-color: #fbbf24;
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
         }
 
         .lp-gain-container {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid rgba(168, 85, 247, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
             text-align: center;
         }
 
         .lp-gain-container label {
             text-align: center;
-            color: #c084fc;
+            color: #fbbf24;
             margin-bottom: 8px;
             font-weight: 600;
         }
@@ -287,9 +292,9 @@
         }
 
         .mode-btn {
-            background: rgba(14, 10, 26, 0.5);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-            color: #a78bfa;
+            background: rgba(11, 14, 20, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: #8a99ad;
             padding: 10px;
             border-radius: 8px;
             font-weight: bold;
@@ -300,21 +305,21 @@
         }
 
         .mode-btn.active {
-            background-color: #a855f7;
-            color: #ffffff;
-            border-color: #a855f7;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+            background-color: #fbbf24;
+            color: #0b0e14;
+            border-color: #fbbf24;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
         }
 
         .toggle-option {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(14, 10, 26, 0.5);
+            background: rgba(11, 14, 20, 0.5);
             padding: 11px 14px;
             border-radius: 8px;
             font-size: 0.85rem;
-            border: 1px solid rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             color: #cbd5e1;
             cursor: pointer;
         }
@@ -322,23 +327,23 @@
         .toggle-option input {
             width: 16px;
             height: 16px;
-            accent-color: #a855f7;
+            accent-color: #fbbf24;
             cursor: pointer;
         }
 
         .boost-total {
             font-size: 1.4rem;
             font-weight: bold;
-            color: #c084fc;
+            color: #fbbf24;
             text-align: center;
             margin: 15px 0;
-            text-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
         }
 
         .btn-contratar {
             width: 100%;
-            background-color: #a855f7;
-            color: #ffffff;
+            background-color: #fbbf24;
+            color: #0b0e14;
             border: none;
             padding: 13px;
             border-radius: 8px;
@@ -346,18 +351,19 @@
             font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
             text-align: center;
+            text-transform: uppercase;
         }
 
         .btn-contratar:hover {
-            background-color: #9333ea;
+            background-color: #f59e0b;
             transform: translateY(-1px);
         }
 
         .promo-banner {
-            background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(202, 138, 4, 0.25));
-            border: 1.5px solid rgba(234, 179, 8, 0.6);
+            background: linear-gradient(135deg, rgba(243, 186, 47, 0.2), rgba(56, 189, 248, 0.15));
+            border: 1px solid rgba(243, 186, 47, 0.4);
             padding: 12px;
             border-radius: 8px;
             font-size: 0.8rem;
@@ -366,12 +372,12 @@
             margin-bottom: 12px;
             display: none;
             line-height: 1.4;
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+            box-shadow: 0 0 15px rgba(243, 186, 47, 0.2);
         }
 
         .btn-contratar.promo-active {
             background: linear-gradient(135deg, #eab308, #ca8a04);
-            color: #111827;
+            color: #0b0e14;
             box-shadow: 0 4px 20px rgba(234, 179, 8, 0.5);
         }
 
@@ -387,22 +393,22 @@
         }
 
         .cuenta-card {
-            background: rgba(22, 16, 38, 0.65);
+            background: rgba(18, 20, 28, 0.55);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 14px;
             overflow: hidden;
             transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         .cuenta-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(168, 85, 247, 0.5);
-            box-shadow: 0 12px 35px 0 rgba(168, 85, 247, 0.2);
+            border-color: rgba(251, 191, 36, 0.5);
+            box-shadow: 0 12px 35px 0 rgba(251, 191, 36, 0.2);
         }
 
         .cuenta-img {
@@ -422,8 +428,8 @@
 
         .cuenta-server {
             font-size: 0.75rem;
-            background: rgba(168, 85, 247, 0.2);
-            color: #d8b4fe;
+            background: rgba(251, 191, 36, 0.2);
+            color: #fef08a;
             padding: 3px 8px;
             border-radius: 4px;
             width: fit-content;
@@ -440,7 +446,7 @@
 
         .cuenta-detalles-info {
             font-size: 0.85rem;
-            color: #a78bfa;
+            color: #94a3b8;
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
@@ -451,19 +457,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid rgba(168, 85, 247, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
             padding-top: 12px;
         }
 
         .cuenta-precio {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #c084fc;
+            color: #fbbf24;
         }
 
         .btn-comprar {
-            background-color: #a855f7;
-            color: #ffffff;
+            background-color: #fbbf24;
+            color: #0b0e14;
             border: none;
             padding: 8px 14px;
             border-radius: 6px;
@@ -474,13 +480,14 @@
         }
 
         .btn-comprar:hover {
-            background-color: #9333ea;
+            background-color: #f59e0b;
         }
 
+        /* MODAL DE PAGO AMPLIADO, CENTRADO Y AIREADO */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 7, 20, 0.85);
+            background: rgba(11, 14, 20, 0.85);
             backdrop-filter: blur(8px);
             display: flex; justify-content: center; align-items: center;
             z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
@@ -488,67 +495,98 @@
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
         .modal-box {
-            background: rgba(22, 16, 38, 0.95);
+            background: rgba(18, 20, 28, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 16px;
-            padding: 28px; width: 100%; max-width: 450px; position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 40px; 
+            width: 100%; 
+            max-width: 620px; 
+            position: relative;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             max-height: 90vh;
             overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .modal-box h3 {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #f8fafc;
+            margin-top: 0;
+        }
+
+        .modal-box #modal-texto {
+            text-align: left;
+            line-height: 1.8; 
+            margin-bottom: 20px;
+            color: #cbd5e1;
+        }
+
+        .modal-box .form-group {
+            text-align: left;
+            margin-bottom: 20px;
         }
 
         .modal-close {
-            position: absolute; top: 15px; right: 15px; background: none; border: none;
-            color: #a78bfa; font-size: 1.2rem; cursor: pointer;
+            position: absolute; top: 20px; right: 20px; background: none; border: none;
+            color: #94a3b8; font-size: 1.5rem; cursor: pointer;
         }
+        .modal-close:hover { color: #ffffff; }
 
         .payment-options {
-            display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
+            display: flex; flex-direction: column; gap: 14px; margin-top: 25px;
         }
         .btn-pagar-paypal {
-            background-color: #0070ba; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            background-color: #0070ba; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.95rem;
         }
         .btn-pagar-alias {
-            background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
+            background-color: #22c55e; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.95rem;
         }
 
         /* Estilos de Términos y Condiciones */
         .terminos-box {
-            background: rgba(14, 10, 26, 0.6);
-            border: 1px solid rgba(168, 85, 247, 0.15);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 12px;
-            max-height: 110px;
+            background: rgba(11, 14, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 18px;
+            max-height: 150px;
             overflow-y: auto;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #94a3b8;
-            line-height: 1.4;
+            line-height: 1.6;
+            text-align: left;
         }
 
         .terminos-box::-webkit-scrollbar {
             width: 6px;
         }
         .terminos-box::-webkit-scrollbar-thumb {
-            background: rgba(168, 85, 247, 0.3);
+            background: rgba(251, 191, 36, 0.3);
             border-radius: 3px;
         }
 
         .terminos-check-container {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            font-size: 0.8rem;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 12px;
+            margin: 15px 0 25px 0;
+            font-size: 0.85rem;
             color: #cbd5e1;
             cursor: pointer;
+            text-align: left;
+            line-height: 1.5;
         }
 
         .terminos-check-container input {
-            width: 16px;
-            height: 16px;
-            accent-color: #a855f7;
+            min-width: 18px;
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #fbbf24;
             cursor: pointer;
         }
 
@@ -556,7 +594,7 @@
         .custom-alert-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 7, 20, 0.85);
+            background: rgba(11, 14, 20, 0.85);
             backdrop-filter: blur(8px);
             display: flex; justify-content: center; align-items: center;
             z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
@@ -565,26 +603,28 @@
             opacity: 1; pointer-events: auto;
         }
         .custom-alert-box {
-            background: rgba(22, 16, 38, 0.98);
+            background: rgba(18, 20, 28, 0.95);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            padding: 24px; width: 100%; max-width: 380px; text-align: center;
+            padding: 30px; width: 100%; max-width: 420px; text-align: center;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            box-sizing: border-box;
         }
         .custom-alert-box h4 {
-            color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px;
+            color: #fbbf24; font-size: 1.2rem; margin-top: 0; margin-bottom: 12px;
         }
         .custom-alert-box p {
-            color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4;
+            color: #cbd5e1; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5;
         }
         .btn-alert-ok {
-            background-color: #a855f7; color: #ffffff; border: none;
-            padding: 10px 24px; border-radius: 8px; font-weight: bold; font-size: 0.9rem;
-            cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+            background: #fbbf24; color: #0b0e14; border: none;
+            padding: 12px 25px; font-weight: bold; border-radius: 8px;
+            cursor: pointer; font-size: 0.9rem; width: 100%; text-transform: uppercase;
+            transition: background 0.2s;
         }
         .btn-alert-ok:hover {
-            background-color: #9333ea;
+            background: #f59e0b;
         }
     </style>
 </head>
@@ -607,9 +647,9 @@
 
         <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
         <div id="seccion-cuentas" class="tab-content active">
-            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px;">Cuentas Disponibles</h2>
+            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #fbbf24; padding-left: 10px;">Cuentas Disponibles</h2>
             <div id="grid-cuentas" class="grid-cuentas">
-                <p style="color: #a78bfa;">Cargando catálogo...</p>
+                <p style="color: #94a3b8;">Cargando catálogo...</p>
             </div>
         </div>
 
@@ -711,7 +751,7 @@
 
                 <!-- Columna 3: Personalizar Pedido -->
                 <div class="boost-card">
-                    <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc;">PERSONALIZAR PEDIDO</h3>
+                    <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Personalizar Pedido</h3>
                     
                     <div class="mode-selector">
                         <div class="mode-btn active" data-mode="solo">Solo Q</div>
@@ -742,8 +782,8 @@
     <div id="modal-pago" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-cerrar" class="modal-close">&times;</button>
-            <h3 id="modal-titulo" style="margin-bottom: 15px; color: #f8fafc;">Finalizar Pago</h3>
-            <div id="modal-texto" style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 15px;"></div>
+            <h3 id="modal-titulo">Finalizar Pago</h3>
+            <div id="modal-texto"></div>
             
             <!-- Campo exclusivo para Cuentas -->
             <div class="form-group" id="grupo-email">
@@ -757,13 +797,13 @@
                     <label>ID de LoL (Nombre#ETIQUETA)</label>
                     <input type="text" id="input-lol-id" placeholder="Nombre#ETIQUETA">
                 </div>
-                <div class="form-group" style="margin-top: 10px;">
-                    <label>User de Discord </label>
-                    <input type="text" id="input-discord-user" placeholder=" ">
+                <div class="form-group">
+                    <label>User de Discord</label>
+                    <input type="text" id="input-discord-user" placeholder="Tu usuario de Discord">
                 </div>
             </div>
 
-            <div class="form-group" style="margin-top: 12px;">
+            <div class="form-group">
                 <label>Términos y Condiciones (Servicios Digitales)</label>
                 <div class="terminos-box">
                     <b>1. Naturaleza Digital:</b> Productos y servicios intangibles.<br>
@@ -816,7 +856,7 @@
                 this.size = Math.random() * 2.5 + 0.5;
                 this.speedX = (Math.random() - 0.5) * 0.4;
                 this.speedY = (Math.random() - 0.5) * 0.4;
-                this.color = Math.random() > 0.5 ? 'rgba(168, 85, 247, 0.35)' : 'rgba(79, 70, 229, 0.3)';
+                this.color = Math.random() > 0.5 ? 'rgba(251, 191, 36, 0.35)' : 'rgba(56, 189, 248, 0.3)';
             }
             update() {
                 this.x += this.speedX;
@@ -1005,7 +1045,7 @@
                 let indexLigaActual = ligasOrden.indexOf(lAct);
                 let siguienteLiga = ligasOrden[indexLigaActual + 1] || "la siguiente liga";
 
-                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ⭐Sabías que si contratas el servicio hasta <b>${siguienteLiga}</b> ¡Obtienes un descuento especial! Aprovechalo, Salta al siguiente nivel!`;
+                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ⭐ Sabías que si contratas el servicio hasta <b>${siguienteLiga}</b> ¡Obtienes un descuento especial! Aprovechalo, Salta al siguiente nivel!`;
                 promoBanner.style.display = "block";
                 
                 btnContratar.classList.add('promo-active');
@@ -1034,7 +1074,7 @@
         const grupoEmail = document.getElementById('grupo-email');
         const grupoBoostCampos = document.getElementById('grupo-boost-campos');
         let itemSeleccionado = null;
-        let tipoItemActual = ''; // 'cuenta' o 'boost'
+        let tipoItemActual = '';
 
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
@@ -1051,7 +1091,7 @@
             grupoEmail.style.display = 'none';
             grupoBoostCampos.style.display = 'block';
 
-            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total con descuento: <b style="color: #c084fc;">USD $${itemSeleccionado.precio}</b>`;
+            modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total con descuento: <b style="color: #fbbf24;">USD $${itemSeleccionado.precio}</b>`;
             document.getElementById('chk-terminos').checked = false;
             modalPago.classList.add('active');
         });
@@ -1163,7 +1203,7 @@
             try {
                 const snapshot = await getDocs(collection(db, "skin"));
                 grid.innerHTML = "";
-                if(snapshot.empty) { grid.innerHTML = "<p style='color: #a78bfa;'>No hay cuentas cargadas.</p>"; return; }
+                if(snapshot.empty) { grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas cargadas.</p>"; return; }
                 
                 snapshot.forEach(doc => {
                     const c = doc.data();
@@ -1194,7 +1234,7 @@
                         grupoEmail.style.display = 'block';
                         grupoBoostCampos.style.display = 'none';
 
-                        modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #c084fc;">USD $${c.price}</b>`;
+                        modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #fbbf24;">USD $${c.price}</b>`;
                         document.getElementById('chk-terminos').checked = false;
                         modalPago.classList.add('active');
                     });
