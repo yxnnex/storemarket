@@ -261,6 +261,41 @@
         .btn-modal-aceptar:hover {
             background: #dc2626;
         }
+
+        /* NOTIFICACIONES TOAST FLOTANTES */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(18, 20, 28, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: entradaToast 0.3s ease forwards;
+            min-width: 250px;
+        }
+
+        .toast.exito { border-left: 4px solid #22c55e; }
+        .toast.error { border-left: 4px solid #ef4444; }
+
+        @keyframes entradaToast {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -348,6 +383,9 @@
         </div>
     </div>
 
+    <!-- CONTENEDOR DE NOTIFICACIONES TOAST -->
+    <div class="toast-container" id="toast-container"></div>
+
     <!-- SCRIPT DE LÓGICA ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -365,6 +403,22 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Función para mostrar notificaciones Toast personalizadas
+        function mostrarToast(mensaje, tipo = 'exito') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${tipo}`;
+            toast.innerHTML = `<span>${tipo === 'exito' ? '✅' : '❌'}</span> ${mensaje}`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
         // Subir cuenta nueva
         document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -379,11 +433,11 @@
                     imageUrl: document.getElementById('admin-imagen').value
                 };
                 await addDoc(collection(db, "skin"), nueva);
-                alert("¡Cuenta publicada con éxito!");
+                mostrarToast("¡Cuenta publicada con éxito!", "exito");
                 e.target.reset();
             } catch (err) {
                 console.error(err);
-                alert("Error al publicar la cuenta.");
+                mostrarToast("Error al publicar la cuenta.", "error");
             }
         });
 
@@ -398,10 +452,10 @@
                     multiplicadorLpBajo: parseFloat(document.getElementById('recargo-lp').value)
                 };
                 await setDoc(doc(db, "configuracion", "tarifasBoost"), tarifas);
-                alert("¡Tarifas de Boost actualizadas correctamente!");
+                mostrarToast("¡Tarifas de Boost actualizadas correctamente!", "exito");
             } catch (err) {
                 console.error(err);
-                alert("Error al guardar las tarifas.");
+                mostrarToast("Error al guardar las tarifas.", "error");
             }
         });
 
@@ -417,10 +471,11 @@
             accionEliminarPendiente = async () => {
                 try {
                     await deleteDoc(doc(db, coleccion, id));
+                    mostrarToast("Registro eliminado correctamente", "exito");
                     cargarServiciosContratados();
                 } catch (err) {
                     console.error("Error al eliminar:", err);
-                    alert("No se pudo eliminar el registro.");
+                    mostrarToast("No se pudo eliminar el registro.", "error");
                 }
             };
         };
