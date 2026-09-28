@@ -24,6 +24,43 @@
             margin: 0 auto;
         }
 
+        /* PANTALLA DE LOGIN */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #07090e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: rgba(18, 20, 28, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 30px;
+            width: 350px;
+            max-width: 90%;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #f3ba2f;
+        }
+
+        /* CONTENIDO PROTEGIDO (OCULTO HASTA AUTENTICARSE) */
+        #admin-content {
+            display: none;
+        }
+
         header {
             display: flex;
             justify-content: space-between;
@@ -49,16 +86,7 @@
             .admin-grid { grid-template-columns: 1fr; }
         }
 
-        .admin-box {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .admin-box-full {
+        .admin-box, .admin-box-full {
             background: rgba(18, 20, 28, 0.55);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -77,6 +105,7 @@
 
         .form-group {
             margin-bottom: 14px;
+            text-align: left;
         }
 
         label {
@@ -101,7 +130,7 @@
             border-color: #f3ba2f;
         }
 
-        .btn-subir {
+        .btn-subir, .btn-login {
             width: 100%;
             background-color: #22c55e;
             color: white;
@@ -115,9 +144,9 @@
             transition: background-color 0.2s;
         }
 
-        .btn-subir:hover { background-color: #16a34a; }
+        .btn-subir:hover, .btn-login:hover { background-color: #16a34a; }
 
-        .btn-volver {
+        .btn-volver, .btn-logout {
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
             padding: 8px 16px;
@@ -125,10 +154,11 @@
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: bold;
+            cursor: pointer;
+            border: none;
         }
-        .btn-volver:hover { background: rgba(255, 255, 255, 0.15); }
+        .btn-volver:hover, .btn-logout:hover { background: rgba(255, 255, 255, 0.15); }
 
-        /* Estilos de la tabla de servicios contratados */
         .table-container {
             overflow-x: auto;
         }
@@ -145,14 +175,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        th {
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        td {
-            color: #e2e8f0;
-        }
+        th { color: #94a3b8; font-weight: 600; }
+        td { color: #e2e8f0; }
 
         .badge {
             padding: 4px 8px;
@@ -178,7 +202,7 @@
             color: #ffffff;
         }
 
-        /* MODAL DE CONFIRMACIÓN PERSONALIZADO */
+        /* MODAL DE CONFIRMACIÓN */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -210,29 +234,12 @@
             max-width: 90%;
             text-align: center;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-            transform: scale(0.95);
-            transition: transform 0.2s ease;
-        }
-
-        .modal-overlay.activo .modal-box {
-            transform: scale(1);
-        }
-
-        .modal-box h3 {
-            font-size: 1.1rem;
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-
-        .modal-box p {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 20px;
         }
 
         .modal-buttons {
             display: flex;
             gap: 10px;
+            margin-top: 20px;
         }
 
         .btn-modal-cancelar, .btn-modal-aceptar {
@@ -243,26 +250,12 @@
             font-size: 0.85rem;
             cursor: pointer;
             border: none;
-            transition: background 0.2s;
         }
 
-        .btn-modal-cancelar {
-            background: rgba(255, 255, 255, 0.08);
-            color: #cbd5e1;
-        }
-        .btn-modal-cancelar:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
+        .btn-modal-cancelar { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
+        .btn-modal-aceptar { background: #ef4444; color: #ffffff; }
 
-        .btn-modal-aceptar {
-            background: #ef4444;
-            color: #ffffff;
-        }
-        .btn-modal-aceptar:hover {
-            background: #dc2626;
-        }
-
-        /* NOTIFICACIONES TOAST FLOTANTES */
+        /* TOASTS */
         .toast-container {
             position: fixed;
             bottom: 20px;
@@ -285,25 +278,39 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: entradaToast 0.3s ease forwards;
-            min-width: 250px;
         }
-
         .toast.exito { border-left: 4px solid #22c55e; }
         .toast.error { border-left: 4px solid #ef4444; }
-
-        @keyframes entradaToast {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <!-- PANTALLA DE ACCESO (LOGIN) -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>NEXUS <span>ADMIN LOGIN</span></h2>
+            <form id="form-login">
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="login-email" required placeholder="tucorreo@admin.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-login">Ingresar al Panel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL DEL PANEL (PROTEGIDO) -->
+    <div id="admin-content" class="container">
         <header>
             <h1>NEXUS <span>ADMIN</span></h1>
-            <a href="index.html" class="btn-volver">Ver Tienda ➔</a>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="index.html" class="btn-volver">Ver Tienda ➔</a>
+                <button id="btn-cerrar-sesion" class="btn-logout">Cerrar Sesión</button>
+            </div>
         </header>
 
         <div class="admin-grid">
@@ -330,28 +337,16 @@
             <div class="admin-box">
                 <h2>Tarifas de Boost</h2>
                 <form id="form-guardar-tarifas">
-                    <div class="form-group">
-                        <label>Tarifa Base por División (Hierro a Oro)</label>
-                        <input type="number" step="0.5" id="tarifa-baja" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tarifa Base por División (Platino a Esmeralda)</label>
-                        <input type="number" step="0.5" id="tarifa-media" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tarifa Base por División (Diamante a Maestro+)</label>
-                        <input type="number" step="0.5" id="tarifa-alta" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Recargo por LP Bajo (17-19 LP)</label>
-                        <input type="number" step="0.05" id="recargo-lp" required>
-                    </div>
+                    <div class="form-group"><label>Tarifa Base por División (Hierro a Oro)</label><input type="number" step="0.5" id="tarifa-baja" required></div>
+                    <div class="form-group"><label>Tarifa Base por División (Platino a Esmeralda)</label><input type="number" step="0.5" id="tarifa-media" required></div>
+                    <div class="form-group"><label>Tarifa Base por División (Diamante a Maestro+)</label><input type="number" step="0.5" id="tarifa-alta" required></div>
+                    <div class="form-group"><label>Recargo por LP Bajo (17-19 LP)</label><input type="number" step="0.05" id="recargo-lp" required></div>
                     <button type="submit" class="btn-subir" style="background-color: #f3ba2f; color: #0b0e14;">Guardar Tarifas</button>
                 </form>
             </div>
         </div>
 
-        <!-- CAJA 3: SERVICIOS CONTRATADOS (PARA CORROBORAR COMPROBANTES) -->
+        <!-- CAJA 3: SERVICIOS CONTRATADOS -->
         <div class="admin-box-full">
             <h2>Servicios Contratados (Para Corroborar Comprobantes)</h2>
             <div class="table-container">
@@ -366,20 +361,18 @@
                         </tr>
                     </thead>
                     <tbody id="tabla-servicios">
-                        <tr>
-                            <td colspan="5" style="text-align: center; color: #94a3b8;">Cargando servicios contratados...</td>
-                        </tr>
+                        <tr><td colspan="5" style="text-align: center; color: #94a3b8;">Cargando servicios contratados...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE CONFIRMACIÓN PERSONALIZADO -->
+    <!-- MODAL DE ELIMINACIÓN -->
     <div class="modal-overlay" id="modal-confirmacion">
         <div class="modal-box">
             <h3>¿Estás seguro?</h3>
-            <p>Esta acción eliminará el registro de forma permanente de la base de datos.</p>
+            <p style="color: #94a3b8; font-size: 0.85rem; margin: 10px 0 20px;">Esta acción eliminará el registro de forma permanente de la base de datos.</p>
             <div class="modal-buttons">
                 <button class="btn-modal-cancelar" id="btn-modal-cancelar">Cancelar</button>
                 <button class="btn-modal-aceptar" id="btn-modal-aceptar">Eliminar</button>
@@ -387,12 +380,13 @@
         </div>
     </div>
 
-    <!-- CONTENEDOR DE NOTIFICACIONES TOAST -->
+    <!-- TOASTS -->
     <div class="toast-container" id="toast-container"></div>
 
-    <!-- SCRIPT DE LÓGICA ADMIN -->
+    <!-- SCRIPT DE LÓGICA Y AUTENTICACIÓN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -405,25 +399,59 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Función para mostrar notificaciones Toast personalizadas
+        const loginOverlay = document.getElementById('login-overlay');
+        const adminContent = document.getElementById('admin-content');
+
+        // Controlar estado de sesión (si ya está logueado, muestra el panel directamente)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginOverlay.style.display = 'none';
+                adminContent.style.display = 'block';
+                cargarTarifasActuales();
+                cargarServiciosContratados();
+            } else {
+                loginOverlay.style.display = 'flex';
+                adminContent.style.display = 'none';
+            }
+        });
+
+        // Manejar el inicio de sesión
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                mostrarToast("¡Bienvenida de nuevo!", "exito");
+            } catch (err) {
+                console.error(err);
+                mostrarToast("Credenciales incorrectas.", "error");
+            }
+        });
+
+        // Botón cerrar sesión
+        document.getElementById('btn-cerrar-sesion').addEventListener('click', async () => {
+            await signOut(auth);
+            mostrarToast("Sesión cerrada correctamente", "exito");
+        });
+
         function mostrarToast(mensaje, tipo = 'exito') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${tipo}`;
             toast.innerHTML = `<span>${tipo === 'exito' ? '✅' : '❌'}</span> ${mensaje}`;
             container.appendChild(toast);
-
             setTimeout(() => {
                 toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
                 toast.style.transition = 'all 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
 
-        // Cargar tarifas actuales desde Firebase al iniciar el panel
         async function cargarTarifasActuales() {
             try {
                 const docRef = doc(db, "configuracion", "tarifasBoost");
@@ -445,7 +473,6 @@
             }
         }
 
-        // Subir cuenta nueva
         document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
@@ -457,7 +484,7 @@
                     riotPoints: document.getElementById('admin-ea').value,
                     price: parseFloat(document.getElementById('admin-precio').value),
                     imageUrl: document.getElementById('admin-imagen').value,
-                    descripcionLarga: document.getElementById('admin-descripcion-larga').value // <-- Campo agregado a Firebase
+                    descripcionLarga: document.getElementById('admin-descripcion-larga').value
                 };
                 await addDoc(collection(db, "skin"), nueva);
                 mostrarToast("¡Cuenta publicada con éxito!", "exito");
@@ -468,7 +495,6 @@
             }
         });
 
-        // Guardar tarifas de boost en Firebase
         document.getElementById('form-guardar-tarifas').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
@@ -486,13 +512,11 @@
             }
         });
 
-        // Variables para controlar el modal personalizado
         const modal = document.getElementById('modal-confirmacion');
         const btnCancelarModal = document.getElementById('btn-modal-cancelar');
         const btnAceptarModal = document.getElementById('btn-modal-aceptar');
         let accionEliminarPendiente = null;
 
-        // Abrir modal personalizado al hacer clic en borrar
         window.prepararEliminacion = function(coleccion, id) {
             modal.classList.add('activo');
             accionEliminarPendiente = async () => {
@@ -507,13 +531,11 @@
             };
         };
 
-        // Botón cancelar del modal
         btnCancelarModal.addEventListener('click', () => {
             modal.classList.remove('activo');
             accionEliminarPendiente = null;
         });
 
-        // Botón aceptar del modal
         btnAceptarModal.addEventListener('click', async () => {
             modal.classList.remove('activo');
             if (accionEliminarPendiente) {
@@ -522,14 +544,12 @@
             }
         });
 
-        // Cargar Servicios Contratados (Venta de cuentas y Boosts) desde Firestore
         async function cargarServiciosContratados() {
             const tabla = document.getElementById('tabla-servicios');
             let htmlContenido = "";
 
             try {
                 const snapshotCuentas = await getDocs(collection(db, "compras")).catch(() => ({ empty: true }));
-                
                 if (!snapshotCuentas.empty) {
                     snapshotCuentas.forEach((docSnap) => {
                         const data = docSnap.data();
@@ -543,16 +563,13 @@
                                 <td>${cliente}</td>
                                 <td>${detalle}</td>
                                 <td>${monto}</td>
-                                <td>
-                                    <button class="btn-eliminar" onclick="prepararEliminacion('compras', '${docSnap.id}')">Eliminar</button>
-                                </td>
+                                <td><button class="btn-eliminar" onclick="prepararEliminacion('compras', '${docSnap.id}')">Eliminar</button></td>
                             </tr>
                         `;
                     });
                 }
 
                 const snapshotBoosts = await getDocs(collection(db, "pedidosBoost")).catch(() => ({ empty: true }));
-
                 if (!snapshotBoosts.empty) {
                     snapshotBoosts.forEach((docSnap) => {
                         const data = docSnap.data();
@@ -566,9 +583,7 @@
                                 <td>${cliente}</td>
                                 <td>${detalle}</td>
                                 <td>${monto}</td>
-                                <td>
-                                    <button class="btn-eliminar" onclick="prepararEliminacion('pedidosBoost', '${docSnap.id}')">Eliminar</button>
-                                </td>
+                                <td><button class="btn-eliminar" onclick="prepararEliminacion('pedidosBoost', '${docSnap.id}')">Eliminar</button></td>
                             </tr>
                         `;
                     });
@@ -579,18 +594,11 @@
                 } else {
                     tabla.innerHTML = htmlContenido;
                 }
-
             } catch (err) {
                 console.error("Error al cargar los servicios:", err);
                 tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Error al conectar con la base de datos para los registros.</td></tr>`;
             }
         }
-
-        // Ejecutar al cargar el panel
-        window.addEventListener('DOMContentLoaded', () => {
-            cargarTarifasActuales();
-            cargarServiciosContratados();
-        });
     </script>
 </body>
 </html>
