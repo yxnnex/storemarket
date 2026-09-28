@@ -522,6 +522,7 @@
             line-height: 1.8; 
             margin-bottom: 20px;
             color: #cbd5e1;
+            word-break: break-word;
         }
 
         .modal-box .form-group {
@@ -1086,7 +1087,7 @@
         let itemSeleccionado = null;
         let tipoItemActual = '';
 
-        // Contratación de Boost (va directo al pago porque ya tiene sus propios pasos)
+        // Contratación de Boost
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
             if (precio <= 0) {
@@ -1110,7 +1111,6 @@
         document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
         document.getElementById('modal-detalles-cerrar').addEventListener('click', () => modalDetalles.classList.remove('active'));
 
-        // Al hacer clic en el botón "Comprar" dentro del modal de detalles, se abre el modal de pago
         btnIrAPago.addEventListener('click', () => {
             modalDetalles.classList.remove('active');
             
@@ -1251,11 +1251,15 @@
                             </div>
                         </div>
                     `;
-                    // Al hacer clic en la tarjeta, ahora abre primero el modal de descripción detallada
+                    
+                    // Aquí se mapea la descripción dinámica que viene de la base de datos (c.description o c.descripcion)
                     card.addEventListener('click', () => {
                         tipoItemActual = 'cuenta';
                         itemSeleccionado = { titulo: c.title, precio: c.price };
                         
+                        // Busca la descripción del panel admin; si escribiste 'descripcion' o 'description' en firebase, lo detectará
+                        const descripcionTexto = c.description || c.descripcion || 'Sin descripción adicional proporcionada.';
+
                         modalDetallesTitulo.textContent = c.title;
                         modalDetallesTexto.innerHTML = `
                             🌐 <b>Servidor:</b> ${c.server}<br>
@@ -1263,7 +1267,7 @@
                             🏆 <b>Rango actual:</b> ${c.currentRank}<br>
                             💎 <b>Esencia Azul (EA):</b> ${c.riotPoints}<br><br>
                             📜 <b>Descripción detallada:</b><br>
-                            Cuenta smurf optimizada, nivel adecuado, sin restricciones previas. Acceso completo a correo de creación y datos de recuperación.<br><br>
+                            ${descripcionTexto.replace(/\n/g, '<br>')}<br><br>
                             Precio: <b style="color: #fbbf24;">USD $${c.price}</b>
                         `;
                         modalDetalles.classList.add('active');
