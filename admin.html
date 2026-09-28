@@ -328,19 +328,19 @@
                 <form id="form-guardar-tarifas">
                     <div class="form-group">
                         <label>Tarifa Base por División (Hierro a Oro)</label>
-                        <input type="number" step="0.5" id="tarifa-baja" value="4.00" required>
+                        <input type="number" step="0.5" id="tarifa-baja" required>
                     </div>
                     <div class="form-group">
                         <label>Tarifa Base por División (Platino a Esmeralda)</label>
-                        <input type="number" step="0.5" id="tarifa-media" value="6.50" required>
+                        <input type="number" step="0.5" id="tarifa-media" required>
                     </div>
                     <div class="form-group">
                         <label>Tarifa Base por División (Diamante a Maestro+)</label>
-                        <input type="number" step="0.5" id="tarifa-alta" value="12.00" required>
+                        <input type="number" step="0.5" id="tarifa-alta" required>
                     </div>
                     <div class="form-group">
                         <label>Recargo por LP Bajo (17-19 LP)</label>
-                        <input type="number" step="0.05" id="recargo-lp" value="1.20" required>
+                        <input type="number" step="0.05" id="recargo-lp" required>
                     </div>
                     <button type="submit" class="btn-subir" style="background-color: #f3ba2f; color: #0b0e14;">Guardar Tarifas</button>
                 </form>
@@ -389,7 +389,7 @@
     <!-- SCRIPT DE LÓGICA ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, getDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
@@ -417,6 +417,29 @@
                 toast.style.transition = 'all 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+
+        // Cargar tarifas actuales desde Firebase al iniciar el panel
+        async function cargarTarifasActuales() {
+            try {
+                const docRef = doc(db, "configuracion", "tarifasBoost");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('tarifa-baja').value = data.baja ?? '';
+                    document.getElementById('tarifa-media').value = data.media ?? '';
+                    document.getElementById('tarifa-alta').value = data.alta ?? '';
+                    document.getElementById('recargo-lp').value = data.multiplicadorLpBajo ?? '';
+                } else {
+                    // Si no existen todavía, colocar valores por defecto orientativos
+                    document.getElementById('tarifa-baja').value = 4.00;
+                    document.getElementById('tarifa-media').value = 6.50;
+                    document.getElementById('tarifa-alta').value = 12.00;
+                    document.getElementById('recargo-lp').value = 1.20;
+                }
+            } catch (err) {
+                console.error("Error al cargar tarifas:", err);
+            }
         }
 
         // Subir cuenta nueva
@@ -563,7 +586,10 @@
         }
 
         // Ejecutar al cargar el panel
-        window.addEventListener('DOMContentLoaded', cargarServiciosContratados);
+        window.addEventListener('DOMContentLoaded', () => {
+            cargarTarifasActuales();
+            cargarServiciosContratados();
+        });
     </script>
 </body>
 </html>
