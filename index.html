@@ -3,82 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda & Boosting</title>
-    <!-- Tus estilos originales se mantienen intactos -->
+    <title>Nexus Store - Plataforma Pro</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: #0d0f18;
-            color: #f8fafc;
+            background-color: #0b0714;
+            color: #ffffff;
+            padding: 20px;
             min-height: 100vh;
-            overflow-x: hidden;
             position: relative;
+            overflow-x: hidden;
         }
 
+        /* Canvas para el fondo dinámico de partículas */
         #bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             z-index: -1;
             pointer-events: none;
         }
 
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
         header {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.2rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 20px 25px;
+            background: rgba(22, 16, 38, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 14px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #c084fc, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-tabs {
+        .logo-area {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .logo-img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+        }
+
+        .logo-area p {
+            color: #a78bfa;
+            font-size: 0.85rem;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 6px;
+            background: rgba(14, 10, 26, 0.7);
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid rgba(168, 85, 247, 0.1);
         }
 
         .tab-btn {
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
+            border: none;
+            color: #a78bfa;
+            padding: 8px 16px;
+            border-radius: 6px;
             font-weight: 600;
+            font-size: 0.88rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .tab-btn.active, .tab-btn:hover {
-            background: linear-gradient(135deg, #9333ea, #4f46e5);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+        .tab-btn::after {
+            content: "⌄";
+            font-size: 0.9rem;
+            color: #8b5cf6;
         }
 
-        main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+        .tab-btn:hover {
+            color: #ffffff;
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        .tab-btn.active {
+            background-color: #a855f7;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+        .tab-btn.active::after {
+            color: #ffffff;
         }
 
         .tab-content {
@@ -89,37 +126,294 @@
             display: block;
         }
 
+        .boost-types-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .boost-type-btn {
+            background: rgba(22, 16, 38, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            color: #a78bfa;
+            padding: 9px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .boost-type-btn.active {
+            background-color: #a855f7;
+            color: #ffffff;
+            border-color: #a855f7;
+            font-weight: bold;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+        }
+
+        .boost-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 340px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .boost-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .boost-card {
+            background: rgba(22, 16, 38, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .rank-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: rgba(14, 10, 26, 0.5);
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        .rank-emblem {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .rank-info span {
+            font-size: 0.7rem;
+            color: #a78bfa;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rank-info h3 {
+            font-size: 1.1rem;
+            color: #f8fafc;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1.3fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            color: #a78bfa;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(14, 10, 26, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.85rem;
+            transition: border-color 0.2s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+        }
+
+        .lp-gain-container {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(168, 85, 247, 0.15);
+            text-align: center;
+        }
+
+        .lp-gain-container label {
+            text-align: center;
+            color: #c084fc;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .lp-gain-container select {
+            max-width: 260px;
+            margin: 0 auto;
+            text-align-last: center;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .mode-btn {
+            background: rgba(14, 10, 26, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            color: #a78bfa;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background-color: #a855f7;
+            color: #ffffff;
+            border-color: #a855f7;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+        }
+
+        .toggle-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(14, 10, 26, 0.5);
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(168, 85, 247, 0.1);
+            color: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .toggle-option input {
+            width: 16px;
+            height: 16px;
+            accent-color: #a855f7;
+            cursor: pointer;
+        }
+
+        .boost-total {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #c084fc;
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-contratar {
+            width: 100%;
+            background-color: #a855f7;
+            color: #ffffff;
+            border: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+            text-align: center;
+        }
+
+        .btn-contratar:hover {
+            background-color: #9333ea;
+            transform: translateY(-1px);
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(202, 138, 4, 0.25));
+            border: 1.5px solid rgba(234, 179, 8, 0.6);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #fef08a;
+            text-align: center;
+            margin-bottom: 12px;
+            display: none;
+            line-height: 1.4;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+        }
+
+        .btn-contratar.promo-active {
+            background: linear-gradient(135deg, #eab308, #ca8a04);
+            color: #111827;
+            box-shadow: 0 4px 20px rgba(234, 179, 8, 0.5);
+        }
+
+        .btn-contratar.promo-active:hover {
+            background: linear-gradient(135deg, #facc15, #eab308);
+        }
+
         .grid-cuentas {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
+            margin-bottom: 50px;
         }
 
         .cuenta-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
+            background: rgba(22, 16, 38, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 14px;
             overflow: hidden;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             cursor: pointer;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
 
         .cuenta-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(192, 132, 252, 0.4);
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 12px 35px 0 rgba(168, 85, 247, 0.2);
         }
 
         .cuenta-img {
             width: 100%;
             height: 160px;
             object-fit: cover;
-            background: #111827;
+            background-color: #140d24;
         }
 
         .cuenta-body {
-            padding: 1.2rem;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -128,22 +422,26 @@
 
         .cuenta-server {
             font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #a78bfa;
-            font-weight: 700;
+            background: rgba(168, 85, 247, 0.2);
+            color: #d8b4fe;
+            padding: 3px 8px;
+            border-radius: 4px;
+            width: fit-content;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
 
         .cuenta-titulo {
-            font-size: 1.1rem;
-            margin: 0.4rem 0;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffffff;
         }
 
         .cuenta-detalles-info {
             font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 1rem;
+            color: #a78bfa;
+            margin-bottom: 15px;
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -153,299 +451,194 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 0.8rem;
+            border-top: 1px solid rgba(168, 85, 247, 0.15);
+            padding-top: 12px;
         }
 
         .cuenta-precio {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #34d399;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #c084fc;
         }
 
         .btn-comprar {
-            background: #4f46e5;
-            color: #fff;
+            background-color: #a855f7;
+            color: #ffffff;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 8px 14px;
             border-radius: 6px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
+            font-size: 0.85rem;
             transition: background 0.2s;
         }
 
         .btn-comprar:hover {
-            background: #6366f1;
-        }
-
-        .boost-container {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .boost-modes {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-        }
-
-        .mode-btn {
-            flex: 1;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .mode-btn.active {
-            background: #9333ea;
-            border-color: #c084fc;
-            color: #fff;
-        }
-
-        .boost-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        @media(max-width: 768px) {
-            .boost-grid { grid-template-columns: 1fr; }
-        }
-
-        .boost-box {
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .boost-box img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 0.4rem;
-        }
-
-        .form-group select, .form-group input {
-            width: 100%;
-            background: #0f172a;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 0.6rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-        }
-
-        .option-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: #cbd5e1;
-            cursor: pointer;
-        }
-
-        .promo-banner {
-            background: rgba(147, 51, 234, 0.15);
-            border: 1px solid rgba(192, 132, 252, 0.3);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            color: #e9d5ff;
-            display: none;
-            text-align: center;
-        }
-
-        .boost-summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1.5rem;
-        }
-
-        .boost-price {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #34d399;
-        }
-
-        .btn-contratar {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .btn-contratar.promo-active {
-            background: linear-gradient(135deg, #9333ea, #ec4899);
-        }
-
-        .btn-contratar:hover {
-            transform: scale(1.02);
+            background-color: #9333ea;
         }
 
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 7, 20, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
         .modal-box {
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 100%;
-            max-width: 450px;
-            padding: 2rem;
+            background: rgba(22, 16, 38, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 16px;
-            position: relative;
+            padding: 28px; width: 100%; max-width: 450px; position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        .modal-box h3 { margin-bottom: 1rem; }
         .modal-close {
-            position: absolute;
-            top: 1rem; right: 1rem;
-            background: transparent; border: none;
-            color: #94a3b8; font-size: 1.2rem; cursor: pointer;
+            position: absolute; top: 15px; right: 15px; background: none; border: none;
+            color: #a78bfa; font-size: 1.2rem; cursor: pointer;
         }
-        .modal-actions {
-            display: flex; gap: 10px; margin-top: 1.5rem;
-        }
-        .modal-actions button {
-            flex: 1; padding: 0.7rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;
-        }
-        .btn-whatsapp { background: #25d366; color: #fff; }
-        .btn-paypal { background: #0070ba; color: #fff; }
 
-        .custom-alert {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
+        .payment-options {
+            display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
         }
-        .custom-alert.active {
-            opacity: 1;
-            pointer-events: auto;
+        .btn-pagar-paypal {
+            background-color: #0070ba; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
+        }
+        .btn-pagar-alias {
+            background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
+        }
+
+        /* Estilos de Términos y Condiciones */
+        .terminos-box {
+            background: rgba(14, 10, 26, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            max-height: 110px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .terminos-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .terminos-box::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.3);
+            border-radius: 3px;
+        }
+
+        .terminos-check-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .terminos-check-container input {
+            width: 16px;
+            height: 16px;
+            accent-color: #a855f7;
+            cursor: pointer;
+        }
+
+        /* Estilos para el Modal de Alerta Personalizado */
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 7, 20, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+        }
+        .custom-alert-overlay.active {
+            opacity: 1; pointer-events: auto;
         }
         .custom-alert-box {
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 90%;
-            max-width: 350px;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            background: rgba(22, 16, 38, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            padding: 24px; width: 100%; max-width: 380px; text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+        .custom-alert-box h4 {
+            color: #f8fafc; font-size: 1.1rem; margin-bottom: 10px;
         }
         .custom-alert-box p {
-            margin-bottom: 1.2rem;
-            font-size: 0.95rem;
-            color: #e2e8f0;
+            color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4;
         }
-        .custom-alert-box button {
-            background: #9333ea;
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
+        .btn-alert-ok {
+            background-color: #a855f7; color: #ffffff; border: none;
+            padding: 10px 24px; border-radius: 8px; font-weight: bold; font-size: 0.9rem;
+            cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+        .btn-alert-ok:hover {
+            background-color: #9333ea;
         }
     </style>
 </head>
 <body>
 
+    <!-- Canvas para el fondo dinámico -->
     <canvas id="bg-canvas"></canvas>
 
-    <header>
-        <div class="logo">⚡ Tienda & Boost</div>
-        <div class="nav-tabs">
-            <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
-            <button class="tab-btn" data-target="seccion-boost">Duo / Solo Boost</button>
-        </div>
-    </header>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <img src="lp.png" alt="Nexus Store Logo" class="logo-img">
+                <p>Cuentas</p>
+            </div>
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
+                <button class="tab-btn" data-target="seccion-boost">Boost</button>
+            </nav>
+        </header>
 
-    <main>
-        <!-- Sección Cuentas -->
+        <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
         <div id="seccion-cuentas" class="tab-content active">
-            <div id="grid-cuentas" class="grid-cuentas"></div>
+            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px;">Cuentas Disponibles</h2>
+            <div id="grid-cuentas" class="grid-cuentas">
+                <p style="color: #a78bfa;">Cargando catálogo...</p>
+            </div>
         </div>
 
-        <!-- Sección Boost -->
+        <!-- SECCIÓN 2: BOOST PRO -->
         <div id="seccion-boost" class="tab-content">
-            <div class="boost-container">
-                <div class="boost-modes">
-                    <button class="mode-btn active" data-mode="solo">Solo Boosting</button>
-                    <button class="mode-btn" data-mode="duo">Duo Boosting</button>
-                </div>
+            <div class="boost-types-nav">
+                <button class="boost-type-btn active">Impulso de rango</button>
+                <button class="boost-type-btn">Partidas de posicionamiento</button>
+                <button class="boost-type-btn">Victorias netas</button>
+            </div>
 
-                <div class="boost-grid">
-                    <!-- Actual -->
-                    <div class="boost-box">
-                        <img id="img-actual" src="Hierro.png" alt="Rango Actual">
-                        <h4 id="txt-actual">Hierro Div. 4</h4>
-                        <div class="form-group" style="margin-top: 1rem;">
+            <div class="boost-layout">
+                <!-- Columna 1: Rango Actual -->
+                <div class="boost-card">
+                    <div class="rank-header">
+                        <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
+                        <div class="rank-info">
+                            <span>Rango actual</span>
+                            <h3 id="txt-actual">Hierro Div. 4</h3>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
                             <label>Liga Actual</label>
                             <select id="liga-actual">
                                 <option value="Hierro">Hierro</option>
                                 <option value="Bronce">Bronce</option>
                                 <option value="Plata">Plata</option>
-                                <option value="Oro">Oro</option>
+                                <option value="Oro" selected>Oro</option>
                                 <option value="Platino">Platino</option>
                                 <option value="Esmeralda">Esmeralda</option>
                                 <option value="Diamante">Diamante</option>
@@ -453,43 +646,47 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>División Actual</label>
+                            <label>División</label>
                             <select id="division-actual">
-                                <option value="4">División 4</option>
-                                <option value="3">División 3</option>
-                                <option value="2">División 2</option>
-                                <option value="1">División 1</option>
+                                <option value="4">Div. IV</option>
+                                <option value="3">Div. III</option>
+                                <option value="2">Div. II</option>
+                                <option value="1">Div. I</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>LP Actuales</label>
-                            <select id="lp-actual">
-                                <option value="0-20">0 - 20 LP</option>
-                                <option value="21-60">21 - 60 LP</option>
-                                <option value="61-100">61 - 100 LP</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Ganancia de LP por Win</label>
-                            <select id="lp-ganancia">
-                                <option value="17-19">17 - 19 LP (Baja)</option>
-                                <option value="20-25" selected>20 - 25 LP (Normal)</option>
-                                <option value="25-30">25 - 30+ LP (Alta)</option>
-                            </select>
+                            <label>LP (opc.)</label>
+                            <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
                         </div>
                     </div>
 
-                    <!-- Deseado -->
-                    <div class="boost-box">
-                        <img id="img-deseado" src="Hierro.png" alt="Rango Deseado">
-                        <h4 id="txt-deseado">Hierro Div. 1</h4>
-                        <div class="form-group" style="margin-top: 1rem;">
+                    <div class="lp-gain-container">
+                        <label for="lp-ganancia">¿Cuantos LP obtienes x victoria?</label>
+                        <select id="lp-ganancia">
+                            <option value="17-19">17 a 19 LP</option>
+                            <option value="20-25" selected>20 a 25 LP</option>
+                            <option value="25-30">25 a 30 LP</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Rango Deseado -->
+                <div class="boost-card">
+                    <div class="rank-header">
+                        <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
+                        <div class="rank-info">
+                            <span>Rango deseado</span>
+                            <h3 id="txt-deseado">Oro Div. 1</h3>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
                             <label>Liga Deseada</label>
                             <select id="liga-deseada">
                                 <option value="Hierro">Hierro</option>
                                 <option value="Bronce">Bronce</option>
                                 <option value="Plata">Plata</option>
-                                <option value="Oro">Oro</option>
+                                <option value="Oro" selected>Oro</option>
                                 <option value="Platino">Platino</option>
                                 <option value="Esmeralda">Esmeralda</option>
                                 <option value="Diamante">Diamante</option>
@@ -497,88 +694,110 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>División Deseada</label>
+                            <label>División</label>
                             <select id="division-deseada">
-                                <option value="4">División 4</option>
-                                <option value="3">División 3</option>
-                                <option value="2">División 2</option>
-                                <option value="1" selected>División 1</option>
+                                <option value="4">Div. IV</option>
+                                <option value="3">Div. III</option>
+                                <option value="2">Div. II</option>
+                                <option value="1" selected>Div. I</option>
                             </select>
                         </div>
-                        <div class="form-group" style="display:none;">
-                            <label>LP Deseado</label>
-                            <select id="lp-deseado"><option value="normal">Normal</option></select>
+                        <div class="form-group">
+                            <label>LP (opc.)</label>
+                            <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
                         </div>
                     </div>
                 </div>
 
-                <div id="promo-banner" class="promo-banner"></div>
-
-                <div class="options-grid">
-                    <label class="option-checkbox"><input type="checkbox" id="chk-streaming"> Ver Streaming (+USD $5.00)</label>
-                    <label class="option-checkbox"><input type="checkbox" id="chk-offline" checked> Jugar Offline (+USD $3.00)</label>
-                </div>
-
-                <div class="boost-summary">
-                    <div>
-                        <span style="font-size: 0.85rem; color: #94a3b8;">Precio Total</span>
-                        <div class="boost-price">USD $<span id="precio-boost">0.00</span></div>
+                <!-- Columna 3: Personalizar Pedido -->
+                <div class="boost-card">
+                    <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc;">PERSONALIZAR PEDIDO</h3>
+                    
+                    <div class="mode-selector">
+                        <div class="mode-btn active" data-mode="solo">Solo Q</div>
+                        <div class="mode-btn" data-mode="duo">Duo</div>
                     </div>
-                    <button id="btn-contratar-boost" class="btn-contratar">Obtener oferta</button>
+
+                    <div class="options-group">
+                        <label class="toggle-option">
+                            <span>Transmisión en vivo</span> 
+                            <input type="checkbox" id="chk-streaming">
+                        </label>
+                        <label class="toggle-option">
+                            <span>Modo Offline</span> 
+                            <input type="checkbox" id="chk-offline">
+                        </label>
+                    </div>
+
+                    <div id="promo-banner" class="promo-banner"></div>
+
+                    <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
+                    <button class="btn-contratar" id="btn-contratar-boost">Obtener oferta</button>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
-    <!-- Modal de Pago / Checkout -->
+    <!-- MODAL DE PAGO -->
     <div id="modal-pago" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-cerrar" class="modal-close">&times;</button>
-            <h3>Finalizar Pedido</h3>
-            <p id="modal-texto" style="margin-bottom: 1rem; color: #94a3b8; font-size: 0.95rem;"></p>
+            <h3 id="modal-titulo" style="margin-bottom: 15px; color: #f8fafc;">Finalizar Pago</h3>
+            <div id="modal-texto" style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 15px;"></div>
             
-            <div id="grupo-email" class="form-group">
-                <label>Correo Electrónico (para entrega de cuenta)</label>
-                <input type="email" id="email-cliente" placeholder="tucorreo@domain.com">
+            <!-- Campo exclusivo para Cuentas -->
+            <div class="form-group" id="grupo-email">
+                <label>Correo Electrónico</label>
+                <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com">
             </div>
 
-            <div id="grupo-boost-campos" style="display:none;">
+            <!-- Campos exclusivos para Boost -->
+            <div id="grupo-boost-campos" style="display: none;">
                 <div class="form-group">
-                    <label>Tu ID de LoL (Usuario#Tag)</label>
-                    <input type="text" id="input-lol-id" placeholder="Ej: Summoner#LAN">
+                    <label>ID de LoL (Nombre#ETIQUETA)</label>
+                    <input type="text" id="input-lol-id" placeholder="Nombre#ETIQUETA">
                 </div>
-                <div class="form-group">
-                    <label>Tu usuario de Discord</label>
-                    <input type="text" id="input-discord-user" placeholder="Ej: tu_usuario">
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>User de Discord </label>
+                    <input type="text" id="input-discord-user" placeholder=" ">
                 </div>
             </div>
 
-            <div class="form-group" style="margin-top: 1rem;">
-                <label class="option-checkbox" style="font-size: 0.8rem;">
-                    <input type="checkbox" id="chk-terminos"> Acepto los Términos y Condiciones de no reembolso una vez iniciado el servicio.
-                </label>
+            <div class="form-group" style="margin-top: 12px;">
+                <label>Términos y Condiciones (Servicios Digitales)</label>
+                <div class="terminos-box">
+                    <b>1. Naturaleza Digital:</b> Productos y servicios intangibles.<br>
+                    <b>2. Política de No Reembolso:</b> Debido a la entrega inmediata de credenciales o inicio del servicio, <b>todas las ventas son definitivas y sin derecho a reembolso</b>. Disputas infundadas en PayPal serán refutadas con registros de entrega e IP.<br>
+                    <b>3. Responsabilidad:</b> El comprador asume el uso posterior de la cuenta.
+                </div>
             </div>
 
-            <div class="modal-actions">
-                <button id="btn-pagar-alias" class="btn-whatsapp">WhatsApp / Alias</button>
-                <button id="btn-pagar-paypal" class="btn-paypal">PayPal</button>
+            <label class="terminos-check-container">
+                <input type="checkbox" id="chk-terminos">
+                <span>He leído y acepto los Términos y Condiciones.</span>
+            </label>
+
+            <div class="payment-options">
+                <button id="btn-pagar-paypal" class="btn-pagar-paypal">Pagar con PayPal</button>
+                <button id="btn-pagar-alias" class="btn-pagar-alias">Pagar por Alias / Transferencia (WhatsApp)</button>
             </div>
         </div>
     </div>
 
-    <!-- Alerta Personalizada Modal -->
-    <div id="customAlert" class="custom-alert">
+    <!-- MODAL DE ALERTA PERSONALIZADO -->
+    <div id="customAlert" class="custom-alert-overlay">
         <div class="custom-alert-box">
-            <p id="customAlertMessage">Mensaje de alerta</p>
-            <button onclick="cerrarAlertaCustom()">Entendido</button>
+            <h4>Aviso</h4>
+            <p id="customAlertMessage">Mensaje de alerta...</p>
+            <button class="btn-alert-ok" onclick="cerrarAlertaCustom()">Aceptar</button>
         </div>
     </div>
 
-    <!-- Lógica de la página con sincronización dinámica de Firebase para las tarifas -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Script para el Fondo Dinámico (Partículas flotantes con Canvas)
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
@@ -646,6 +865,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Funciones globales para el manejo del modal de alerta personalizado
         window.mostrarAlerta = function(mensaje) {
             document.getElementById('customAlertMessage').innerText = mensaje;
             document.getElementById('customAlert').classList.add('active');
@@ -709,11 +929,12 @@
 
         const valoresLigas = { Hierro: 1, Bronce: 2, Plata: 3, Oro: 4, Platino: 5, Esmeralda: 6, Diamante: 7, Maestro: 8 };
 
-        // Tarifas por defecto conectadas dinámicamente a Firebase
+        // Tarifas base por defecto sincronizables con Firebase
         let tarifasFirebase = {
-            baja: 4.00,
-            media: 6.50,
-            alta: 12.00,
+            hierroBronce: 5.00,
+            plataOro: 7.00,
+            platinoEsmeralda: 9.00,
+            diamante: 12.00,
             multiplicadorLpBajo: 1.20
         };
 
@@ -723,13 +944,14 @@
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    tarifasFirebase.baja = data.baja ?? 4.00;
-                    tarifasFirebase.media = data.media ?? 6.50;
-                    tarifasFirebase.alta = data.alta ?? 12.00;
+                    tarifasFirebase.hierroBronce = data.hierroBronce ?? 5.00;
+                    tarifasFirebase.plataOro = data.plataOro ?? 7.00;
+                    tarifasFirebase.platinoEsmeralda = data.platinoEsmeralda ?? 9.00;
+                    tarifasFirebase.diamante = data.diamante ?? 12.00;
                     tarifasFirebase.multiplicadorLpBajo = data.multiplicadorLpBajo ?? 1.20;
                 }
             } catch (err) {
-                console.error("Error al cargar tarifas:", err);
+                console.error("Error al cargar tarifas desde Firebase:", err);
             }
             actualizarBoost();
         }
@@ -750,9 +972,10 @@
             const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
             const diff = scoreDeseado - scoreActual;
 
-            let tarifaPorDivision = tarifasFirebase.baja;
-            if (lAct === "Platino" || lAct === "Esmeralda") tarifaPorDivision = tarifasFirebase.media;
-            if (lAct === "Diamante" || lAct === "Maestro") tarifaPorDivision = tarifasFirebase.alta;
+            let tarifaPorDivision = tarifasFirebase.plataOro;
+            if (lAct === "Hierro" || lAct === "Bronce") tarifaPorDivision = tarifasFirebase.hierroBronce;
+            if (lAct === "Platino" || lAct === "Esmeralda") tarifaPorDivision = tarifasFirebase.platinoEsmeralda;
+            if (lAct === "Diamante" || lAct === "Maestro") tarifaPorDivision = tarifasFirebase.diamante;
 
             let precioDivisiones = diff > 0 ? diff * tarifaPorDivision : 0;
 
@@ -806,7 +1029,7 @@
         const grupoEmail = document.getElementById('grupo-email');
         const grupoBoostCampos = document.getElementById('grupo-boost-campos');
         let itemSeleccionado = null;
-        let tipoItemActual = '';
+        let tipoItemActual = ''; // 'cuenta' o 'boost'
 
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
@@ -856,7 +1079,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error(e); }
+                } catch(e) { console.error("Error guardando boost:", e); }
 
             } else {
                 const email = document.getElementById('email-cliente').value;
@@ -872,7 +1095,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error(e); }
+                } catch(e) { console.error("Error guardando compra:", e); }
             }
             
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
@@ -903,7 +1126,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error(e); }
+                } catch(e) { console.error("Error guardando boost PayPal:", e); }
 
             } else {
                 const email = document.getElementById('email-cliente').value;
@@ -920,7 +1143,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error(e); }
+                } catch(e) { console.error("Error guardando compra PayPal:", e); }
             }
             
             const monto = itemSeleccionado.precio;
@@ -975,6 +1198,7 @@
             } catch(e) { console.error(e); }
         }
 
+        // Inicializar carga de tarifas de Firebase y catálogo
         cargarTarifasTienda();
         cargarCatalogo();
     </script>
