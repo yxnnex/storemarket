@@ -522,7 +522,6 @@
             line-height: 1.8; 
             margin-bottom: 20px;
             color: #cbd5e1;
-            white-space: pre-line;
         }
 
         .modal-box .form-group {
@@ -1235,8 +1234,7 @@
                         grupoEmail.style.display = 'block';
                         grupoBoostCampos.style.display = 'none';
 
-                        const descripcionLarga = c.descripcionLarga || "Sin descripción detallada.";
-                        modalTexto.innerHTML = `<b>${c.title}</b><br><br>${descripcionLarga}<br><br>Precio: <b style="color: #fbbf24;">USD $${c.price}</b>`;
+                        modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #fbbf24;">USD $${c.price}</b>`;
                         document.getElementById('chk-terminos').checked = false;
                         modalPago.classList.add('active');
                     });
