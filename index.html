@@ -1014,7 +1014,7 @@
             if(!email) { mostrarAlerta("Ingresa tu correo electrónico"); return; }
             if(!aceptaTerminos) { mostrarAlerta("Debes aceptar los Términos y Condiciones de no reembolso."); return; }
             
-            const tuNumeroWhatsApp = "549261XXXXXXXX"; 
+            const tuNumeroWhatsApp = "59899806108"; 
             const mensaje = `Hola! Quiero contratar el ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email} (Acepté los términos de no reembolso).`;
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
             modalPago.classList.remove('active');
@@ -1029,7 +1029,7 @@
                 return; 
             }
             if(!aceptaTerminos) {
-                mostrarAlerta("Debes aceptar los Términos y Condiciones de no reembolso para continuar.");
+                mostrarAlerta("Debes aceptar los Términos y Condiciones para continuar.");
                 return;
             }
             
