@@ -483,7 +483,7 @@
             background-color: #f59e0b;
         }
 
-        /* MODAL DE PAGO AMPLIADO, CENTRADO Y AIREADO */
+        /* MODAL GENERAL */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -517,7 +517,7 @@
             margin-top: 0;
         }
 
-        .modal-box #modal-texto {
+        .modal-box #modal-texto, .modal-box #modal-detalles-texto {
             text-align: left;
             line-height: 1.8; 
             margin-bottom: 20px;
@@ -778,7 +778,17 @@
         </div>
     </div>
 
-    <!-- MODAL DE PAGO -->
+    <!-- MODAL DE DETALLES DE CUENTA (PASO 1) -->
+    <div id="modal-detalles" class="modal-overlay">
+        <div class="modal-box">
+            <button id="modal-detalles-cerrar" class="modal-close">&times;</button>
+            <h3 id="modal-detalles-titulo">Detalles de la Cuenta</h3>
+            <div id="modal-detalles-texto"></div>
+            <button id="btn-ir-a-pago" class="btn-contratar">Comprar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE PAGO (PASO 2) -->
     <div id="modal-pago" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-cerrar" class="modal-close">&times;</button>
@@ -905,7 +915,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Funciones globales para el manejo del modal de alerta personalizado
         window.mostrarAlerta = function(mensaje) {
             document.getElementById('customAlertMessage').innerText = mensaje;
             document.getElementById('customAlert').classList.add('active');
@@ -969,7 +978,6 @@
 
         const valoresLigas = { Hierro: 1, Bronce: 2, Plata: 3, Oro: 4, Platino: 5, Esmeralda: 6, Diamante: 7, Maestro: 8 };
 
-        // Tarifas base por defecto sincronizables con Firebase
         let tarifasFirebase = {
             hierroBronce: 5.00,
             plataOro: 7.00,
@@ -980,23 +988,19 @@
 
         async function cargarTarifasTienda() {
             try {
-                console.log("Intentando conectar con Firebase para buscar tarifas...");
                 const docRef = doc(db, "configuracion", "tarifasBoost");
                 const docSnap = await getDoc(docRef);
                 
                 if (docSnap.exists()) {
-                    console.log("¡Tarifas encontradas en Firestore!", docSnap.data());
                     const data = docSnap.data();
                     tarifasFirebase.hierroBronce = data.hierroBronce ?? 5.00;
                     tarifasFirebase.plataOro = data.plataOro ?? 7.00;
                     tarifasFirebase.platinoEsmeralda = data.platinoEsmeralda ?? 9.00;
                     tarifasFirebase.diamante = data.diamante ?? 12.00;
                     tarifasFirebase.multiplicadorLpBajo = data.multiplicadorLpBajo ?? 1.20;
-                } else {
-                    console.warn("El documento 'configuracion/tarifasBoost' no existe en Firestore. Usando valores por defecto.");
                 }
             } catch (err) {
-                console.error("Error crítico al cargar tarifas desde Firebase:", err);
+                console.error("Error al cargar tarifas:", err);
             }
             actualizarBoost();
         }
@@ -1069,6 +1073,12 @@
             el.addEventListener('input', actualizarBoost);
         });
 
+        // Modales
+        const modalDetalles = document.getElementById('modal-detalles');
+        const modalDetallesTexto = document.getElementById('modal-detalles-texto');
+        const modalDetallesTitulo = document.getElementById('modal-detalles-titulo');
+        const btnIrAPago = document.getElementById('btn-ir-a-pago');
+
         const modalPago = document.getElementById('modal-pago');
         const modalTexto = document.getElementById('modal-texto');
         const grupoEmail = document.getElementById('grupo-email');
@@ -1076,6 +1086,7 @@
         let itemSeleccionado = null;
         let tipoItemActual = '';
 
+        // Contratación de Boost (va directo al pago porque ya tiene sus propios pasos)
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
             if (precio <= 0) {
@@ -1084,7 +1095,7 @@
             }
             tipoItemActual = 'boost';
             itemSeleccionado = {
-                titulo: `Boost (${modoSeleccionado.toUpperCase()}) de ${ligaActual.value} Div.${divActual.value} a ${ligaDeseada.value} Div.${divDeseada.value} [${lpGanancia.value} LP]`,
+                titulo: `Boost (${modoSeleccionado.toUpperCase()}) de ${ligaActual.value} Div.${divActual.value} a ${ligaDeseada.value} Div.${ligaDeseada.value} [${lpGanancia.value} LP]`,
                 precio: precio.toFixed(2)
             };
             
@@ -1097,6 +1108,19 @@
         });
 
         document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
+        document.getElementById('modal-detalles-cerrar').addEventListener('click', () => modalDetalles.classList.remove('active'));
+
+        // Al hacer clic en el botón "Comprar" dentro del modal de detalles, se abre el modal de pago
+        btnIrAPago.addEventListener('click', () => {
+            modalDetalles.classList.remove('active');
+            
+            grupoEmail.style.display = 'block';
+            grupoBoostCampos.style.display = 'none';
+
+            modalTexto.innerHTML = `Compra: <b>${itemSeleccionado.titulo}</b><br>Precio: <b style="color: #fbbf24;">USD $${itemSeleccionado.precio}</b>`;
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
+        });
 
         document.getElementById('btn-pagar-alias').addEventListener('click', async () => {
             const aceptaTerminos = document.getElementById('chk-terminos').checked;
@@ -1124,7 +1148,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando boost:", e); }
+                } catch(e) { console.error(e); }
 
             } else {
                 const email = document.getElementById('email-cliente').value;
@@ -1140,7 +1164,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando compra:", e); }
+                } catch(e) { console.error(e); }
             }
             
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
@@ -1171,7 +1195,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando boost PayPal:", e); }
+                } catch(e) { console.error(e); }
 
             } else {
                 const email = document.getElementById('email-cliente').value;
@@ -1188,7 +1212,7 @@
                         monto: `USD $${itemSeleccionado.precio}`,
                         fecha: new Date().toISOString()
                     });
-                } catch(e) { console.error("Error guardando compra PayPal:", e); }
+                } catch(e) { console.error(e); }
             }
             
             const monto = itemSeleccionado.precio;
@@ -1227,23 +1251,28 @@
                             </div>
                         </div>
                     `;
+                    // Al hacer clic en la tarjeta, ahora abre primero el modal de descripción detallada
                     card.addEventListener('click', () => {
                         tipoItemActual = 'cuenta';
                         itemSeleccionado = { titulo: c.title, precio: c.price };
                         
-                        grupoEmail.style.display = 'block';
-                        grupoBoostCampos.style.display = 'none';
-
-                        modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #fbbf24;">USD $${c.price}</b>`;
-                        document.getElementById('chk-terminos').checked = false;
-                        modalPago.classList.add('active');
+                        modalDetallesTitulo.textContent = c.title;
+                        modalDetallesTexto.innerHTML = `
+                            🌐 <b>Servidor:</b> ${c.server}<br>
+                            ⚔️ <b>Campeones:</b> ${c.championCount}<br>
+                            🏆 <b>Rango actual:</b> ${c.currentRank}<br>
+                            💎 <b>Esencia Azul (EA):</b> ${c.riotPoints}<br><br>
+                            📜 <b>Descripción detallada:</b><br>
+                            Cuenta smurf optimizada, nivel adecuado, sin restricciones previas. Acceso completo a correo de creación y datos de recuperación.<br><br>
+                            Precio: <b style="color: #fbbf24;">USD $${c.price}</b>
+                        `;
+                        modalDetalles.classList.add('active');
                     });
                     grid.appendChild(card);
                 });
             } catch(e) { console.error(e); }
         }
 
-        // Inicializar carga de tarifas de Firebase y catálogo
         cargarTarifasTienda();
         cargarCatalogo();
     </script>
