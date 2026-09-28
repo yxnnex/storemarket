@@ -177,6 +177,90 @@
             background: rgba(239, 68, 68, 0.3);
             color: #ffffff;
         }
+
+        /* MODAL DE CONFIRMACIÓN PERSONALIZADO */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 9, 14, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.activo {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: rgba(18, 20, 28, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            width: 380px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.activo .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-box h3 {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .modal-box p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-modal-cancelar, .btn-modal-aceptar {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-modal-cancelar {
+            background: rgba(255, 255, 255, 0.08);
+            color: #cbd5e1;
+        }
+        .btn-modal-cancelar:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-modal-aceptar {
+            background: #ef4444;
+            color: #ffffff;
+        }
+        .btn-modal-aceptar:hover {
+            background: #dc2626;
+        }
     </style>
 </head>
 <body>
@@ -252,6 +336,18 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIRMACIÓN PERSONALIZADO -->
+    <div class="modal-overlay" id="modal-confirmacion">
+        <div class="modal-box">
+            <h3>¿Estás seguro?</h3>
+            <p>Esta acción eliminará el registro de forma permanente de la base de datos.</p>
+            <div class="modal-buttons">
+                <button class="btn-modal-cancelar" id="btn-modal-cancelar">Cancelar</button>
+                <button class="btn-modal-aceptar" id="btn-modal-aceptar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPT DE LÓGICA ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -309,18 +405,40 @@
             }
         });
 
-        // Función global para eliminar servicio (cuenta o boost)
-        window.eliminarServicio = async function(coleccion, id) {
-            if (confirm("¿Estás seguro de eliminar este registro?")) {
+        // Variables para controlar el modal personalizado
+        const modal = document.getElementById('modal-confirmacion');
+        const btnCancelarModal = document.getElementById('btn-modal-cancelar');
+        const btnAceptarModal = document.getElementById('btn-modal-aceptar');
+        let accionEliminarPendiente = null;
+
+        // Abrir modal personalizado al hacer clic en borrar
+        window.prepararEliminacion = function(coleccion, id) {
+            modal.classList.add('activo');
+            accionEliminarPendiente = async () => {
                 try {
                     await deleteDoc(doc(db, coleccion, id));
-                    cargarServiciosContratados(); // Recargar la tabla
+                    cargarServiciosContratados();
                 } catch (err) {
                     console.error("Error al eliminar:", err);
                     alert("No se pudo eliminar el registro.");
                 }
+            };
+        };
+
+        // Botón cancelar del modal
+        btnCancelarModal.addEventListener('click', () => {
+            modal.classList.remove('activo');
+            accionEliminarPendiente = null;
+        });
+
+        // Botón aceptar del modal
+        btnAceptarModal.addEventListener('click', async () => {
+            modal.classList.remove('activo');
+            if (accionEliminarPendiente) {
+                await accionEliminarPendiente();
+                accionEliminarPendiente = null;
             }
-        }
+        });
 
         // Cargar Servicios Contratados (Venta de cuentas y Boosts) desde Firestore
         async function cargarServiciosContratados() {
@@ -345,7 +463,7 @@
                                 <td>${detalle}</td>
                                 <td>${monto}</td>
                                 <td>
-                                    <button class="btn-eliminar" onclick="eliminarServicio('compras', '${docSnap.id}')"> eliminar</button>
+                                    <button class="btn-eliminar" onclick="prepararEliminacion('compras', '${docSnap.id}')">🗑️ Borrar</button>
                                 </td>
                             </tr>
                         `;
@@ -356,7 +474,6 @@
                 const snapshotBoosts = await getDocs(collection(db, "pedidosBoost")).catch(() => ({ empty: true }));
 
                 if (!snapshotBoosts.empty) {
-                    snapshotBoosts.exportHTML = true; // dummy reference
                     snapshotBoosts.forEach((docSnap) => {
                         const data = docSnap.data();
                         const cliente = data.clienteDiscord || data.discord || data.usuario || "Cliente";
@@ -370,7 +487,7 @@
                                 <td>${detalle}</td>
                                 <td>${monto}</td>
                                 <td>
-                                    <button class="btn-eliminar" onclick="eliminarServicio('pedidosBoost', '${docSnap.id}')"> eliminar</button>
+                                    <button class="btn-eliminar" onclick="prepararEliminacion('pedidosBoost', '${docSnap.id}')">🗑️ Borrar</button>
                                 </td>
                             </tr>
                         `;
