@@ -477,12 +477,14 @@
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
         .modal-box {
-            background: rgba(22, 16, 38, 0.9);
+            background: rgba(22, 16, 38, 0.95);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 16px;
             padding: 28px; width: 100%; max-width: 450px; position: relative;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-close {
@@ -498,6 +500,45 @@
         }
         .btn-pagar-alias {
             background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
+        }
+
+        /* Estilos de Términos y Condiciones */
+        .terminos-box {
+            background: rgba(14, 10, 26, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            max-height: 110px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .terminos-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .terminos-box::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.3);
+            border-radius: 3px;
+        }
+
+        .terminos-check-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .terminos-check-container input {
+            width: 16px;
+            height: 16px;
+            accent-color: #a855f7;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -654,10 +695,26 @@
             <button id="modal-cerrar" class="modal-close">&times;</button>
             <h3 id="modal-titulo" style="margin-bottom: 15px; color: #f8fafc;">Finalizar Pago</h3>
             <div id="modal-texto" style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 15px;"></div>
+            
             <div class="form-group">
                 <label>Correo Electrónico</label>
                 <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com" required>
             </div>
+
+            <div class="form-group" style="margin-top: 12px;">
+                <label>Términos y Condiciones (Servicios Digitales)</label>
+                <div class="terminos-box">
+                    <b>1. Naturaleza Digital:</b> Productos y servicios intangibles.<br>
+                    <b>2. Política de No Reembolso:</b> Debido a la entrega inmediata de credenciales o inicio del servicio, <b>todas las ventas son definitivas y sin derecho a reembolso</b>. Disputas infundadas en PayPal serán refutadas con registros de entrega e IP.<br>
+                    <b>3. Responsabilidad:</b> El comprador asume el uso posterior de la cuenta.
+                </div>
+            </div>
+
+            <label class="terminos-check-container">
+                <input type="checkbox" id="chk-terminos">
+                <span>He leído y acepto los Términos y Condiciones de no reembolso.</span>
+            </label>
+
             <div class="payment-options">
                 <button id="btn-pagar-paypal" class="btn-pagar-paypal">Pagar con PayPal</button>
                 <button id="btn-pagar-alias" class="btn-pagar-alias">Pagar por Alias / Transferencia (WhatsApp)</button>
@@ -820,27 +877,38 @@
                 precio: precio.toFixed(2)
             };
             modalTexto.innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total con descuento: <b style="color: #c084fc;">USD $${itemSeleccionado.precio}</b>`;
+            document.getElementById('chk-terminos').checked = false; // Resetear checkbox
             modalPago.classList.add('active');
         });
 
         document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
 
+        // PAGO VÍA WHATSAPP / ALIAS
         document.getElementById('btn-pagar-alias').addEventListener('click', () => {
             const email = document.getElementById('email-cliente').value;
+            const aceptaTerminos = document.getElementById('chk-terminos').checked;
+
             if(!email) { alert("Ingresa tu correo electrónico"); return; }
+            if(!aceptaTerminos) { alert("Debes aceptar los Términos y Condiciones de no reembolso."); return; }
             
             const tuNumeroWhatsApp = "549261XXXXXXXX"; 
-            const mensaje = `Hola! Quiero contratar el ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email}`;
+            const mensaje = `Hola! Quiero contratar el ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi correo es: ${email} (Acepté los términos de no reembolso).`;
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${encodeURIComponent(mensaje)}`, '_blank');
             modalPago.classList.remove('active');
         });
 
-        // REDIRECCIÓN DIRECTA A PAYPAL.ME CON TU USUARIO Y EL MONTO EXACTO
+        // PAGO DIRECTO A PAYPAL.ME CON TU USUARIO Y MONTO EXACTO
         document.getElementById('btn-pagar-paypal').addEventListener('click', () => {
             const email = document.getElementById('email-cliente').value;
+            const aceptaTerminos = document.getElementById('chk-terminos').checked;
+
             if(!email) { 
                 alert("Ingresa tu correo electrónico antes de continuar."); 
                 return; 
+            }
+            if(!aceptaTerminos) {
+                alert("Debes aceptar los Términos y Condiciones de no reembolso para continuar.");
+                return;
             }
             
             const monto = itemSeleccionado.precio;
@@ -882,6 +950,7 @@
                     card.addEventListener('click', () => {
                         itemSeleccionado = { titulo: c.title, precio: c.price };
                         modalTexto.innerHTML = `Compra: <b>${c.title}</b><br>Precio: <b style="color: #c084fc;">USD $${c.price}</b>`;
+                        document.getElementById('chk-terminos').checked = false; // Resetear checkbox
                         modalPago.classList.add('active');
                     });
                     grid.appendChild(card);
