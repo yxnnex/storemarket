@@ -44,14 +44,18 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        .logo-area h1 {
-            font-size: 1.8rem;
-            color: #f8fafc;
-            letter-spacing: 0.5px;
+        /* ESTILOS PARA EL LOGO DE IMAGEN */
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .logo-area h1 span {
-            color: #f3ba2f;
+        .logo-img {
+            height: 40px; /* Ajusta la altura según prefieras */
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
         }
 
         .logo-area p {
@@ -500,7 +504,7 @@
         <!-- HEADER -->
         <header>
             <div class="logo-area">
-                <h1>NEXUS <span>STORE</span></h1>
+                <img src="lp.png" alt="Nexus Store Logo" class="logo-img">
                 <p>Cuentas verificadas y servicio profesional</p>
             </div>
             <nav class="tabs-nav">
