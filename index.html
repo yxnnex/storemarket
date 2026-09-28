@@ -1095,8 +1095,19 @@
                 return;
             }
             tipoItemActual = 'boost';
+
+            // Función auxiliar para pasar los números a romanos de forma limpia
+            const numARomano = (num) => {
+                const romanos = { "4": "IV", "3": "III", "2": "II", "1": "I" };
+                return romanos[num] || num;
+            };
+
+            const modoTexto = modoSeleccionado === 'solo' ? 'SOLOQ' : 'DUO';
+            const divisionActualRomana = numARomano(divActual.value);
+            const divisionDeseadaRomana = numARomano(divDeseada.value);
+
             itemSeleccionado = {
-                titulo: `Boost (${modoSeleccionado.toUpperCase()}) de ${ligaActual.value} Div.${divActual.value} a ${ligaDeseada.value} Div.${ligaDeseada.value} [${lpGanancia.value} LP]`,
+                titulo: `Boost (${modoTexto}) de 🔹${ligaActual.value} ${divisionActualRomana} a ${ligaDeseada.value} ${divisionDeseadaRomana} , ganancia de LP entre [${lpGanancia.value} LP]`,
                 precio: precio.toFixed(2)
             };
             
@@ -1138,7 +1149,7 @@
                     return;
                 }
 
-                mensaje = `Hola! Quiero contratar el servicio: ${itemSeleccionado.titulo} por USD $${itemSeleccionado.precio}. Mi ID de LoL es: ${lolId} (Acepté los términos de no reembolso). Mi user de discord es ${discordUser}.`;
+                mensaje = `Hola! Quiero contratar el servicio: ${itemSeleccionado.titulo} . Mi ID de LoL es: ${lolId} . Mi user de discord es ${discordUser}. (Acepté los términos de no reembolso) Por un total de USD $${itemSeleccionado.precio}.`;
                 
                 try {
                     await addDoc(collection(db, "pedidosBoost"), {
@@ -1256,7 +1267,6 @@
                         tipoItemActual = 'cuenta';
                         itemSeleccionado = { titulo: c.title, precio: c.price };
                         
-                        // CORRECCIÓN: Se agrega c.descripcionLarga para que lea correctamente lo enviado desde el admin
                         const descripcionTexto = c.descripcionLarga || c.description || c.descripcion || 'Sin descripción adicional proporcionada.';
 
                         modalDetallesTitulo.textContent = c.title;
