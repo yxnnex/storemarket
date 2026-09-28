@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LP Store - Boost Pro</title>
+    <title>LP Store</title>
     <style>
         body {
             background-color: #0b0e14;
@@ -194,7 +194,7 @@
         /* Sección de Cuentas (Firebase) */
         .cuentas-container {
             width: 100%;
-            display: none;
+            display: block; /* Asegura que se vea */
         }
 
         .cuentas-grid {
@@ -205,14 +205,63 @@
         }
 
         .cuenta-card {
-            background: #121824;
-            border: 1px solid #232d3f;
-            border-radius: 12px;
+            background: rgba(18, 20, 28, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
             padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-sizing: border-box;
+        }
+
+        .cuenta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .cuenta-tag {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            font-size: 10px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .cuenta-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .cuenta-info {
+            background: rgba(11, 14, 20, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #a0aec0;
+            margin: 12px 0;
+        }
+
+        .cuenta-info div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .cuenta-info div:last-child {
+            margin-bottom: 0;
+        }
+
+        .cuenta-info strong {
+            color: #fbbf24;
         }
     </style>
 </head>
@@ -231,9 +280,51 @@
             </div>
         </header>
 
-        <!-- Contenedor Boost Pro con los nuevos rangos de LP -->
-        <div class="boost-layout">
-            <!-- Panel 1 -->
+        <!-- Sección de Cuentas (Firebase) -->
+        <div class="cuentas-container">
+            <div class="cuentas-grid">
+                <!-- Tarjeta de ejemplo 1 -->
+                <div class="cuenta-card">
+                    <div class="cuenta-header">
+                        <span class="cuenta-tag">Smurf</span>
+                        <span class="cuenta-price">$15.00</span>
+                    </div>
+                    <div class="cuenta-info">
+                        <div><span>Nivel:</span> <strong>30+</strong></div>
+                        <div><span>Server:</span> <strong>LAN / LAS</strong></div>
+                    </div>
+                    <button class="btn-submit">Comprar Cuenta</button>
+                </div>
+                <!-- Tarjeta de ejemplo 2 -->
+                <div class="cuenta-card">
+                    <div class="cuenta-header">
+                        <span class="cuenta-tag">Verificada</span>
+                        <span class="cuenta-price">$25.00</span>
+                    </div>
+                    <div class="cuenta-info">
+                        <div><span>Nivel:</span> <strong>50+</strong></div>
+                        <div><span>Server:</span> <strong>LAS</strong></div>
+                    </div>
+                    <button class="btn-submit">Comprar Cuenta</button>
+                </div>
+                <!-- Tarjeta de ejemplo 3 -->
+                <div class="cuenta-card">
+                    <div class="cuenta-header">
+                        <span class="cuenta-tag">Ranked Ready</span>
+                        <span class="cuenta-price">$18.00</span>
+                    </div>
+                    <div class="cuenta-info">
+                        <div><span>Nivel:</span> <strong>30+</strong></div>
+                        <div><span>Server:</span> <strong>NA</strong></div>
+                    </div>
+                    <button class="btn-submit">Comprar Cuenta</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor Boost Pro (con los rangos de LP nuevos) -->
+        <!-- (Si usas JavaScript para alternar entre vistas, puedes mantener esto oculto o visible según corresponda) -->
+        <div class="boost-layout" style="display: none; margin-top: 20px;">
             <div class="panel">
                 <h3>Detalles del Servicio</h3>
                 <div class="form-group">
@@ -246,7 +337,6 @@
                 </div>
             </div>
 
-            <!-- Panel 2 (Ejemplo extra para completar la grilla) -->
             <div class="panel">
                 <h3>Opciones Adicionales</h3>
                 <div class="checkbox-group">
@@ -255,7 +345,6 @@
                 </div>
             </div>
 
-            <!-- Checkout Panel -->
             <div class="checkout-panel">
                 <div>
                     <h3>Resumen</h3>
