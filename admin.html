@@ -299,45 +299,43 @@
             let htmlContenido = "";
 
             try {
-                // 1. Consultar compras de cuentas (Asumimos colección "compras" o "ventas")
-                // Si guardas las compras en otra colección, solo cambia el nombre aquí abajo
+                // 1. Consultar compras de cuentas
                 const snapshotCuentas = await getDocs(collection(db, "compras")).catch(() => ({ empty: true }));
                 
                 if (!snapshotCuentas.empty) {
                     snapshotCuentas.forEach((docSnap) => {
                         const data = docSnap.data();
-                        const cliente = data.discord || data.usuario || "Cliente";
-                        const detalle = data.tituloCuenta || data.detalle || "Compra de Cuenta LoL";
-                        const precio = data.precio ? `$${data.precio}` : "N/D";
+                        const cliente = data.clienteDiscord || data.discord || data.usuario || "Cliente";
+                        const detalle = data.detalle || "Compra de Cuenta LoL";
+                        const monto = data.monto || (data.precio ? `USD $${data.precio}` : "N/D");
 
                         htmlContenido += `
                             <tr>
                                 <td><span class="badge badge-cuenta">Cuenta</span></td>
                                 <td>${cliente}</td>
                                 <td>${detalle}</td>
-                                <td>${precio}</td>
+                                <td>${monto}</td>
                             </tr>
                         `;
                     });
                 }
 
-                // 2. Consultar servicios de Boost (Colección "pedidosBoost" o "boosts")
+                // 2. Consultar servicios de Boost
                 const snapshotBoosts = await getDocs(collection(db, "pedidosBoost")).catch(() => ({ empty: true }));
 
                 if (!snapshotBoosts.empty) {
                     snapshotBoosts.forEach((docSnap) => {
                         const data = docSnap.data();
-                        const cliente = data.discord || data.usuario || "Cliente";
-                        // Ejemplo: "Duo boost de Oro a Platino"
-                        const detalle = data.detalle || `Duo Boost de ${data.currentRank || 'Rango X'} a ${data.desiredRank || 'Rango Y'}`;
-                        const precio = data.price ? `$${data.price}` : (data.precio ? `$${data.precio}` : "N/D");
+                        const cliente = data.clienteDiscord || data.discord || data.usuario || "Cliente";
+                        const detalle = data.detalle || "Servicio de Boost";
+                        const monto = data.monto || "N/D";
 
                         htmlContenido += `
                             <tr>
                                 <td><span class="badge badge-boost">Boost</span></td>
                                 <td>${cliente}</td>
                                 <td>${detalle}</td>
-                                <td>${precio}</td>
+                                <td>${monto}</td>
                             </tr>
                         `;
                     });
