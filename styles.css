@@ -94,19 +94,19 @@ header p {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Más espacio entre los bloques de formulario */
 }
 
 label {
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: #94a3b8;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 select, input {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Caja de mensaje un poco más alta y cómoda */
     background: rgba(11, 14, 20, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: white;
@@ -184,7 +184,7 @@ select, input {
 }
 
 /* ========================================== */
-/* MODAL DE PAGO AMPLIADO Y CENTRADO          */
+/* MODAL DE PAGO AMPLIADO, CENTRADO Y AIREADO */
 /* ========================================== */
 .modal-overlay {
     position: fixed;
@@ -213,9 +213,9 @@ select, input {
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 18px;
-    padding: 35px;
+    padding: 40px; /* Más espacio interno */
     width: 100%; 
-    max-width: 560px;
+    max-width: 620px; /* Cuadro más ancho para que no se vea apretado */
     position: relative;
     box-shadow: 0 15px 40px rgba(0,0,0,0.6);
     max-height: 90vh;
@@ -223,20 +223,35 @@ select, input {
     box-sizing: border-box;
 }
 
-.modal-box h3, 
-.modal-box #modal-texto, 
+/* Título "Finalizar Pago" centrado */
+.modal-box h3 {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    color: #f8fafc;
+}
+
+/* Textos internos alineados a la izquierda pero con buen margen entre líneas */
+.modal-box #modal-texto {
+    text-align: left;
+    line-height: 1.8; /* Más espacio entre líneas */
+    margin-bottom: 20px;
+    color: #cbd5e1;
+}
+
 .modal-box .form-group {
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .modal-close {
     position: absolute; 
-    top: 18px; 
-    right: 18px; 
+    top: 20px; 
+    right: 20px; 
     background: none; 
     border: none;
     color: #94a3b8; 
-    font-size: 1.4rem; 
+    font-size: 1.5rem; 
     cursor: pointer;
 }
 .modal-close:hover { 
@@ -246,8 +261,8 @@ select, input {
 .payment-options {
     display: flex; 
     flex-direction: column; 
-    gap: 12px; 
-    margin-top: 20px;
+    gap: 14px; 
+    margin-top: 25px;
 }
 
 .btn-pagar-paypal {
@@ -274,18 +289,18 @@ select, input {
     font-size: 0.95rem;
 }
 
-/* Términos y Condiciones amplios y cómodos */
+/* Términos y Condiciones cómodos y amplios */
 .terminos-box {
     background: rgba(11, 14, 20, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 15px;
-    max-height: 140px;
+    padding: 16px;
+    margin-bottom: 18px;
+    max-height: 150px;
     overflow-y: auto;
     font-size: 0.8rem;
     color: #94a3b8;
-    line-height: 1.5;
+    line-height: 1.6; /* Espaciado interno en los términos */
     text-align: left;
 }
 
@@ -302,18 +317,19 @@ select, input {
     align-items: flex-start;
     justify-content: flex-start;
     gap: 12px;
-    margin: 15px 0 20px 0;
+    margin: 15px 0 25px 0;
     font-size: 0.85rem;
     color: #cbd5e1;
     cursor: pointer;
     text-align: left;
+    line-height: 1.5;
 }
 
 .terminos-check-container input {
     min-width: 18px;
     width: 18px;
     height: 18px;
-    margin-top: 1px;
+    margin-top: 2px;
     accent-color: #fbbf24;
     cursor: pointer;
 }
