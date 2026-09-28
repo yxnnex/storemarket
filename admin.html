@@ -500,7 +500,6 @@
             const targetSection = document.getElementById(`sec-${tabName}`);
             if (targetSection) targetSection.classList.add('activa');
 
-            // Encontrar el botón correspondiente y activarlo
             event.currentTarget.classList.add('activo');
         }
 
@@ -648,11 +647,9 @@
         }
 
         window.irAEdicion = function(id, dataStr) {
-            // Al hacer clic en modificar, saltamos automáticamente a la pestaña de "Publicar / Editar" formulario
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('activo'));
             document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('activa'));
             
-            // Activar botón y sección de publicar
             document.querySelector('.tab-btn').classList.add('activo');
             document.getElementById('sec-publicar').classList.add('activa');
 
