@@ -13,7 +13,6 @@
         }
 
         body {
-            /* Fondo oscuro con gradientes morados y azules elegantes */
             background-color: #0b0714;
             background-image: 
                 radial-gradient(at 15% 15%, rgba(126, 34, 206, 0.22) 0px, transparent 50%),
@@ -29,7 +28,6 @@
             margin: 0 auto;
         }
 
-        /* HEADER PROFESIONAL */
         header {
             display: flex;
             justify-content: space-between;
@@ -64,7 +62,6 @@
             font-size: 0.85rem;
         }
 
-        /* PESTAÑAS SUPERIORES */
         .tabs-nav {
             display: flex;
             gap: 6px;
@@ -118,7 +115,6 @@
             display: block;
         }
 
-        /* SUB-MENÚ DE TIPO DE BOOST */
         .boost-types-nav {
             display: flex;
             gap: 10px;
@@ -148,7 +144,6 @@
             box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
         }
 
-        /* LAYOUT DE LA CALCULADORA DE BOOST (3 COLUMNAS) */
         .boost-layout {
             display: grid;
             grid-template-columns: 1fr 1fr 340px;
@@ -266,7 +261,6 @@
             text-align-last: center;
         }
 
-        /* PANEL LATERAL DE PERSONALIZACIÓN */
         .options-group {
             display: flex;
             flex-direction: column;
@@ -350,21 +344,31 @@
             transform: translateY(-1px);
         }
 
-        /* ALERTA DE OFERTA ESPECIAL / LIGA COMPLETA */
+        /* ESTILOS MODIFICADOS PARA LA OFERTA (AMARILLO / DORADO) */
         .promo-banner {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(79, 70, 229, 0.2));
-            border: 1px solid rgba(168, 85, 247, 0.4);
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(202, 138, 4, 0.25));
+            border: 1.5px solid rgba(234, 179, 8, 0.6);
             padding: 12px;
             border-radius: 8px;
             font-size: 0.8rem;
-            color: #f3e8ff;
+            color: #fef08a;
             text-align: center;
             margin-bottom: 12px;
             display: none;
             line-height: 1.4;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
         }
 
-        /* CATÁLOGO DE CUENTAS GRID */
+        .btn-contratar.promo-active {
+            background: linear-gradient(135deg, #eab308, #ca8a04);
+            color: #111827;
+            box-shadow: 0 4px 20px rgba(234, 179, 8, 0.5);
+        }
+
+        .btn-contratar.promo-active:hover {
+            background: linear-gradient(135deg, #facc15, #eab308);
+        }
+
         .grid-cuentas {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -463,7 +467,6 @@
             background-color: #9333ea;
         }
 
-        /* MODAL DE PAGO */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -502,7 +505,6 @@
 <body>
 
     <div class="container">
-        <!-- HEADER -->
         <header>
             <div class="logo-area">
                 <img src="lp.png" alt="Nexus Store Logo" class="logo-img">
@@ -572,8 +574,8 @@
                     <div class="lp-gain-container">
                         <label for="lp-ganancia">¿Cuantos LP obtienes x victoria?</label>
                         <select id="lp-ganancia">
-                            <option value="17-19" selected>17 a 19 LP</option>
-                            <option value="20-25">20 a 25 LP</option>
+                            <option value="17-19">17 a 19 LP</option>
+                            <option value="20-25" selected>20 a 25 LP</option>
                             <option value="25-30">25 a 30 LP</option>
                         </select>
                     </div>
@@ -638,7 +640,6 @@
                         </label>
                     </div>
 
-                    <!-- BANNER DE ALERTA DE OFERTA PARA LIGA ENTERA -->
                     <div id="promo-banner" class="promo-banner"></div>
 
                     <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
@@ -665,7 +666,6 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -682,7 +682,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Pestañas superiores
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         tabBtns.forEach(btn => {
@@ -694,7 +693,6 @@
             });
         });
 
-        // Selector Solo / Duo
         const modeBtns = document.querySelectorAll('.mode-btn');
         let modoSeleccionado = 'solo';
         modeBtns.forEach(btn => {
@@ -763,8 +761,7 @@
 
             const multiplicadorLp = {
                 '17-19': 1.20,
-                '19-22': 1.10,
-                '22-25': 1.00,
+                '20-25': 1.00,
                 '25-30': 0.90
             };
             let precio = precioDivisiones * (multiplicadorLp[lpGanancia.value] || 1.0);
@@ -785,9 +782,13 @@
 
                 promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! ¡Obtienes un descuento especial!`;
                 promoBanner.style.display = "block";
+                
+                // Activar estilos amarillos en el botón
+                btnContratar.classList.add('promo-active');
                 btnContratar.textContent = `¡Aprovechar Oferta de ${lAct}!`;
             } else {
                 promoBanner.style.display = "none";
+                btnContratar.classList.remove('promo-active');
                 btnContratar.textContent = "Obtener oferta";
             }
 
