@@ -162,6 +162,21 @@
         }
         .badge-cuenta { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
         .badge-boost { background: rgba(243, 186, 47, 0.15); color: #f3ba2f; }
+
+        .btn-eliminar {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .btn-eliminar:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -224,11 +239,12 @@
                             <th>Cliente / Discord</th>
                             <th>Detalle del Servicio</th>
                             <th>Monto</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tabla-servicios">
                         <tr>
-                            <td colspan="4" style="text-align: center; color: #94a3b8;">Cargando servicios contratados...</td>
+                            <td colspan="5" style="text-align: center; color: #94a3b8;">Cargando servicios contratados...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -239,7 +255,7 @@
     <!-- SCRIPT DE LÓGICA ADMIN -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
@@ -293,6 +309,19 @@
             }
         });
 
+        // Función global para eliminar servicio (cuenta o boost)
+        window.eliminarServicio = async function(coleccion, id) {
+            if (confirm("¿Estás seguro de eliminar este registro?")) {
+                try {
+                    await deleteDoc(doc(db, coleccion, id));
+                    cargarServiciosContratados(); // Recargar la tabla
+                } catch (err) {
+                    console.error("Error al eliminar:", err);
+                    alert("No se pudo eliminar el registro.");
+                }
+            }
+        }
+
         // Cargar Servicios Contratados (Venta de cuentas y Boosts) desde Firestore
         async function cargarServiciosContratados() {
             const tabla = document.getElementById('tabla-servicios');
@@ -315,6 +344,9 @@
                                 <td>${cliente}</td>
                                 <td>${detalle}</td>
                                 <td>${monto}</td>
+                                <td>
+                                    <button class="btn-eliminar" onclick="eliminarServicio('compras', '${docSnap.id}')">🗑️ Borrar</button>
+                                </td>
                             </tr>
                         `;
                     });
@@ -324,6 +356,7 @@
                 const snapshotBoosts = await getDocs(collection(db, "pedidosBoost")).catch(() => ({ empty: true }));
 
                 if (!snapshotBoosts.empty) {
+                    snapshotBoosts.exportHTML = true; // dummy reference
                     snapshotBoosts.forEach((docSnap) => {
                         const data = docSnap.data();
                         const cliente = data.clienteDiscord || data.discord || data.usuario || "Cliente";
@@ -336,6 +369,9 @@
                                 <td>${cliente}</td>
                                 <td>${detalle}</td>
                                 <td>${monto}</td>
+                                <td>
+                                    <button class="btn-eliminar" onclick="eliminarServicio('pedidosBoost', '${docSnap.id}')">🗑️ Borrar</button>
+                                </td>
                             </tr>
                         `;
                     });
@@ -343,14 +379,14 @@
 
                 // Si no hay nada en ninguna de las dos colecciones
                 if (htmlContenido === "") {
-                    tabla.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">No hay servicios contratados registrados todavía.</td></tr>`;
+                    tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">No hay servicios contratados registrados todavía.</td></tr>`;
                 } else {
                     tabla.innerHTML = htmlContenido;
                 }
 
             } catch (err) {
                 console.error("Error al cargar los servicios:", err);
-                tabla.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #ef4444;">Error al conectar con la base de datos para los registros.</td></tr>`;
+                tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">Error al conectar con la base de datos para los registros.</td></tr>`;
             }
         }
 
