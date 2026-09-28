@@ -75,7 +75,7 @@
 
         h1 span { color: #f3ba2f; }
 
-        /* BARRA DE PESTAÑAS SUPERIOR (TIPO NAVEGACIÓN) */
+        /* BARRA DE PESTAÑAS SUPERIOR */
         .admin-tabs-nav {
             display: flex;
             gap: 10px;
@@ -385,8 +385,8 @@
                     <div class="form-group"><label>Precio USD</label><input type="number" step="0.01" id="admin-precio" required></div>
                     <div class="form-group"><label>URL de Imagen</label><input type="url" id="admin-imagen" required></div>
                     <div class="form-group">
-                        <label>Descripción Larga (Detalles de la cuenta)</label>
-                        <textarea id="admin-descripcion-larga" rows="3" placeholder="Ej: Cuenta con skins épicas, correo verificable, etc..."></textarea>
+                        <label>Descripción detallada (Detalles de la cuenta)</label>
+                        <textarea id="admin-descripcion-detallada" rows="3" placeholder="Ej: Cuenta smurf optimizada, nivel adecuado..."></textarea>
                     </div>
                     <button type="submit" id="btn-submit-cuenta" class="btn-subir">Publicar Cuenta</button>
                     <button type="button" id="btn-cancelar-edicion" style="display:none; width:100%; background:rgba(255,255,255,0.08); color:#fff; border:none; padding:10px; border-radius:8px; margin-top:8px; cursor:pointer; font-weight:bold;" onclick="cancelarEdicion()">Cancelar Edición</button>
@@ -500,7 +500,6 @@
             const targetSection = document.getElementById(`sec-${tabName}`);
             if (targetSection) targetSection.classList.add('activa');
 
-            // Encontrar el botón correspondiente y activarlo
             event.currentTarget.classList.add('activo');
         }
 
@@ -585,7 +584,7 @@
                     riotPoints: document.getElementById('admin-ea').value,
                     price: parseFloat(document.getElementById('admin-precio').value),
                     imageUrl: document.getElementById('admin-imagen').value,
-                    descripcionLarga: document.getElementById('admin-descripcion-larga').value
+                    descripcionDetallada: document.getElementById('admin-descripcion-detallada').value // CORREGIDO AQUÍ
                 };
 
                 if (editId) {
@@ -648,11 +647,9 @@
         }
 
         window.irAEdicion = function(id, dataStr) {
-            // Al hacer clic en modificar, saltamos automáticamente a la pestaña de "Publicar / Editar" formulario
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('activo'));
             document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('activa'));
             
-            // Activar botón y sección de publicar
             document.querySelector('.tab-btn').classList.add('activo');
             document.getElementById('sec-publicar').classList.add('activa');
 
@@ -665,7 +662,9 @@
             document.getElementById('admin-ea').value = data.riotPoints || '';
             document.getElementById('admin-precio').value = data.price || '';
             document.getElementById('admin-imagen').value = data.imageUrl || '';
-            document.getElementById('admin-descripcion-larga').value = data.descripcionLarga || '';
+            
+            // CORREGIDO AQUÍ TAMBIÉN PARA CARGAR DESCRIPCION DETALLADA
+            document.getElementById('admin-descripcion-detallada').value = data.descripcionDetallada || data.descripcionLarga || '';
 
             document.getElementById('titulo-form-cuenta').textContent = 'Modificar Cuenta Publicada';
             document.getElementById('btn-submit-cuenta').textContent = 'Guardar Cambios';
