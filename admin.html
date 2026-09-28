@@ -86,7 +86,7 @@
             margin-bottom: 5px;
         }
 
-        select, input {
+        select, input, textarea {
             width: 100%;
             padding: 10px;
             background: rgba(11, 14, 20, 0.6);
@@ -96,7 +96,7 @@
             font-size: 0.85rem;
         }
 
-        select:focus, input:focus {
+        select:focus, input:focus, textarea:focus {
             outline: none;
             border-color: #f3ba2f;
         }
@@ -318,6 +318,10 @@
                     <div class="form-group"><label>EA (Esencia Azul)</label><input type="text" id="admin-ea" required></div>
                     <div class="form-group"><label>Precio USD</label><input type="number" step="0.01" id="admin-precio" required></div>
                     <div class="form-group"><label>URL de Imagen</label><input type="url" id="admin-imagen" required></div>
+                    <div class="form-group">
+                        <label>Descripción Larga (Detalles de la cuenta)</label>
+                        <textarea id="admin-descripcion-larga" rows="3" placeholder="Ej: Cuenta con skins épicas, correo verificable, etc..."></textarea>
+                    </div>
                     <button type="submit" class="btn-subir">Publicar Cuenta</button>
                 </form>
             </div>
@@ -431,7 +435,6 @@
                     document.getElementById('tarifa-alta').value = data.alta ?? '';
                     document.getElementById('recargo-lp').value = data.multiplicadorLpBajo ?? '';
                 } else {
-                    // Si no existen todavía, colocar valores por defecto orientativos
                     document.getElementById('tarifa-baja').value = 4.00;
                     document.getElementById('tarifa-media').value = 6.50;
                     document.getElementById('tarifa-alta').value = 12.00;
@@ -453,7 +456,8 @@
                     currentRank: document.getElementById('admin-rango').value,
                     riotPoints: document.getElementById('admin-ea').value,
                     price: parseFloat(document.getElementById('admin-precio').value),
-                    imageUrl: document.getElementById('admin-imagen').value
+                    imageUrl: document.getElementById('admin-imagen').value,
+                    descripcionLarga: document.getElementById('admin-descripcion-larga').value // <-- Campo agregado a Firebase
                 };
                 await addDoc(collection(db, "skin"), nueva);
                 mostrarToast("¡Cuenta publicada con éxito!", "exito");
@@ -524,7 +528,6 @@
             let htmlContenido = "";
 
             try {
-                // 1. Consultar compras de cuentas
                 const snapshotCuentas = await getDocs(collection(db, "compras")).catch(() => ({ empty: true }));
                 
                 if (!snapshotCuentas.empty) {
@@ -548,7 +551,6 @@
                     });
                 }
 
-                // 2. Consultar servicios de Boost
                 const snapshotBoosts = await getDocs(collection(db, "pedidosBoost")).catch(() => ({ empty: true }));
 
                 if (!snapshotBoosts.empty) {
@@ -565,14 +567,13 @@
                                 <td>${detalle}</td>
                                 <td>${monto}</td>
                                 <td>
-                                    <button class="btn-eliminar" onclick="prepararEliminacion('pedidosBoost', '${docSnap.id}')">Eliminarr</button>
+                                    <button class="btn-eliminar" onclick="prepararEliminacion('pedidosBoost', '${docSnap.id}')">Eliminar</button>
                                 </td>
                             </tr>
                         `;
                     });
                 }
 
-                // Si no hay nada en ninguna de las dos colecciones
                 if (htmlContenido === "") {
                     tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">No hay servicios contratados registrados todavía.</td></tr>`;
                 } else {
