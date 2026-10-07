@@ -3,881 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Plataforma Pro</title>
+    <title>Nexus Store - Panel Admin Pro</title>
     <style>
-        body {
-            background-color: #0b0e14;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .container {
-            max-width: 1250px;
-            width: 100%;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            background: rgba(18, 20, 28, 0.55);
-            padding: 20px 25px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            box-sizing: border-box;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .logo-area {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
-        }
-
-        .logo-area p {
-            font-size: 0.85rem;
-            color: #8a99ad;
-            margin: 4px 0 0 0;
-        }
-
-        .tabs-nav {
-            display: flex;
-            gap: 6px;
-            background: rgba(11, 14, 20, 0.7);
-            padding: 5px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: #8a99ad;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .tab-btn::after {
-            content: "⌄";
-            font-size: 0.9rem;
-            color: #fbbf24;
-        }
-
-        .tab-btn:hover {
-            color: #ffffff;
-            background: rgba(251, 191, 36, 0.1);
-        }
-
-        .tab-btn.active {
-            background-color: #fbbf24;
-            color: #0b0e14;
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
-        }
-
-        .tab-btn.active::after {
-            color: #0b0e14;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .boost-types-nav {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .boost-type-btn {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            color: #8a99ad;
-            padding: 9px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .boost-type-btn.active {
-            background-color: #fbbf24;
-            color: #0b0e14;
-            border-color: #fbbf24;
-            font-weight: bold;
-            box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
-        }
-
-        .boost-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr 340px;
-            gap: 20px;
-            align-items: start;
-            width: 100%;
-        }
-
-        @media (max-width: 1024px) {
-            .boost-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .boost-card {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            box-sizing: border-box;
-            width: 100%;
-        }
-
-        .rank-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            background: rgba(11, 14, 20, 0.5);
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .rank-emblem {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-        }
-
-        .rank-info span {
-            font-size: 0.7rem;
-            color: #8a99ad;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .rank-info h3 {
-            font-size: 1.1rem;
-            color: #f8fafc;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1.5fr 1.3fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(11, 14, 20, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 0.85rem;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: #fbbf24;
-            box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
-        }
-
-        .lp-gain-container {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.07);
-            text-align: center;
-        }
-
-        .lp-gain-container label {
-            text-align: center;
-            color: #fbbf24;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .lp-gain-container select {
-            max-width: 260px;
-            margin: 0 auto;
-            text-align-last: center;
-        }
-
-        .options-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .mode-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .mode-btn {
-            background: rgba(11, 14, 20, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            color: #8a99ad;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .mode-btn.active {
-            background-color: #fbbf24;
-            color: #0b0e14;
-            border-color: #fbbf24;
-            box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
-        }
-
-        .toggle-option {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(11, 14, 20, 0.5);
-            padding: 11px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #cbd5e1;
-            cursor: pointer;
-        }
-
-        .toggle-option input {
-            width: 16px;
-            height: 16px;
-            accent-color: #fbbf24;
-            cursor: pointer;
-        }
-
-        .boost-total {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #fbbf24;
-            text-align: center;
-            margin: 15px 0;
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
-        }
-
-        .btn-contratar {
-            width: 100%;
-            background-color: #fbbf24;
-            color: #0b0e14;
-            border: none;
-            padding: 13px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        .btn-contratar:hover {
-            background-color: #f59e0b;
-            transform: translateY(-1px);
-        }
-
-        .promo-banner {
-            background: linear-gradient(135deg, rgba(243, 186, 47, 0.2), rgba(56, 189, 248, 0.15));
-            border: 1px solid rgba(243, 186, 47, 0.4);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            color: #fef08a;
-            text-align: center;
-            margin-bottom: 12px;
-            display: none;
-            line-height: 1.4;
-            box-shadow: 0 0 15px rgba(243, 186, 47, 0.2);
-        }
-
-        .btn-contratar.promo-active {
-            background: linear-gradient(135deg, #eab308, #ca8a04);
-            color: #0b0e14;
-            box-shadow: 0 4px 20px rgba(234, 179, 8, 0.5);
-        }
-
-        .btn-contratar.promo-active:hover {
-            background: linear-gradient(135deg, #facc15, #eab308);
-        }
-
-        .grid-cuentas {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 50px;
-        }
-
-        .cuenta-card {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 14px;
-            overflow: hidden;
-            transition: all 0.25s ease;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        .cuenta-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(251, 191, 36, 0.5);
-            box-shadow: 0 12px 35px 0 rgba(251, 191, 36, 0.2);
-        }
-
-        .cuenta-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #140d24;
-        }
-
-        .cuenta-body {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-        }
-
-        .cuenta-server {
-            font-size: 0.75rem;
-            background: rgba(251, 191, 36, 0.2);
-            color: #fef08a;
-            padding: 3px 8px;
-            border-radius: 4px;
-            width: fit-content;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .cuenta-titulo {
-            font-size: 1rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ffffff;
-        }
-
-        .cuenta-detalles-info {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .cuenta-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.07);
-            padding-top: 12px;
-        }
-
-        .cuenta-precio {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #fbbf24;
-        }
-
-        .btn-comprar {
-            background-color: #fbbf24;
-            color: #0b0e14;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: background 0.2s;
-        }
-
-        .btn-comprar:hover {
-            background-color: #f59e0b;
-        }
-
-        /* MODAL GENERAL */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 14, 20, 0.85);
-            backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0b0e14; color: #ffffff; padding: 20px; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; }
         
-        .modal-box {
-            background: rgba(18, 20, 28, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            padding: 40px; 
-            width: 100%; 
-            max-width: 620px; 
-            position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            max-height: 90vh;
-            overflow-y: auto;
-            box-sizing: border-box;
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0e14; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .login-box { background: rgba(18, 20, 28, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; width: 350px; max-width: 90%; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); text-align: center; }
+        .login-box h2 { font-size: 1.3rem; margin-bottom: 20px; color: #fbbf24; }
+        
+        #admin-content { display: none; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; margin-bottom: 25px; }
+        h1 span { color: #fbbf24; }
+        
+        .admin-tabs-nav { display: flex; gap: 10px; background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); padding: 10px; border-radius: 16px; margin-bottom: 25px; overflow-x: auto; }
+        .tab-btn { background: transparent; border: none; color: #8a99ad; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+        .tab-btn:hover { color: #ffffff; background: rgba(251, 191, 36, 0.1); }
+        .tab-btn.activo { background: #fbbf24; color: #0b0e14; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3); font-weight: bold; }
+        
+        .admin-section { display: none; }
+        .admin-section.activa { display: block; }
+        
+        .admin-box, .admin-box-full { background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 16px; padding: 25px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); margin-bottom: 20px; }
+        .admin-box h2, .admin-box-full h2 { font-size: 1.2rem; margin-bottom: 20px; color: #22c55e; border-left: 4px solid #22c55e; padding-left: 10px; }
+        
+        .form-group { margin-bottom: 14px; text-align: left; }
+        label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
+        select, input, textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; color: #ffffff; font-size: 0.85rem; }
+        select:focus, input:focus, textarea:focus { outline: none; border-color: #fbbf24; }
+        
+        .btn-subir, .btn-login { width: 100%; background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; margin-top: 10px; transition: background-color 0.2s; }
+        .btn-subir:hover, .btn-login:hover { background-color: #16a34a; }
+        
+        .btn-volver, .btn-logout { background: rgba(255, 255, 255, 0.08); color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; cursor: pointer; border: none; }
+        .btn-volver:hover, .btn-logout:hover { background: rgba(255, 255, 255, 0.15); }
+        
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+        th, td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+        th { color: #8a99ad; font-weight: 600; }
+        td { color: #e2e8f0; }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+        .badge-cuenta { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .badge-boost { background: rgba(243, 186, 47, 0.15); color: #fbbf24; }
+
+        .btn-eliminar { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .btn-eliminar:hover { background: rgba(239, 68, 68, 0.3); color: #ffffff; }
+
+        .btn-modificar { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .btn-modificar:hover { background: rgba(59, 130, 246, 0.3); color: #ffffff; }
+
+        /* ESTILOS DE TARJETAS DE LIGA */
+        .liga-tarjeta {
+            background: rgba(18, 20, 28, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
-        .modal-box h3 {
-            text-align: center;
-            font-size: 1.4rem;
-            margin-bottom: 25px;
-            color: #f8fafc;
-            margin-top: 0;
-        }
-
-        .modal-box #modal-texto, .modal-box #modal-detalles-texto {
-            text-align: left;
-            line-height: 1.8; 
-            margin-bottom: 20px;
-            color: #cbd5e1;
-            word-break: break-word;
-        }
-
-        .modal-box .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .modal-close {
-            position: absolute; top: 20px; right: 20px; background: none; border: none;
-            color: #94a3b8; font-size: 1.5rem; cursor: pointer;
-        }
-        .modal-close:hover { color: #ffffff; }
-
-        .payment-options {
-            display: flex; flex-direction: column; gap: 14px; margin-top: 25px;
-        }
-        .btn-pagar-paypal {
-            background-color: #0070ba; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.95rem;
-        }
-        .btn-pagar-alias {
-            background-color: #22c55e; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.95rem;
-        }
-
-        /* Estilos de Términos y Condiciones */
-        .terminos-box {
-            background: rgba(11, 14, 20, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 18px;
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            line-height: 1.6;
-            text-align: left;
-        }
-
-        .terminos-box::-webkit-scrollbar {
-            width: 6px;
-        }
-        .terminos-box::-webkit-scrollbar-thumb {
-            background: rgba(251, 191, 36, 0.3);
-            border-radius: 3px;
-        }
-
-        .terminos-check-container {
+        .liga-header-admin {
             display: flex;
-            align-items: flex-start;
-            justify-content: flex-start;
-            gap: 12px;
-            margin: 15px 0 25px 0;
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            cursor: pointer;
-            text-align: left;
-            line-height: 1.5;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 12px;
         }
 
-        .terminos-check-container input {
-            min-width: 18px;
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
-            accent-color: #fbbf24;
-            cursor: pointer;
+        .liga-titulo-admin {
+            color: #fbbf24;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
         }
 
-        .custom-alert-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 14, 20, 0.85);
-            backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+        .badge-liga-admin {
+            background: rgba(251, 191, 36, 0.12);
+            color: #fbbf24;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            border: 1px solid rgba(251, 191, 36, 0.2);
         }
-        .custom-alert-overlay.active {
-            opacity: 1; pointer-events: auto;
+
+        .tabla-tarifas-head {
+            display: grid;
+            grid-template-columns: 2fr 2fr 2fr 1.5fr 1fr;
+            gap: 15px;
+            padding: 0 10px 8px 10px;
+            font-size: 0.75rem;
+            color: #8a99ad;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .custom-alert-box {
-            background: rgba(18, 20, 28, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 30px; width: 100%; max-width: 420px; text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            box-sizing: border-box;
+
+        .fila-tarifa-admin {
+            display: grid;
+            grid-template-columns: 2fr 2fr 2fr 1.5fr 1fr;
+            align-items: center;
+            gap: 15px;
+            background: rgba(11, 14, 20, 0.5);
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
         }
-        .custom-alert-box h4 {
-            color: #fbbf24; font-size: 1.2rem; margin-top: 0; margin-bottom: 12px;
+
+        .input-precio-juego {
+            background: rgba(18, 20, 28, 0.9);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
         }
-        .custom-alert-box p {
-            color: #cbd5e1; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5;
+
+        .estado-listo {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: fit-content;
         }
-        .btn-alert-ok {
-            background: #fbbf24; color: #0b0e14; border: none;
-            padding: 12px 25px; font-weight: bold; border-radius: 8px;
-            cursor: pointer; font-size: 0.9rem; width: 100%; text-transform: uppercase;
-            transition: background 0.2s;
-        }
-        .btn-alert-ok:hover {
-            background: #f59e0b;
-        }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 20, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+        .modal-overlay.activo { opacity: 1; pointer-events: auto; }
+        .modal-box { background: rgba(18, 20, 28, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; width: 380px; max-width: 90%; text-align: center; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-modal-cancelar, .btn-modal-aceptar { flex: 1; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; border: none; }
+        .btn-modal-cancelar { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
+        .btn-modal-aceptar { background: #ef4444; color: #ffffff; }
+
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: rgba(18, 20, 28, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px 20px; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 8px 24px rgba(0,0,0,0.5); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 10px; }
+        .toast.exito { border-left: 4px solid #22c55e; }
+        .toast.error { border-left: 4px solid #ef4444; }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>NEXUS <span>ADMIN LOGIN</span></h2>
+            <form id="form-login">
+                <div class="form-group"><label>Correo Electrónico</label><input type="email" id="login-email" required placeholder="tucorreo@admin.com"></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" id="login-password" required placeholder="••••••••"></div>
+                <button type="submit" class="btn-login">Ingresar al Panel</button>
+            </form>
+        </div>
+    </div>
 
-    <div class="container">
+    <div id="admin-content" class="container">
         <header>
-            <div class="logo-area">
-                <img src="lp.png" alt="Nexus Store Logo" class="logo-img">
-                <p>Cuentas</p>
+            <h1>NEXUS <span>ADMIN</span></h1>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="index.html" class="btn-volver">Ver Tienda ➔</a>
+                <button id="btn-cerrar-sesion" class="btn-logout">Cerrar Sesión</button>
             </div>
-            <nav class="tabs-nav">
-                <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
-                <button class="tab-btn" data-target="seccion-boost">Boost</button>
-            </nav>
         </header>
 
-        <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
-        <div id="seccion-cuentas" class="tab-content active">
-            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #fbbf24; padding-left: 10px;">Cuentas Disponibles</h2>
-            <div id="grid-cuentas" class="grid-cuentas">
-                <p style="color: #94a3b8;">Cargando catálogo...</p>
+        <div class="admin-tabs-nav">
+            <button class="tab-btn activo" onclick="cambiarTab('publicar')">Publicar cuenta ▾</button>
+            <button class="tab-btn" onclick="cambiarTab('editar')">Editar cuentas publicadas ▾</button>
+            <button class="tab-btn" onclick="cambiarTab('historial')">Historial de servicios ▾</button>
+            <button class="tab-btn" onclick="cambiarTab('tarifas')">Tarifas de Boost ▾</button>
+        </div>
+
+        <div id="sec-publicar" class="admin-section activa">
+            <div class="admin-box">
+                <h2 id="titulo-form-cuenta">Publicar Cuenta</h2>
+                <form id="form-subir-cuenta">
+                    <input type="hidden" id="edit-cuenta-id" value="">
+                    <div class="form-group"><label>Título</label><input type="text" id="admin-titulo" required></div>
+                    <div class="form-group"><label>Servidor</label><select id="admin-server"><option value="LAS">LAS</option><option value="LAN">LAN</option><option value="NA">NA</option></select></div>
+                    <div class="form-group"><label>Campeones</label><input type="text" id="admin-campeones" required></div>
+                    <div class="form-group"><label>Rango Actual</label><input type="text" id="admin-rango" required></div>
+                    <div class="form-group"><label>EA (Esencia Azul)</label><input type="text" id="admin-ea" required></div>
+                    <div class="form-group"><label>Precio USD</label><input type="number" step="0.01" id="admin-precio" required></div>
+                    <div class="form-group"><label>URL de Imagen</label><input type="url" id="admin-imagen" required></div>
+                    <div class="form-group"><label>Descripción Larga</label><textarea id="admin-descripcion-larga" rows="3" placeholder="Detalles de la cuenta..."></textarea></div>
+                    <button type="submit" id="btn-submit-cuenta" class="btn-subir">Publicar Cuenta</button>
+                    <button type="button" id="btn-cancelar-edicion" style="display:none; width:100%; background:rgba(255,255,255,0.08); color:#fff; border:none; padding:10px; border-radius:8px; margin-top:8px; cursor:pointer; font-weight:bold;" onclick="cancelarEdicion()">Cancelar Edición</button>
+                </form>
             </div>
         </div>
 
-        <!-- SECCIÓN 2: BOOST PRO -->
-        <div id="seccion-boost" class="tab-content">
-            <div class="boost-types-nav">
-                <button class="boost-type-btn active">Impulso de rango</button>
-                <button class="boost-type-btn">Partidas de posicionamiento</button>
-                <button class="boost-type-btn">Victorias netas</button>
+        <div id="sec-editar" class="admin-section">
+            <div class="admin-box-full">
+                <h2>Cuentas Publicadas en Tienda</h2>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Título</th><th>Servidor</th><th>Rango</th><th>Precio</th><th>Acciones</th></tr></thead>
+                        <tbody id="tabla-cuentas-admin"><tr><td colspan="5" style="text-align: center; color: #8a99ad;">Cargando...</td></tr></tbody>
+                    </table>
+                </div>
             </div>
+        </div>
 
-            <div class="boost-layout">
-                <!-- Columna 1: Rango Actual -->
-                <div class="boost-card">
-                    <div class="rank-header">
-                        <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
-                        <div class="rank-info">
-                            <span>Rango actual</span>
-                            <h3 id="txt-actual">Hierro Div. 4</h3>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Liga Actual</label>
-                            <select id="liga-actual">
-                                <option value="Hierro">Hierro</option>
-                                <option value="Bronce">Bronce</option>
-                                <option value="Plata">Plata</option>
-                                <option value="Oro" selected>Oro</option>
-                                <option value="Platino">Platino</option>
-                                <option value="Esmeralda">Esmeralda</option>
-                                <option value="Diamante">Diamante</option>
-                                <option value="Maestro">Maestro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>División</label>
-                            <select id="division-actual">
-                                <option value="4">Div. IV</option>
-                                <option value="3">Div. III</option>
-                                <option value="2">Div. II</option>
-                                <option value="1">Div. I</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>LP (opc.)</label>
-                            <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
-                        </div>
-                    </div>
-
-                    <div class="lp-gain-container">
-                        <label for="lp-ganancia">¿Cuántos LP obtienes x victoria?</label>
-                        <select id="lp-ganancia">
-                            <option value="17_19">17 a 19 LP</option>
-                            <option value="20_24" selected>20 a 24 LP</option>
-                            <option value="25_30">25 a 30 LP</option>
-                        </select>
-                    </div>
+        <div id="sec-historial" class="admin-section">
+            <div class="admin-box-full">
+                <h2>Servicios Contratados</h2>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Tipo</th><th>Cliente</th><th>Detalle</th><th>Monto</th><th>Acciones</th></tr></thead>
+                        <tbody id="tabla-servicios"><tr><td colspan="5" style="text-align: center; color: #8a99ad;">Cargando...</td></tr></tbody>
+                    </table>
                 </div>
+            </div>
+        </div>
 
-                <!-- Columna 2: Rango Deseado -->
-                <div class="boost-card">
-                    <div class="rank-header">
-                        <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
-                        <div class="rank-info">
-                            <span>Rango deseado</span>
-                            <h3 id="txt-deseado">Oro Div. 1</h3>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Liga Deseada</label>
-                            <select id="liga-deseada">
-                                <option value="Hierro">Hierro</option>
-                                <option value="Bronce">Bronce</option>
-                                <option value="Plata">Plata</option>
-                                <option value="Oro" selected>Oro</option>
-                                <option value="Platino">Platino</option>
-                                <option value="Esmeralda">Esmeralda</option>
-                                <option value="Diamante">Diamante</option>
-                                <option value="Maestro">Maestro</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>División</label>
-                            <select id="division-deseada">
-                                <option value="4">Div. IV</option>
-                                <option value="3">Div. III</option>
-                                <option value="2">Div. II</option>
-                                <option value="1" selected>Div. I</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>LP (opc.)</label>
-                            <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Columna 3: Personalizar Pedido -->
-                <div class="boost-card">
-                    <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Personalizar Pedido</h3>
-                    
-                    <div class="mode-selector">
-                        <div class="mode-btn active" data-mode="solo">Solo Q</div>
-                        <div class="mode-btn" data-mode="duo">Duo</div>
-                    </div>
-
-                    <div class="options-group">
-                        <label class="toggle-option">
-                            <span>Transmisión en vivo</span> 
-                            <input type="checkbox" id="chk-streaming">
-                        </label>
-                        <label class="toggle-option">
-                            <span>Modo Offline</span> 
-                            <input type="checkbox" id="chk-offline">
-                        </label>
-                    </div>
-
-                    <div id="promo-banner" class="promo-banner"></div>
-
-                    <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
-                    <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
-                </div>
+        <!-- SECCIÓN 4: TARIFAS DE BOOST -->
+        <div id="sec-tarifas" class="admin-section">
+            <div class="admin-box-full" style="border-color: rgba(251, 191, 36, 0.3);">
+                <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas de Boost por Liga y LP</h2>
+                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Modifica el <b>Precio x Juego ($ USD)</b>. En Diamante puedes configurar de forma específica los tramos (Diamante IV a III, III a II, II a I) dado su nivel competitivo.</p>
+                
+                <form id="form-guardar-tarifas">
+                    <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;"></div>
+                    <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold; padding: 14px; font-size: 1rem;">Guardar Todas las Tarifas en Firebase</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DETALLES DE CUENTA -->
-    <div id="modal-detalles" class="modal-overlay">
+    <div class="modal-overlay" id="modal-confirmacion">
         <div class="modal-box">
-            <button id="modal-detalles-cerrar" class="modal-close">&times;</button>
-            <h3 id="modal-detalles-titulo">Detalles de la Cuenta</h3>
-            <div id="modal-detalles-texto"></div>
-            <button id="btn-ir-a-pago" class="btn-contratar">Comprar</button>
-        </div>
-    </div>
-
-    <!-- MODAL PAGO -->
-    <div id="modal-pago" class="modal-overlay">
-        <div class="modal-box">
-            <button id="modal-cerrar" class="modal-close">&times;</button>
-            <h3 id="modal-titulo">Finalizar Pago</h3>
-            <div id="modal-texto"></div>
-            
-            <div class="form-group" id="grupo-email">
-                <label>Correo Electrónico</label>
-                <input type="email" id="email-cliente" placeholder="tucorreo@gmail.com">
-            </div>
-
-            <div id="grupo-boost-campos" style="display: none;">
-                <div class="form-group">
-                    <label>ID de LoL (Nombre#ETIQUETA)</label>
-                    <input type="text" id="input-lol-id" placeholder="Nombre#ETIQUETA">
-                </div>
-                <div class="form-group">
-                    <label>User de Discord</label>
-                    <input type="text" id="input-discord-user" placeholder="Tu usuario de Discord">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Términos y Condiciones (Servicios Digitales)</label>
-                <div class="terminos-box">
-                    <b>1. Naturaleza Digital:</b> Productos y servicios intangibles.<br>
-                    <b>2. Política de No Reembolso:</b> Debido a la entrega inmediata de credenciales o inicio del servicio, <b>todas las ventas son definitivas y sin derecho a reembolso</b>.<br>
-                    <b>3. Responsabilidad:</b> El comprador asume el uso posterior de la cuenta.
-                </div>
-            </div>
-
-            <label class="terminos-check-container">
-                <input type="checkbox" id="chk-terminos">
-                <span>He leído y acepto los Términos y Condiciones.</span>
-            </label>
-
-            <div class="payment-options">
-                <button id="btn-pagar-paypal" class="btn-pagar-paypal">Pagar con PayPal</button>
-                <button id="btn-pagar-alias" class="btn-pagar-alias">Pagar por Alias / Transferencia (WhatsApp)</button>
+            <h3>¿Estás seguro?</h3>
+            <p style="color: #8a99ad; font-size: 0.85rem; margin: 10px 0 20px;">Esta acción eliminará el registro permanentemente.</p>
+            <div class="modal-buttons">
+                <button class="btn-modal-cancelar" id="btn-modal-cancelar">Cancelar</button>
+                <button class="btn-modal-aceptar" id="btn-modal-aceptar">Eliminar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL ALERTA -->
-    <div id="customAlert" class="custom-alert-overlay">
-        <div class="custom-alert-box">
-            <h4>Aviso</h4>
-            <p id="customAlertMessage">Mensaje de alerta...</p>
-            <button class="btn-alert-ok" onclick="cerrarAlertaCustom()">Aceptar</button>
-        </div>
-    </div>
+    <div class="toast-container" id="toast-container"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, getDoc, getDocs, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVGo2MoRA0cXgPMb7O3dVxDJVxG_iC1kQ",
+            authDomain: "store-51d80.firebaseapp.com",
+            projectId: "store-51d80",
+            storageBucket: "store-51d80.firebasestorage.app",
+            messagingSenderId: "695612329327",
+            appId: "1:695612329327:web:298cea611bd736e3a36c9a"
+        };
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = (Math.random() - 0.5) * 0.4;
-                this.color = Math.random() > 0.5 ? 'rgba(251, 191, 36, 0.35)' : 'rgba(56, 189, 248, 0.3)';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                else if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                else if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+        window.cambiarTab = function(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('activo'));
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('activa'));
+            document.getElementById(`sec-${tabName}`).classList.add('activa');
+            event.currentTarget.classList.add('activo');
         }
 
-        function initParticles() {
-            particlesArray = [];
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                renderizarGrillaAdmin();
+                cargarServiciosContratados();
+                cargarCuentasAdmin();
+            } else {
+                document.getElementById('login-overlay').style.display = 'flex';
+                document.getElementById('admin-content').style.display = 'none';
+            }
+        });
+
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
+                mostrarToast("¡Bienvenida de nuevo!", "exito");
+            } catch (err) { mostrarToast("Credenciales incorrectas.", "error"); }
+        });
+
+        document.getElementById('btn-cerrar-sesion').addEventListener('click', async () => {
+            await signOut(auth);
+            mostrarToast("Sesión cerrada", "exito");
+        });
+
+        function mostrarToast(mensaje, tipo = 'exito') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${tipo}`;
+            toast.innerHTML = `<span>${tipo === 'exito' ? '✅' : '❌'}</span> ${mensaje}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        const ligasLista = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante", "Maestro"];
+        const tramosConfigEstandar = [
+            { id: "17_19", label: "17 a 19 LP", victorias: 6 },
+            { id: "20_24", label: "20 a 24 LP", victorias: 5 },
+            { id: "25_30", label: "25 a 30 LP", victorias: 4 }
+        ];
+
+        // Tramos específicos para Diamante por división
+        const tramosConfigDiamante = [
+            { id: "iv_a_iii", label: "Diamante IV a III", victorias: 6 },
+            { id: "iii_a_ii", label: "Diamante III a II", victorias: 5 },
+            { id: "ii_a_i", label: "Diamante II a I", victorias: 4 }
+        ];
+
+        async function renderizarGrillaAdmin() {
+            const container = document.getElementById('grilla-tarifas-container');
+            let tarifasGuardadas = {};
+            try {
+                const docSnap = await getDoc(doc(db, "configuracion", "tarifasBoost"));
+                if (docSnap.exists()) tarifasGuardadas = docSnap.data();
+            } catch(e) {}
+
+            let html = "";
+            ligasLista.forEach(liga => {
+                const esDiamante = liga === "Diamante";
+                const tramosActuales = esDiamante ? tramosConfigDiamante : tramosConfigEstandar;
+
+                html += `
+                    <div class="liga-tarjeta">
+                        <div class="liga-header-admin">
+                            <span class="liga-titulo-admin">🛡️ ${liga.toUpperCase()}</span>
+                            <span class="badge-liga-admin">Liga ${liga}</span>
+                        </div>
+                        <div class="tabla-tarifas-head">
+                            <span>${esDiamante ? 'Tramo de División' : 'Ganancia de LP'}</span>
+                            <span>Victorias req.</span>
+                            <span>Precio x Juego ($ USD)</span>
+                            <span>Total 100 LP</span>
+                            <span>Estado</span>
+                        </div>
+                        <div>
+                `;
+
+                tramosActuales.forEach(tramo => {
+                    const key = `${liga.toLowerCase()}_${tramo.id}`;
+                    
+                    let defJuego = 1.00;
+                    if (liga === "Bronce") defJuego = 1.25;
+                    else if (liga === "Plata" || liga === "Oro") defJuego = 1.50;
+                    else if (liga === "Platino") defJuego = 2.00;
+                    else if (liga === "Esmeralda") defJuego = 2.50;
+                    else if (liga === "Diamante" || liga === "Maestro") defJuego = 3.50;
+
+                    const precioJuegoGuardado = tarifasGuardadas[key] !== undefined ? tarifasGuardadas[key] : defJuego;
+                    const total100Lp = (precioJuegoGuardado * tramo.victorias).toFixed(2);
+
+                    html += `
+                        <div class="fila-tarifa-admin">
+                            <div><strong style="font-size: 0.85rem; color: #fff;">${tramo.label}</strong></div>
+                            <div><span style="font-size: 0.82rem; color: #cbd5e1;"><b>${tramo.victorias}</b> victorias</span></div>
+                            <div>
+                                <input type="number" step="0.25" id="tarifa_${key}" value="${precioJuegoGuardado}" oninput="calcularTotalAdmin('${key}', ${tramo.victorias})" class="input-precio-juego" required>
+                            </div>
+                            <div><strong id="total_${key}" style="font-size: 0.95rem; color: #22c55e;">$${total100Lp}</strong></div>
+                            <div><span class="estado-listo">✓ Listo</span></div>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        window.calcularTotalAdmin = function(key, victorias) {
+            const inputVal = parseFloat(document.getElementById(`tarifa_${key}`).value) || 0;
+            const total = (inputVal * victorias).toFixed(2);
+            document.getElementById(`total_${key}`).textContent = `$${total}`;
+        }
+
+        document.getElementById('form-guardar-tarifas').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                let nuevasTarifas = {};
+                ligasLista.forEach(liga => {
+                    const tramosActuales = liga === "Diamante" ? tramosConfigDiamante : tramosConfigEstandar;
+                    tramosActuales.forEach(tramo => {
+                        const key = `${liga.toLowerCase()}_${tramo.id}`;
+                        nuevasTarifas[key] = parseFloat(document.getElementById(`tarifa_${key}`).value);
+                    });
+                });
+                await setDoc(doc(db, "configuracion", "tarifasBoost"), nuevasTarifas);
+                mostrarToast("¡Tarifas de Boost actualizadas y sincronizadas!", "exito");
+            } catch (err) { mostrarToast("Error al guardar tarifas.", "error"); }
+        });
+
+        // GESTIÓN DE CUENTAS
+        document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('edit-cuenta-id').value;
+            const nueva = {
+                title: document.getElementById('admin-titulo').value,
+                server: document.getElementById('admin-server').value,
+                championCount: document.getElementById('admin-campeones').value,
+                currentRank: document.getElementById('admin-rango').value,
+                riotPoints: document.getElementById('admin-ea').value,
+                price: parseFloat(document.getElementById('admin-precio').value),
+                imageUrl: document.getElementById('admin-imagen').value,
+                descripcionLarga: document.getElementById('admin-descripcion-larga').value
+            };
+            try {
+                if (editId) { await updateDoc(doc(db, "skin", editId), nueva); cancelarEdicion(); }
+                else { await addDoc(collection(db, "skin"), nueva); e.target.reset(); }
+                mostrarToast("¡Operación exitosa!", "exito");
+                cargarCuentasAdmin();
+            } catch (err) { mostrarToast("Error al guardar cuenta.", "error"); }
+        });
+
+        window.cancelarEdicion = function() {
+            document.getElementById('form-subir-cuenta').reset();
+            document.getElementById('edit-cuenta-id').value = '';
+            document.getElementById('titulo-form-cuenta').textContent = 'Publicar Cuenta';
+            document.getElementById('btn-submit-cuenta').textContent = 'Publicar Cuenta';
+            document.getElementById('btn-cancelar-edicion').style.display = 'none';
+        }
+
+        async function cargarCuentasAdmin() {
+            const tabla = document.getElementById('tabla-cuentas-admin');
+            try {
+                const snapshot = await getDocs(collection(db, "skin"));
+                if (snapshot.empty) { tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #8a99ad;">No hay cuentas.</td></tr>`; return; }
+                let html = "";
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    html += `<tr><td>${data.title}</td><td>${data.server}</td><td>${data.currentRank}</td><td style="color: #22c55e;">$${data.price}</td><td><button class="btn-modificar" onclick="irAEdicion('${docSnap.id}', '${encodeURIComponent(JSON.stringify(data))}')">Modificar</button> <button class="btn-eliminar" onclick="prepararEliminacion('skin', '${docSnap.id}')">Eliminar</button></td></tr>`;
+                });
+                tabla.innerHTML = html;
+            } catch(e) {}
+        }
+
+        window.irAEdicion = function(id, dataStr) {
+            cambiarTab.call({classList:{add:()=>{}}, getAttribute:()=>'publicar'}, 'publicar');
+            document.querySelectorAll('.tab-btn')[0].classList.add('activo');
+            document.querySelectorAll('.tab-btn')[3].classList.remove('activo');
+            const data = JSON.parse(decodeURIComponent(dataStr));
+            document.getElementById('edit-cuenta-id').value = id;
+            document.getElementById('admin-titulo').value = data.title;
+            document.getElementById('admin-server').value = data.server;
+            document.getElementById('admin-campeones').value = data.championCount;
+            document.getElementById('admin-rango').value = data.currentRank;
+            document.getElementById('admin-ea').value = data.riotPoints;
+            document.getElementById('admin-precio').value = data.price;
+            document.getElementById('admin-imagen').value = data.imageUrl;
+            document.getElementById('admin-descripcion-larga').value = data.descripcionLarga || '';
+            document.getElementById('titulo-form-cuenta').textContent = 'Modificar Cuenta';
+            document.getElementById('btn-submit-cuenta').textContent = 'Guardar Cambios';
+            document.getElementById('btn-cancelar-edicion').style.display = 'block';
+        }
+
+        let idEliminar = null, colEliminar = null;
+        window.prepararEliminacion = function(col, id) {
+            colEliminar = col; idEliminar = id;
+            document.getElementById('modal-confirmacion').classList.add('activo');
+        }
+        document.getElementById('btn-modal-cancelar').addEventListener('click', () => document.getElementById('modal-confirmacion').classList.remove('activo'));
+        document.getElementById('btn-modal-aceptar').addEventListener('click', async () => {
+            document.getElementById('modal-confirmacion').classList.remove('activo');
+            if(idEliminar) {
+                await deleteDoc(doc(db, colEliminar, idEliminar));
+                mostrarToast("Eliminado correctamente", "exito");
+                cargarCuentasAdmin();
+                cargarServiciosContratados();
+            }
+        });
+
+        async function cargarServiciosContratados() {
+            const tabla = document.getElementById('tabla-servicios');
+            let html = "";
+            try {
+                const s1 = await getDocs(collection(db, "compras")).catch(()=>({empty:true}));
+                s1.forEach(d => {
+                    const dt = d.data();
+                    html += `<tr><td><span class="badge badge-cuenta">Cuenta</span></td><td>${dt.clienteDiscord||dt.email}</td><td>${dt.detalle}</td><td>${dt.monto}</td><td><button class="btn-eliminar" onclick="prepararEliminacion('compras', '${d.id}')">Eliminar</button></td></tr>`;
+                });
+                const s2 = await getDocs(collection(db, "pedidosBoost")).catch(()=>({empty:true}));
+                s2.forEach(d => {
+                    const dt = d.data();
+                    html += `<tr><td><span class="badge badge-boost">Boost</span></td><td>${dt.clienteDiscord}</td><td>${dt.detalle}</td><td>${dt.monto}</td><td><button class="btn-eliminar" onclick="prepararEliminacion('pedidosBoost', '${d.id}')">Eliminar</button></td></tr>`;
+                });
+                tabla.innerHTML = html || `<tr><td colspan="5" style="text-align: center; color: #8a99ad;">No hay registros.</td></tr>`;
+            } catch(e) {}
+        }
+    </script>
+</body>
+</html>
