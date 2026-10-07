@@ -5,51 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Store - Panel Admin Pro</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #07090e; color: #ffffff; padding: 20px; min-height: 100vh; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #07090e; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0b0e14; color: #ffffff; padding: 20px; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0e14; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .login-box { background: rgba(18, 20, 28, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 30px; width: 350px; max-width: 90%; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); text-align: center; }
-        .login-box h2 { font-size: 1.3rem; margin-bottom: 20px; color: #f3ba2f; }
+        .login-box h2 { font-size: 1.3rem; margin-bottom: 20px; color: #fbbf24; }
+        
         #admin-content { display: none; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; margin-bottom: 20px; }
-        h1 span { color: #f3ba2f; }
-        .admin-tabs-nav { display: flex; gap: 10px; background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); padding: 10px; border-radius: 16px; margin-bottom: 20px; overflow-x: auto; }
-        .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
-        .tab-btn:hover { color: #ffffff; background: rgba(255, 255, 255, 0.04); }
-        .tab-btn.activo { background: #f3ba2f; color: #0b0e14; box-shadow: 0 4px 20px rgba(243, 186, 47, 0.3); }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; margin-bottom: 25px; }
+        h1 span { color: #fbbf24; }
+        
+        .admin-tabs-nav { display: flex; gap: 10px; background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); padding: 10px; border-radius: 16px; margin-bottom: 25px; overflow-x: auto; }
+        .tab-btn { background: transparent; border: none; color: #8a99ad; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+        .tab-btn:hover { color: #ffffff; background: rgba(251, 191, 36, 0.1); }
+        .tab-btn.activo { background: #fbbf24; color: #0b0e14; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3); font-weight: bold; }
+        
         .admin-section { display: none; }
         .admin-section.activa { display: block; }
+        
         .admin-box, .admin-box-full { background: rgba(18, 20, 28, 0.55); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 16px; padding: 25px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); margin-bottom: 20px; }
         .admin-box h2, .admin-box-full h2 { font-size: 1.2rem; margin-bottom: 20px; color: #22c55e; border-left: 4px solid #22c55e; padding-left: 10px; }
+        
         .form-group { margin-bottom: 14px; text-align: left; }
         label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
         select, input, textarea { width: 100%; padding: 10px; background: rgba(11, 14, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; color: #ffffff; font-size: 0.85rem; }
-        select:focus, input:focus, textarea:focus { outline: none; border-color: #f3ba2f; }
+        select:focus, input:focus, textarea:focus { outline: none; border-color: #fbbf24; }
+        
         .btn-subir, .btn-login { width: 100%; background-color: #22c55e; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; margin-top: 10px; transition: background-color 0.2s; }
         .btn-subir:hover, .btn-login:hover { background-color: #16a34a; }
+        
         .btn-volver, .btn-logout { background: rgba(255, 255, 255, 0.08); color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; cursor: pointer; border: none; }
         .btn-volver:hover, .btn-logout:hover { background: rgba(255, 255, 255, 0.15); }
+        
         .table-container { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
         th, td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
-        th { color: #94a3b8; font-weight: 600; }
+        th { color: #8a99ad; font-weight: 600; }
         td { color: #e2e8f0; }
+
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
         .badge-cuenta { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-        .badge-boost { background: rgba(243, 186, 47, 0.15); color: #f3ba2f; }
-        .btn-acciones-container { display: flex; gap: 6px; }
+        .badge-boost { background: rgba(243, 186, 47, 0.15); color: #fbbf24; }
+
         .btn-eliminar { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
         .btn-eliminar:hover { background: rgba(239, 68, 68, 0.3); color: #ffffff; }
+
         .btn-modificar { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
         .btn-modificar:hover { background: rgba(59, 130, 246, 0.3); color: #ffffff; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 9, 14, 0.75); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+
+        /* ESTILOS IDÉNTICOS A TU DISEÑO DE TARJETAS DE LIGA */
+        .liga-tarjeta {
+            background: rgba(18, 20, 28, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .liga-header-admin {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 12px;
+        }
+
+        .liga-titulo-admin {
+            color: #fbbf24;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+        }
+
+        .badge-liga-admin {
+            background: rgba(251, 191, 36, 0.12);
+            color: #fbbf24;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .tabla-tarifas-head {
+            display: grid;
+            grid-template-columns: 2fr 2fr 2fr 1.5fr 1fr;
+            gap: 15px;
+            padding: 0 10px 8px 10px;
+            font-size: 0.75rem;
+            color: #8a99ad;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .fila-tarifa-admin {
+            display: grid;
+            grid-template-columns: 2fr 2fr 2fr 1.5fr 1fr;
+            align-items: center;
+            gap: 15px;
+            background: rgba(11, 14, 20, 0.5);
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+        }
+
+        .input-precio-juego {
+            background: rgba(18, 20, 28, 0.9);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .estado-listo {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: fit-content;
+        }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 20, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
         .modal-overlay.activo { opacity: 1; pointer-events: auto; }
-        .modal-box { background: rgba(18, 20, 28, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; width: 380px; max-width: 90%; text-align: center; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5); }
+        .modal-box { background: rgba(18, 20, 28, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; width: 380px; max-width: 90%; text-align: center; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); }
         .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
         .btn-modal-cancelar, .btn-modal-aceptar { flex: 1; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; border: none; }
         .btn-modal-cancelar { background: rgba(255, 255, 255, 0.08); color: #cbd5e1; }
         .btn-modal-aceptar { background: #ef4444; color: #ffffff; }
+
+        /* TOASTS */
         .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: rgba(18, 20, 28, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px 20px; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 8px 24px rgba(0,0,0,0.5); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 10px; }
         .toast.exito { border-left: 4px solid #22c55e; }
@@ -58,6 +162,7 @@
 </head>
 <body>
 
+    <!-- PANTALLA DE LOGIN -->
     <div id="login-overlay">
         <div class="login-box">
             <h2>NEXUS <span>ADMIN LOGIN</span></h2>
@@ -69,6 +174,7 @@
         </div>
     </div>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <div id="admin-content" class="container">
         <header>
             <h1>NEXUS <span>ADMIN</span></h1>
@@ -85,6 +191,7 @@
             <button class="tab-btn" onclick="cambiarTab('tarifas')">Tarifas de Boost ▾</button>
         </div>
 
+        <!-- SECCIÓN 1: PUBLICAR -->
         <div id="sec-publicar" class="admin-section activa">
             <div class="admin-box">
                 <h2 id="titulo-form-cuenta">Publicar Cuenta</h2>
@@ -104,48 +211,51 @@
             </div>
         </div>
 
+        <!-- SECCIÓN 2: EDITAR CUENTAS -->
         <div id="sec-editar" class="admin-section">
             <div class="admin-box-full">
                 <h2>Cuentas Publicadas en Tienda</h2>
                 <div class="table-container">
                     <table>
                         <thead><tr><th>Título</th><th>Servidor</th><th>Rango</th><th>Precio</th><th>Acciones</th></tr></thead>
-                        <tbody id="tabla-cuentas-admin"><tr><td colspan="5" style="text-align: center; color: #94a3b8;">Cargando...</td></tr></tbody>
+                        <tbody id="tabla-cuentas-admin"><tr><td colspan="5" style="text-align: center; color: #8a99ad;">Cargando...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
+        <!-- SECCIÓN 3: HISTORIAL -->
         <div id="sec-historial" class="admin-section">
             <div class="admin-box-full">
                 <h2>Servicios Contratados</h2>
                 <div class="table-container">
                     <table>
                         <thead><tr><th>Tipo</th><th>Cliente</th><th>Detalle</th><th>Monto</th><th>Acciones</th></tr></thead>
-                        <tbody id="tabla-servicios"><tr><td colspan="5" style="text-align: center; color: #94a3b8;">Cargando...</td></tr></tbody>
+                        <tbody id="tabla-servicios"><tr><td colspan="5" style="text-align: center; color: #8a99ad;">Cargando...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN 4: TARIFAS DE BOOST (GRILLA POR LIGA Y LP) -->
+        <!-- SECCIÓN 4: TARIFAS DE BOOST (TABLA ESTILO IMAGEN) -->
         <div id="sec-tarifas" class="admin-section">
-            <div class="admin-box-full" style="border-color: rgba(243, 186, 47, 0.3);">
-                <h2 style="color: #f3ba2f; border-left-color: #f3ba2f;">Configurar Tarifas de Boost por Liga y LP</h2>
-                <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 20px;">Modifica los precios por división para cada liga y tramo de LP. Se sincronizan en tiempo real con el index de la tienda[cite: 5].</p>
+            <div class="admin-box-full" style="border-color: rgba(251, 191, 36, 0.3);">
+                <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas de Boost por Liga y LP</h2>
+                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Modifica el <b>Precio x Juego ($ USD)</b> en cada tramo. El sistema calcula automáticamente el <b>Total 100 LP</b> multiplicando por las victorias requeridas.</p>
                 
                 <form id="form-guardar-tarifas">
-                    <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
-                    <button type="submit" class="btn-subir" style="background-color: #f3ba2f; color: #0b0e14; font-weight: bold;">Guardar Tarifas en Firebase</button>
+                    <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;"></div>
+                    <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold; padding: 14px; font-size: 1rem;">Guardar Todas las Tarifas en Firebase</button>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- MODAL -->
     <div class="modal-overlay" id="modal-confirmacion">
         <div class="modal-box">
             <h3>¿Estás seguro?</h3>
-            <p style="color: #94a3b8; font-size: 0.85rem; margin: 10px 0 20px;">Esta acción eliminará el registro permanentemente.</p>
+            <p style="color: #8a99ad; font-size: 0.85rem; margin: 10px 0 20px;">Esta acción eliminará el registro permanentemente.</p>
             <div class="modal-buttons">
                 <button class="btn-modal-cancelar" id="btn-modal-cancelar">Cancelar</button>
                 <button class="btn-modal-aceptar" id="btn-modal-aceptar">Eliminar</button>
@@ -216,7 +326,11 @@
         }
 
         const ligasLista = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante", "Maestro"];
-        const tramosLpLista = ["17-19", "20-24", "25-30"];
+        const tramosConfig = [
+            { id: "17_19", label: "17 a 19 LP", victorias: 6 },
+            { id: "20_24", label: "20 a 24 LP", victorias: 5 },
+            { id: "25_30", label: "25 a 30 LP", victorias: 4 }
+        ];
 
         async function renderizarGrillaAdmin() {
             const container = document.getElementById('grilla-tarifas-container');
@@ -229,30 +343,56 @@
             let html = "";
             ligasLista.forEach(liga => {
                 html += `
-                    <div style="background: rgba(11,14,20,0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px;">
-                        <h3 style="color: #fbbf24; font-size: 0.95rem; margin-bottom: 8px;">Liga ${liga}</h3>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <div class="liga-tarjeta">
+                        <div class="liga-header-admin">
+                            <span class="liga-titulo-admin">🛡️ ${liga.toUpperCase()}</span>
+                            <span class="badge-liga-admin">Liga ${liga}</span>
+                        </div>
+                        <div class="tabla-tarifas-head">
+                            <span>Ganancia de LP</span>
+                            <span>Victorias req.</span>
+                            <span>Precio x Juego ($ USD)</span>
+                            <span>Total 100 LP</span>
+                            <span>Estado</span>
+                        </div>
+                        <div>
                 `;
-                tramosLpLista.forEach(tramo => {
-                    const key = `${liga.toLowerCase()}_${tramo.replace('-', '_')}`;
-                    let def = 6.00;
-                    if(liga==="Hierro"||liga==="Bronce") def = tramo==="17-19"?6:(tramo==="20-24"?5:4);
-                    else if(liga==="Plata"||liga==="Oro") def = tramo==="17-19"?9:(tramo==="20-24"?7.5:6);
-                    else if(liga==="Platino") def = tramo==="17-19"?12:(tramo==="20-24"?10:8);
-                    else if(liga==="Esmeralda") def = tramo==="17-19"?15:(tramo==="20-24"?12.5:10);
-                    else if(liga==="Diamante"||liga==="Maestro") def = tramo==="17-19"?18:(tramo==="20-24"?15:12);
 
-                    const val = tarifasGuardadas[key] !== undefined ? tarifasGuardadas[key] : def;
+                tramosConfig.forEach(tramo => {
+                    const key = `${liga.toLowerCase()}_${tramo.id}`;
+                    
+                    let defJuego = 1.00;
+                    if (liga === "Bronce") defJuego = 1.25;
+                    else if (liga === "Plata" || liga === "Oro") defJuego = 1.50;
+                    else if (liga === "Platino") defJuego = 2.00;
+                    else if (liga === "Esmeralda") defJuego = 2.50;
+                    else if (liga === "Diamante" || liga === "Maestro") defJuego = 3.00;
+
+                    const precioJuegoGuardado = tarifasGuardadas[key] !== undefined ? tarifasGuardadas[key] : defJuego;
+                    const total100Lp = (precioJuegoGuardado * tramo.victorias).toFixed(2);
+
                     html += `
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label>LP ${tramo}</label>
-                            <input type="number" step="0.5" id="tarifa_${key}" value="${val}" required>
+                        <div class="fila-tarifa-admin">
+                            <div><strong style="font-size: 0.85rem; color: #fff;">${tramo.label}</strong></div>
+                            <div><span style="font-size: 0.82rem; color: #cbd5e1;"><b>${tramo.victorias}</b> victorias (para 100 LP)</span></div>
+                            <div>
+                                <input type="number" step="0.25" id="tarifa_${key}" value="${precioJuegoGuardado}" oninput="calcularTotalAdmin('${key}', ${tramo.victorias})" class="input-precio-juego" required>
+                            </div>
+                            <div><strong id="total_${key}" style="font-size: 0.95rem; color: #22c55e;">$${total100Lp}</strong></div>
+                            <div><span class="estado-listo">✓ Listo</span></div>
                         </div>
                     `;
                 });
+
                 html += `</div></div>`;
             });
             container.innerHTML = html;
+        }
+
+        window.calcularTotalAdmin = function(key, victorias) {
+            const inputVal = parseFloat(document.getElementById(`tarifa_${key}`).value) || 0;
+            const total = (inputVal * victorias).toFixed(2);
+            document.getElementById(`total_${key}`).textContent = `$${total}`;
         }
 
         document.getElementById('form-guardar-tarifas').addEventListener('submit', async (e) => {
@@ -260,8 +400,8 @@
             try {
                 let nuevasTarifas = {};
                 ligasLista.forEach(liga => {
-                    tramosLpLista.forEach(tramo => {
-                        const key = `${liga.toLowerCase()}_${tramo.replace('-', '_')}`;
+                    tramosConfig.forEach(tramo => {
+                        const key = `${liga.toLowerCase()}_${tramo.id}`;
                         nuevasTarifas[key] = parseFloat(document.getElementById(`tarifa_${key}`).value);
                     });
                 });
@@ -304,7 +444,7 @@
             const tabla = document.getElementById('tabla-cuentas-admin');
             try {
                 const snapshot = await getDocs(collection(db, "skin"));
-                if (snapshot.empty) { tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">No hay cuentas.</td></tr>`; return; }
+                if (snapshot.empty) { tabla.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #8a99ad;">No hay cuentas.</td></tr>`; return; }
                 let html = "";
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
@@ -363,7 +503,7 @@
                     const dt = d.data();
                     html += `<tr><td><span class="badge badge-boost">Boost</span></td><td>${dt.clienteDiscord}</td><td>${dt.detalle}</td><td>${dt.monto}</td><td><button class="btn-eliminar" onclick="prepararEliminacion('pedidosBoost', '${d.id}')">Eliminar</button></td></tr>`;
                 });
-                tabla.innerHTML = html || `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">No hay registros.</td></tr>`;
+                tabla.innerHTML = html || `<tr><td colspan="5" style="text-align: center; color: #8a99ad;">No hay registros.</td></tr>`;
             } catch(e) {}
         }
     </script>
