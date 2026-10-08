@@ -965,13 +965,13 @@
         function obtenerPrecioPorVictoria(liga, tramoLp) {
             const key = `${liga.toLowerCase()}_${tramoLp}`;
             if (tarifasFirebase[key] !== undefined) {
-                return tarifasFirebase[key];
+                return parseFloat(tarifasFirebase[key]);
             }
-            if (liga === "Hierro" || liga === "Bronce") return 3.5;
-            if (liga === "Plata" || liga === "Oro") return 4;
-            if (liga === "Platino") return 4.5;
-            if (liga === "Esmeralda") return 5;
-            return 6;
+            if (liga === "Hierro" || liga === "Bronce") return 1.5;
+            if (liga === "Plata" || liga === "Oro") return 2.0;
+            if (liga === "Platino") return 2.5;
+            if (liga === "Esmeralda") return 3.0;
+            return 3.5;
         }
 
         function actualizarBoost() {
@@ -996,12 +996,15 @@
 
             const dAct = divActualSelect.value;
             const dDes = divDeseadaSelect.value;
-            const tramoLpSelect = document.getElementById('lp-ganancia').value;
+            const tramoLpSelect = document.getElementById('lp-ganancia').value; // Ej: "17_19", "20_24", "25_30"
             
-            let lpPorVictoria = 20;
-            if (tramoLpSelect === "17_19") lpPorVictoria = 18;
-            else if (tramoLpSelect === "20_24") lpPorVictoria = 22;
-            else if (tramoLpSelect === "25_30") lpPorVictoria = 27;
+            // Promedio estimado de ganancia de LP por victoria para determinar cuántos juegos requiere cubrir el trayecto
+            let lpPromedioVictoria = 27; // 25 a 30 LP (rápido / buen MMR)
+            if (tramoLpSelect === "17_19") {
+                lpPromedioVictoria = 18; // 17 a 19 LP (lento / mal MMR / más partidas)
+            } else if (tramoLpSelect === "20_24") {
+                lpPromedioVictoria = 22; // 20 a 24 LP (estándar)
+            }
 
             document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
             document.getElementById('txt-actual').textContent = lAct === "Maestro" ? "Maestro" : `${lAct} Div. ${dAct}`;
@@ -1025,9 +1028,14 @@
             let precioTotal = 0;
 
             if (diffLP > 0) {
-                const totalPartidas = Math.ceil(diffLP / lpPorVictoria);
+                // Cantidad total de partidas requeridas según los LP faltantes y el factor de ganancia (MMR)
+                const totalPartidasEstimadas = Math.ceil(diffLP / lpPromedioVictoria);
+                
+                // Precio unitario base por juego configurado en la tabla para esa liga
                 const precioPorJuego = obtenerPrecioPorVictoria(lAct, tramoLpSelect);
-                precioTotal = totalPartidas * precioPorJuego;
+                
+                // El precio total escala de manera justa con el volumen de partidas
+                precioTotal = totalPartidasEstimadas * precioPorJuego;
             }
 
             let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
