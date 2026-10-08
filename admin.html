@@ -144,6 +144,20 @@
             width: fit-content;
         }
 
+        /* Estructura compacta para Códigos Promo */
+        .codigos-layout {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .codigos-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: rgba(18, 20, 28, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px 20px; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 8px 24px rgba(0,0,0,0.5); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 10px; }
         .toast.exito { border-left: 4px solid #22c55e; }
@@ -233,23 +247,25 @@
             </div>
         </div>
 
-        <!-- SECCIÓN CÓDIGOS PROMOCIONALES -->
+        <!-- SECCIÓN CÓDIGOS PROMOCIONALES (COMPACTO DOS COLUMNAS) -->
         <div id="sec-codigos" class="admin-section">
-            <div class="admin-box">
-                <h2>Crear Código Promocional</h2>
-                <form id="form-crear-codigo">
-                    <div class="form-group"><label>Código (ej: EVENTO5)</label><input type="text" id="admin-codigo-texto" required style="text-transform: uppercase;"></div>
-                    <div class="form-group"><label>Descuento (%)</label><input type="number" min="1" max="100" id="admin-codigo-descuento" required placeholder="5"></div>
-                    <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold;">Guardar Código</button>
-                </form>
-            </div>
-            <div class="admin-box-full">
-                <h2>Códigos Promocionales Activos</h2>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Código</th><th>Descuento</th><th>Estado</th><th>Acciones</th></tr></thead>
-                        <tbody id="tabla-codigos-admin"><tr><td colspan="4" style="text-align: center; color: #8a99ad;">Cargando...</td></tr></tbody>
-                    </table>
+            <div class="codigos-layout">
+                <div class="admin-box" style="margin-bottom: 0;">
+                    <h2>Crear Código</h2>
+                    <form id="form-crear-codigo">
+                        <div class="form-group"><label>Código (ej: EVENTO5)</label><input type="text" id="admin-codigo-texto" required style="text-transform: uppercase;"></div>
+                        <div class="form-group"><label>Descuento (%)</label><input type="number" min="1" max="100" id="admin-codigo-descuento" required placeholder="5"></div>
+                        <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold;">Guardar Código</button>
+                    </form>
+                </div>
+                <div class="admin-box-full" style="margin-bottom: 0;">
+                    <h2>Códigos Activos</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Código</th><th>Descuento</th><th>Estado</th><th>Acciones</th></tr></thead>
+                            <tbody id="tabla-codigos-admin"><tr><td colspan="4" style="text-align: center; color: #8a99ad;">Cargando...</td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
