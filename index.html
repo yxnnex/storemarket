@@ -162,7 +162,6 @@
             width: 100%;
         }
 
-        /* Contenedor centrado y compacto para Posicionamiento y Netas */
         .boost-layout-centered {
             display: flex;
             justify-content: center;
@@ -649,7 +648,6 @@
             background: #f59e0b;
         }
 
-        /* Estilo del pie de página legal y confianza */
         .site-footer {
             width: 100%;
             max-width: 1250px;
@@ -707,7 +705,6 @@
             <!-- CONTENEDOR 1: IMPULSO DE RANGO -->
             <div id="panel-boost-rango" class="boost-subpanel">
                 <div class="boost-layout">
-                    <!-- Columna 1: Rango Actual -->
                     <div class="boost-card">
                         <div class="rank-header">
                             <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
@@ -755,7 +752,6 @@
                         </div>
                     </div>
 
-                    <!-- Columna 2: Rango Deseado -->
                     <div class="boost-card">
                         <div class="rank-header">
                             <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
@@ -794,7 +790,6 @@
                         </div>
                     </div>
 
-                    <!-- Columna 3: Personalizar Pedido -->
                     <div class="boost-card">
                         <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Personalizar Pedido</h3>
                         
@@ -822,7 +817,7 @@
                 </div>
             </div>
 
-            <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO (COMPACTO Y CENTRADO) -->
+            <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO -->
             <div id="panel-boost-posicionamiento" class="boost-subpanel" style="display: none;">
                 <div class="boost-layout-centered">
                     <div class="boost-card-compact">
@@ -868,7 +863,7 @@
                 </div>
             </div>
 
-            <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY (COMPACTO Y CENTRADO) -->
+            <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
             <div id="panel-boost-netas" class="boost-subpanel" style="display: none;">
                 <div class="boost-layout-centered">
                     <div class="boost-card-compact">
@@ -906,7 +901,6 @@
             </div>
         </div>
 
-        <!-- PIE DE PÁGINA: CONFIANZA Y AVISO LEGAL -->
         <footer class="site-footer">
             <div class="confianza-footer">
                 <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
@@ -948,7 +942,6 @@
                 </div>
             </div>
 
-            <!-- BLOQUE DE CÓDIGO PROMOCIONAL -->
             <div class="form-group" style="background: rgba(11, 14, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fbbf24; margin-bottom: 0;">
                     <input type="checkbox" id="chk-tiene-codigo" style="width: 16px; height: 16px; accent-color: #fbbf24; cursor: pointer;">
@@ -982,7 +975,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE ALERTA -->
     <div id="customAlert" class="custom-alert-overlay">
         <div class="custom-alert-box">
             <h4>Aviso</h4>
@@ -1082,7 +1074,6 @@
             });
         });
 
-        // NAVEGACIÓN ENTRE TIPOS DE BOOST
         const boostTypeBtns = document.querySelectorAll('.boost-type-btn');
         const subpanels = document.querySelectorAll('.boost-subpanel');
 
@@ -1427,4 +1418,157 @@
                 esOferta: false
             };
 
-            descuento
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            document.getElementById('grupo-email').style.display = 'none';
+            document.getElementById('grupo-boost-campos').style.display = 'block';
+
+            refrescarTextoModalPago();
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
+        });
+
+        // Contratar Victorias Netas / Decay
+        document.getElementById('btn-contratar-netas').addEventListener('click', () => {
+            const precio = actualizarNetas();
+            tipoItemActual = 'boost';
+            const liga = document.getElementById('netas-liga').value;
+            const cant = document.getElementById('netas-cantidad').value;
+
+            itemSeleccionado = {
+                titulo: `Victorias Netas / Antidecay (${cant} victorias) - Liga: ${liga}`,
+                precio: precio.toFixed(2),
+                precioOriginalBase: precio.toFixed(2),
+                esOferta: false
+            };
+
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            document.getElementById('grupo-email').style.display = 'none';
+            document.getElementById('grupo-boost-campos').style.display = 'block';
+
+            refrescarTextoModalPago();
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
+        });
+
+        document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
+        document.getElementById('modal-detalles-cerrar').addEventListener('click', () => modalDetalles.classList.remove('active'));
+
+        document.getElementById('btn-ir-a-pago').addEventListener('click', () => {
+            modalDetalles.classList.remove('active');
+            document.getElementById('grupo-email').style.display = 'block';
+            document.getElementById('grupo-boost-campos').style.display = 'none';
+
+            itemSeleccionado.precioOriginalBase = itemSeleccionado.precio;
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            refrescarTextoModalPago();
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
+        });
+
+        document.getElementById('btn-pagar-alias').addEventListener('click', async () => {
+            if(!document.getElementById('chk-terminos').checked) { mostrarAlerta("Debes aceptar los Términos y Condiciones."); return; }
+            const wpp = "59899806108";
+            let mensaje = "";
+            const precioFinalEnvio = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
+
+            if (tipoItemActual === 'boost') {
+                const lid = document.getElementById('input-lol-id').value, disc = document.getElementById('input-discord-user').value;
+                if(!lid || !disc) { mostrarAlerta("Ingresa tu ID de LoL y Discord."); return; }
+                mensaje = `Hola! Quiero contratar: ${itemSeleccionado.titulo}. LoL: ${lid}, Discord: ${disc}. Total: $${precioFinalEnvio}`;
+                await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
+            } else {
+                const mail = document.getElementById('email-cliente').value;
+                if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
+                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
+                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
+            }
+            window.open(`https://wa.me/${wpp}?text=${encodeURIComponent(mensaje)}`, '_blank');
+            modalPago.classList.remove('active');
+        });
+
+        document.getElementById('btn-pagar-paypal').addEventListener('click', async () => {
+            if(!document.getElementById('chk-terminos').checked) { mostrarAlerta("Debes aceptar los Términos y Condiciones."); return; }
+            const precioFinalEnvio = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
+
+            if (tipoItemActual === 'boost') {
+                const lid = document.getElementById('input-lol-id').value, disc = document.getElementById('input-discord-user').value;
+                if(!lid || !disc) { mostrarAlerta("Ingresa tus datos."); return; }
+                await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
+            } else {
+                const mail = document.getElementById('email-cliente').value;
+                if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
+                let mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
+                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
+            }
+            window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
+            modalPago.classList.remove('active');
+        });
+
+        async function cargarCatalogo() {
+            const grid = document.getElementById('grid-cuentas');
+            try {
+                const snapshot = await getDocs(collection(db, "skin"));
+                grid.innerHTML = "";
+                if(snapshot.empty) { grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas disponibles.</p>"; return; }
+                
+                snapshot.forEach(docSnap => {
+                    const c = docSnap.data();
+                    const card = document.createElement('div');
+                    card.className = 'cuenta-card';
+                    card.innerHTML = `
+                        <img src="${c.imageUrl}" class="cuenta-img" alt="Cuenta">
+                        <div class="cuenta-body">
+                            <div>
+                                <span class="cuenta-server">${c.server}</span>
+                                <h3 class="cuenta-titulo">${c.title}</h3>
+                                <div class="cuenta-detalles-info">
+                                    <span>⚔️ Campeones: ${c.championCount}</span>
+                                    <span>🏆 Rango: ${c.currentRank}</span>
+                                    <span>💎 EA: ${c.riotPoints}</span>
+                                </div>
+                            </div>
+                            <div class="cuenta-footer">
+                                <span class="cuenta-precio">USD $${c.price}</span>
+                                <button class="btn-comprar">Comprar</button>
+                            </div>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => {
+                        tipoItemActual = 'cuenta';
+                        itemSeleccionado = { titulo: c.title, precio: c.price, precioOriginalBase: c.price };
+                        document.getElementById('modal-detalles-titulo').textContent = c.title;
+                        document.getElementById('modal-detalles-texto').innerHTML = `
+                            🌐 <b>Servidor:</b> ${c.server}<br>
+                            ⚔️ <b>Campeones:</b> ${c.championCount}<br>
+                            🏆 <b>Rango actual:</b> ${c.currentRank}<br>
+                            💎 <b>EA:</b> ${c.riotPoints}<br><br>
+                            📜 <b>Descripción:</b><br>${(c.descripcionLarga || '').replace(/\n/g, '<br>')}<br><br>
+                            Precio: <b style="color: #fbbf24;">USD $${c.price}</b>
+                        `;
+                        modalDetalles.classList.add('active');
+                    });
+                    grid.appendChild(card);
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        cargarTarifasTienda();
+        cargarCatalogo();
+    </script>
+</body>
+</html>
