@@ -833,6 +833,19 @@
                 </div>
             </div>
 
+            <!-- BLOQUE DE CÓDIGO PROMOCIONAL -->
+            <div class="form-group" style="background: rgba(11, 14, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fbbf24; margin-bottom: 0;">
+                    <input type="checkbox" id="chk-tiene-codigo" style="width: 16px; height: 16px; accent-color: #fbbf24; cursor: pointer;">
+                    <span>¿Tienes un código promocional?</span>
+                </label>
+                <div id="contenedor-input-codigo" style="display: none; margin-top: 10px; display: none; gap: 8px;">
+                    <input type="text" id="input-codigo-promo" placeholder="Ingresa tu código" style="text-transform: uppercase;">
+                    <button type="button" id="btn-aplicar-codigo" style="background: #22c55e; color: white; border: none; padding: 0 16px; border-radius: 8px; font-weight: bold; cursor: pointer;">✓</button>
+                </div>
+                <small id="mensaje-codigo-estado" style="display: block; margin-top: 6px; font-size: 0.75rem;"></small>
+            </div>
+
             <div class="form-group">
                 <label>Términos y Condiciones (Servicios Digitales)</label>
                 <div class="terminos-box">
@@ -1082,10 +1095,8 @@
             if (document.getElementById('chk-streaming').checked) precioTotal += 5;
             if (document.getElementById('chk-offline').checked) precioTotal += 3;
 
-            // Guardamos tanto el precio final como el desglose en el elemento visual
             const spanPrecio = document.getElementById('precio-boost');
             if (esLigaCompleta) {
-                // Si hay oferta de liga completa, recalculamos con los adicionales si aplican pero mostramos el desglose base o completo
                 spanPrecio.innerHTML = htmlPrecioDisplay;
             } else {
                 spanPrecio.textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
@@ -1102,6 +1113,78 @@
         const modalDetalles = document.getElementById('modal-detalles');
         const modalPago = document.getElementById('modal-pago');
         let itemSeleccionado = null, tipoItemActual = '';
+        let descuentoAplicadoPorcentaje = 0;
+
+        function calcularPrecioFinalConCupon(precioBaseNum) {
+            if (descuentoAplicadoPorcentaje > 0) {
+                const rebaja = precioBaseNum * (descuentoAplicadoPorcentaje / 100);
+                return (precioBaseNum - rebaja).toFixed(2);
+            }
+            return precioBaseNum.toFixed(2);
+        }
+
+        document.getElementById('chk-tiene-codigo').addEventListener('change', (e) => {
+            const contenedor = document.getElementById('contenedor-input-codigo');
+            contenedor.style.display = e.target.checked ? 'flex' : 'none';
+            if (!e.target.checked) {
+                descuentoAplicadoPorcentaje = 0;
+                document.getElementById('input-codigo-promo').value = '';
+                document.getElementById('mensaje-codigo-estado').textContent = '';
+                refrescarTextoModalPago();
+            }
+        });
+
+        document.getElementById('btn-aplicar-codigo').addEventListener('click', async () => {
+            const codigoIngresado = document.getElementById('input-codigo-promo').value.trim().toUpperCase();
+            const msgEstado = document.getElementById('mensaje-codigo-estado');
+            if (!codigoIngresado) {
+                msgEstado.style.color = '#ef4444';
+                msgEstado.textContent = "Por favor ingresa un código.";
+                return;
+            }
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "codigosPromo"));
+                let encontrado = false;
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.codigo === codigoIngresado && data.activo) {
+                        encontrado = true;
+                        descuentoAplicadoPorcentaje = data.descuento;
+                    }
+                });
+
+                if (encontrado) {
+                    msgEstado.style.color = '#22c55e';
+                    msgEstado.textContent = `¡Código aplicado con éxito! Descuento del ${descuentoAplicadoPorcentaje}%`;
+                    refrescarTextoModalPago();
+                } else {
+                    descuentoAplicadoPorcentaje = 0;
+                    msgEstado.style.color = '#ef4444';
+                    msgEstado.textContent = "No es un código válido.";
+                    refrescarTextoModalPago();
+                }
+            } catch (err) {
+                msgEstado.style.color = '#ef4444';
+                msgEstado.textContent = "Error al verificar el código.";
+            }
+        });
+
+        function refrescarTextoModalPago() {
+            if (!itemSeleccionado) return;
+            const precioBaseNum = parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio);
+            const precioFinalStr = calcularPrecioFinalConCupon(precioBaseNum);
+
+            let textoHtmlModal = `Servicio: <b>${itemSeleccionado.titulo}</b><br>`;
+            if (descuentoAplicadoPorcentaje > 0) {
+                textoHtmlModal += `Total: <span style="text-decoration: line-through; color: #94a3b8;">USD $${precioBaseNum.toFixed(2)}</span> <b style="color: #22c55e;">USD $${precioFinalStr}</b> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px;">¡${descuentoAplicadoPorcentaje}% OFF Cupón!</span>`;
+            } else if (itemSeleccionado.esOferta) {
+                textoHtmlModal += `Total: <span style="text-decoration: line-through; color: #94a3b8;">USD $${itemSeleccionado.precioOriginal}</span> <b style="color: #22c55e;">USD $${precioFinalStr}</b> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px;">¡Oferta Aplicada!</span>`;
+            } else {
+                textoHtmlModal += `Total: <b style="color: #fbbf24;">USD $${precioFinalStr}</b>`;
+            }
+            document.getElementById('modal-texto').innerHTML = textoHtmlModal;
+        }
 
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
@@ -1128,21 +1211,21 @@
             itemSeleccionado = {
                 titulo: textoTituloServicio,
                 precio: precio.toFixed(2),
+                precioOriginalBase: precio.toFixed(2),
                 esOferta: esLigaCompleta,
                 precioOriginal: esLigaCompleta ? (precio / 0.9).toFixed(2) : null
             };
 
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
             document.getElementById('grupo-email').style.display = 'none';
             document.getElementById('grupo-boost-campos').style.display = 'block';
 
-            let textoHtmlModal = `Servicio: <b>${itemSeleccionado.titulo}</b><br>`;
-            if (itemSeleccionado.esOferta) {
-                textoHtmlModal += `Total: <span style="text-decoration: line-through; color: #94a3b8;">USD $${itemSeleccionado.precioOriginal}</span> <b style="color: #22c55e;">USD $${itemSeleccionado.precio}</b> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px;">¡Oferta Aplicada!</span>`;
-            } else {
-                textoHtmlModal += `Total: <b style="color: #fbbf24;">USD $${itemSeleccionado.precio}</b>`;
-            }
-
-            document.getElementById('modal-texto').innerHTML = textoHtmlModal;
+            refrescarTextoModalPago();
             document.getElementById('chk-terminos').checked = false;
             modalPago.classList.add('active');
         });
@@ -1154,7 +1237,15 @@
             modalDetalles.classList.remove('active');
             document.getElementById('grupo-email').style.display = 'block';
             document.getElementById('grupo-boost-campos').style.display = 'none';
-            document.getElementById('modal-texto').innerHTML = `Compra: <b>${itemSeleccionado.titulo}</b><br>Precio: <b style="color: #fbbf24;">USD $${itemSeleccionado.precio}</b>`;
+
+            itemSeleccionado.precioOriginalBase = itemSeleccionado.precio;
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            refrescarTextoModalPago();
             document.getElementById('chk-terminos').checked = false;
             modalPago.classList.add('active');
         });
@@ -1163,17 +1254,18 @@
             if(!document.getElementById('chk-terminos').checked) { mostrarAlerta("Debes aceptar los Términos y Condiciones."); return; }
             const wpp = "59899806108";
             let mensaje = "";
+            const precioFinalEnvio = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
 
             if (tipoItemActual === 'boost') {
                 const lid = document.getElementById('input-lol-id').value, disc = document.getElementById('input-discord-user').value;
                 if(!lid || !disc) { mostrarAlerta("Ingresa tu ID de LoL y Discord."); return; }
-                mensaje = `Hola! Quiero contratar: ${itemSeleccionado.titulo}. LoL: ${lid}, Discord: ${disc}. Total: $${itemSeleccionado.precio}`;
-                await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${itemSeleccionado.precio}`, fecha: new Date().toISOString() }).catch(()=>{});
+                mensaje = `Hola! Quiero contratar: ${itemSeleccionado.titulo}. LoL: ${lid}, Discord: ${disc}. Total: $${precioFinalEnvio}`;
+                await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
-                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${itemSeleccionado.precio}. Correo: ${mail}`;
-                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${itemSeleccionado.precio}`, fecha: new Date().toISOString() }).catch(()=>{});
+                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
+                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://wa.me/${wpp}?text=${encodeURIComponent(mensaje)}`, '_blank');
             modalPago.classList.remove('active');
@@ -1181,17 +1273,19 @@
 
         document.getElementById('btn-pagar-paypal').addEventListener('click', async () => {
             if(!document.getElementById('chk-terminos').checked) { mostrarAlerta("Debes aceptar los Términos y Condiciones."); return; }
+            const precioFinalEnvio = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
+
             if (tipoItemActual === 'boost') {
                 const lid = document.getElementById('input-lol-id').value, disc = document.getElementById('input-discord-user').value;
                 if(!lid || !disc) { mostrarAlerta("Ingresa tus datos."); return; }
-                await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${itemSeleccionado.precio}`, fecha: new Date().toISOString() }).catch(()=>{});
+                await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
-                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${itemSeleccionado.precio}. Correo: ${mail}`;
-                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${itemSeleccionado.precio}`, fecha: new Date().toISOString() }).catch(()=>{});
+                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
+                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
-            window.open(`https://paypal.me/agustinportii/${itemSeleccionado.precio}USD`, '_blank');
+            window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
             modalPago.classList.remove('active');
         });
 
@@ -1226,7 +1320,7 @@
                     `;
                     card.addEventListener('click', () => {
                         tipoItemActual = 'cuenta';
-                        itemSeleccionado = { titulo: c.title, precio: c.price };
+                        itemSeleccionado = { titulo: c.title, precio: c.price, precioOriginalBase: c.price };
                         document.getElementById('modal-detalles-titulo').textContent = c.title;
                         document.getElementById('modal-detalles-texto').innerHTML = `
                             🌐 <b>Servidor:</b> ${c.server}<br>
