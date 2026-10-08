@@ -628,6 +628,22 @@
         .btn-alert-ok:hover {
             background: #f59e0b;
         }
+
+        /* Estilo del pie de página legal */
+        .site-footer {
+            width: 100%;
+            max-width: 1250px;
+            margin: 60px auto 20px auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+        }
+        .site-footer p {
+            font-size: 0.78rem;
+            color: #8a99ad;
+            line-height: 1.6;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -777,6 +793,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- AVISO LEGAL INFERIOR (Visible en todas las pestañas dentro del contenedor principal) -->
+        <footer class="site-footer">
+            <p><strong>Aviso Legal:</strong> Los servicios de boosting y la compraventa de cuentas de League of Legends infringen las Condiciones de Uso de Riot Games. Al contratar o adquirir cualquiera de estos servicios, el usuario acepta bajo su absoluta responsabilidad los riesgos derivados, incluyendo suspensiones o baneos de cuentas. Nuestra plataforma no se hace responsable por sanciones aplicadas por el sistema de juego ni por el mal uso que se le dé a las cuentas tras su entrega.</p>
+        </footer>
     </div>
 
     <!-- MODAL DE DETALLES DE CUENTA -->
@@ -1167,6 +1188,7 @@
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
+                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${itemSeleccionado.precio}. Correo: ${mail}`;
                 await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${itemSeleccionado.precio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://paypal.me/agustinportii/${itemSeleccionado.precio}USD`, '_blank');
