@@ -162,16 +162,28 @@
             width: 100%;
         }
 
-        .boost-layout-single {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 20px;
-            align-items: start;
+        /* Contenedor centrado y compacto para Posicionamiento y Netas */
+        .boost-layout-centered {
+            display: flex;
+            justify-content: center;
             width: 100%;
         }
 
+        .boost-card-compact {
+            background: rgba(18, 20, 28, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 500px;
+        }
+
         @media (max-width: 1024px) {
-            .boost-layout, .boost-layout-single {
+            .boost-layout {
                 grid-template-columns: 1fr;
             }
         }
@@ -810,12 +822,12 @@
                 </div>
             </div>
 
-            <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO -->
+            <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO (COMPACTO Y CENTRADO) -->
             <div id="panel-boost-posicionamiento" class="boost-subpanel" style="display: none;">
-                <div class="boost-layout-single">
-                    <div class="boost-card">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #fbbf24; text-transform: uppercase;">Partidas de Posicionamiento</h3>
-                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
+                <div class="boost-layout-centered">
+                    <div class="boost-card-compact">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #fbbf24; text-transform: uppercase;">Partidas de Posicionamiento</h3>
+                        <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
                         
                         <div class="form-group">
                             <label>¿Cuántas partidas de posicionamiento quieres?</label>
@@ -846,22 +858,22 @@
                                 <option value="Maestro">Maestro o superior</option>
                             </select>
                         </div>
-                    </div>
 
-                    <div class="boost-card">
-                        <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Resumen del Pedido</h3>
-                        <div class="boost-total">USD <span id="precio-pos">0.00</span></div>
-                        <button class="btn-contratar" id="btn-contratar-pos">Contratar servicio</button>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
+                            <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
+                            <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-pos">0.00</span></div>
+                            <button class="btn-contratar" id="btn-contratar-pos">Contratar servicio</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
+            <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY (COMPACTO Y CENTRADO) -->
             <div id="panel-boost-netas" class="boost-subpanel" style="display: none;">
-                <div class="boost-layout-single">
-                    <div class="boost-card">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #fbbf24; text-transform: uppercase;">Victorias Netas (Antidecay)</h3>
-                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
+                <div class="boost-layout-centered">
+                    <div class="boost-card-compact">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #fbbf24; text-transform: uppercase;">Victorias Netas (Antidecay)</h3>
+                        <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
                         
                         <div class="form-group">
                             <label>Selecciona tu Liga Actual</label>
@@ -883,12 +895,12 @@
                                 <option value="5">5 Victorias</option>
                             </select>
                         </div>
-                    </div>
 
-                    <div class="boost-card">
-                        <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Resumen del Pedido</h3>
-                        <div class="boost-total">USD <span id="precio-netas">0.00</span></div>
-                        <button class="btn-contratar" id="btn-contratar-netas">Contratar servicio</button>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
+                            <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
+                            <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-netas">0.00</span></div>
+                            <button class="btn-contratar" id="btn-contratar-netas">Contratar servicio</button>
+                        </div>
                     </div>
                 </div>
             </div>
