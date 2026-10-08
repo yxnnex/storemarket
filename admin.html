@@ -144,6 +144,30 @@
             width: fit-content;
         }
 
+        /* Estructura para Tarifas de Victorias (Posicionamiento y Netas) */
+        .tabla-victorias-admin {
+            display: grid;
+            grid-template-columns: 2.5fr 2fr 1fr;
+            gap: 15px;
+            padding: 0 10px 8px 10px;
+            font-size: 0.75rem;
+            color: #8a99ad;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .fila-victoria-admin {
+            display: grid;
+            grid-template-columns: 2.5fr 2fr 1fr;
+            align-items: center;
+            gap: 15px;
+            background: rgba(11, 14, 20, 0.5);
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+        }
+
         /* Estructura compacta para Códigos Promo */
         .codigos-layout {
             display: grid;
@@ -191,6 +215,7 @@
             <button class="tab-btn" onclick="cambiarTab('editar', event)">Editar cuentas</button>
             <button class="tab-btn" onclick="cambiarTab('historial', event)">Historial</button>
             <button class="tab-btn" onclick="cambiarTab('tarifas', event)">Tarifas de Boost</button>
+            <button class="tab-btn" onclick="cambiarTab('victorias', event)">Tarifas Posicionamiento y Netas</button>
             <button class="tab-btn" onclick="cambiarTab('codigos', event)">Códigos Promo</button>
         </div>
 
@@ -243,6 +268,25 @@
                 <form id="form-guardar-tarifas">
                     <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;"></div>
                     <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold; padding: 14px;">Guardar Todas las Tarifas en Firebase</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- NUEVA SECCIÓN: TARIFAS POSICIONAMIENTO Y VICTORIAS NETAS -->
+        <div id="sec-victorias" class="admin-section">
+            <div class="admin-box-full" style="border-color: rgba(251, 191, 36, 0.3);">
+                <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas por Partida / Victoria (Posicionamiento y Antidecay)</h2>
+                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Define el valor unitario por victoria aplicable tanto para las partidas de posicionamiento como para las victorias netas (antidecay) según la liga de referencia.</p>
+                <form id="form-guardar-victorias">
+                    <div class="liga-tarjeta" style="margin-bottom: 20px;">
+                        <div class="tabla-victorias-admin">
+                            <span>Liga / Nivel</span>
+                            <span>Valor por Victoria (USD $)</span>
+                            <span>Estado</span>
+                        </div>
+                        <div id="grilla-victorias-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
+                    </div>
+                    <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold; padding: 14px;">Guardar Tarifas de Victorias en Firebase</button>
                 </form>
             </div>
         </div>
@@ -303,6 +347,7 @@
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
                 renderizarGrillaAdmin();
+                renderizarGrillaVictorias();
                 cargarServiciosContratados();
                 cargarCuentasAdmin();
                 cargarCodigosAdmin();
@@ -444,8 +489,50 @@
                     }
                 });
                 await setDoc(doc(db, "configuracion", "tarifasBoost"), nuevasTarifas);
-                mostrarToast("¡Tarifas de Diamante guardadas con éxito!", "exito");
+                mostrarToast("¡Tarifas de Boost guardadas con éxito!", "exito");
             } catch (err) { mostrarToast("Error al guardar tarifas.", "error"); }
+        });
+
+        // GESTIÓN DE TARIFAS DE VICTORIAS (POSICIONAMIENTO Y NETAS)
+        const categoriasVictorias = [
+            { id: "hierro", label: "Hierro / Bronce / Plata", def: 2.5 },
+            { id: "platino", label: "Platino / Esmeralda", def: 3.2 },
+            { id: "diamante", label: "Diamante", def: 3.5 },
+            { id: "maestro_plus", label: "Maestro / Gran Maestro / Challenger", def: 4.5 }
+        ];
+
+        async function renderizarGrillaVictorias() {
+            const container = document.getElementById('grilla-victorias-container');
+            let tarifasVitGuardadas = {};
+            try {
+                const docSnap = await getDoc(doc(db, "configuracion", "tarifasVictorias"));
+                if (docSnap.exists()) tarifasVitGuardadas = docSnap.data();
+            } catch(e) {}
+
+            let html = "";
+            categoriasVictorias.forEach(cat => {
+                const valorActual = tarifasVitGuardadas[cat.id] !== undefined ? tarifasVitGuardadas[cat.id] : cat.def;
+                html += `
+                    <div class="fila-victoria-admin">
+                        <div><strong style="font-size: 0.9rem; color: #fff;">${cat.label}</strong></div>
+                        <div><input type="number" step="0.25" id="vit_${cat.id}" value="${valorActual}" class="input-precio-juego" required></div>
+                        <div><span class="estado-listo">✓ Activo</span></div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        document.getElementById('form-guardar-victorias').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                let nuevasTarifasVit = {};
+                categoriasVictorias.forEach(cat => {
+                    nuevasTarifasVit[cat.id] = parseFloat(document.getElementById(`vit_${cat.id}`).value);
+                });
+                await setDoc(doc(db, "configuracion", "tarifasVictorias"), nuevasTarifasVit);
+                mostrarToast("¡Tarifas de Victorias guardadas con éxito!", "exito");
+            } catch (err) { mostrarToast("Error al guardar tarifas de victorias.", "error"); }
         });
 
         // GESTIÓN DE CÓDIGOS PROMOCIONALES EN ADMIN
