@@ -144,7 +144,6 @@
             width: fit-content;
         }
 
-        /* Estructura para Tarifas de Victorias (Posicionamiento y Netas) */
         .tabla-victorias-admin {
             display: grid;
             grid-template-columns: 2.5fr 2fr 1fr;
@@ -168,7 +167,6 @@
             margin-bottom: 10px;
         }
 
-        /* Estructura compacta para Códigos Promo */
         .codigos-layout {
             display: grid;
             grid-template-columns: 360px 1fr;
@@ -272,7 +270,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN: TARIFAS POSICIONAMIENTO Y VICTORIAS NETAS -->
         <div id="sec-victorias" class="admin-section">
             <div class="admin-box-full" style="border-color: rgba(251, 191, 36, 0.3);">
                 <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas por Partida / Victoria (Posicionamiento y Antidecay)</h2>
@@ -291,7 +288,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN CÓDIGOS PROMOCIONALES (COMPACTO DOS COLUMNAS) -->
         <div id="sec-codigos" class="admin-section">
             <div class="codigos-layout">
                 <div class="admin-box" style="margin-bottom: 0;">
@@ -378,6 +374,38 @@
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+
+        // PUBLICAR O EDITAR CUENTA EN LA TIENDA
+        document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const titulo = document.getElementById('admin-titulo').value.trim();
+            const server = document.getElementById('admin-server').value;
+            const championCount = document.getElementById('admin-campeones').value.trim();
+            const currentRank = document.getElementById('admin-rango').value.trim();
+            const riotPoints = document.getElementById('admin-ea').value.trim();
+            const price = parseFloat(document.getElementById('admin-precio').value);
+            const imageUrl = document.getElementById('admin-imagen').value.trim();
+            const descripcionLarga = document.getElementById('admin-descripcion-larga').value.trim();
+
+            try {
+                await addDoc(collection(db, "skin"), {
+                    title: titulo,
+                    server,
+                    championCount,
+                    currentRank,
+                    riotPoints,
+                    price,
+                    imageUrl,
+                    descripcionLarga,
+                    fecha: new Date().toISOString()
+                });
+                mostrarToast("¡Cuenta publicada con éxito!", "exito");
+                document.getElementById('form-subir-cuenta').reset();
+                cargarCuentasAdmin();
+            } catch (err) {
+                mostrarToast("Error al publicar la cuenta.", "error");
+            }
+        });
 
         const ligasLista = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante", "Maestro"];
         const tramosEstandar = [
@@ -493,7 +521,6 @@
             } catch (err) { mostrarToast("Error al guardar tarifas.", "error"); }
         });
 
-        // GESTIÓN DE TARIFAS DE VICTORIAS (POSICIONAMIENTO Y NETAS)
         const categoriasVictorias = [
             { id: "hierro", label: "Hierro / Bronce / Plata", def: 2.5 },
             { id: "platino", label: "Platino / Esmeralda", def: 3.2 },
@@ -535,7 +562,6 @@
             } catch (err) { mostrarToast("Error al guardar tarifas de victorias.", "error"); }
         });
 
-        // GESTIÓN DE CÓDIGOS PROMOCIONALES EN ADMIN
         document.getElementById('form-crear-codigo').addEventListener('submit', async (e) => {
             e.preventDefault();
             const codigo = document.getElementById('admin-codigo-texto').value.trim().toUpperCase();
