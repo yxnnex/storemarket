@@ -272,7 +272,7 @@
             </div>
         </div>
 
-        <!-- NUEVA SECCIÓN: TARIFAS POSICIONAMIENTO Y VICTORIAS NETAS -->
+        <!-- SECCIÓN: TARIFAS POSICIONAMIENTO Y VICTORIAS NETAS -->
         <div id="sec-victorias" class="admin-section">
             <div class="admin-box-full" style="border-color: rgba(251, 191, 36, 0.3);">
                 <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas por Partida / Victoria (Posicionamiento y Antidecay)</h2>
@@ -431,7 +431,7 @@
                             <div class="fila-tarifa-admin">
                                 <div><strong style="font-size: 0.85rem; color: #fff;">${tramo.label}</strong></div>
                                 <div><span style="font-size: 0.82rem; color: #cbd5e1;"><b>${tramo.victorias}</b> victorias (para 100 LP)</span></div>
-                                <div><input type="number" step="0.25" id="tarifa_${key}" value="${precioJuegoGuardado}" oninput="calcularTotalAdmin('${key}', ${tramo.victorias})" class="input-precio-juego" required></div>
+                                <div><input type="number" step="any" id="tarifa_${key}" value="${precioJuegoGuardado}" oninput="calcularTotalAdmin('${key}', ${tramo.victorias})" class="input-precio-juego" required></div>
                                 <div><strong id="total_${key}" style="font-size: 0.95rem; color: #22c55e;">$${total100Lp}</strong></div>
                                 <div><span class="estado-listo">✓ Listo</span></div>
                             </div>
@@ -449,7 +449,7 @@
                                 <div class="fila-tarifa-admin">
                                     <div><strong style="font-size: 0.85rem; color: #fff; padding-left: 10px;">↳ ${item.label}</strong></div>
                                     <div><span style="font-size: 0.82rem; color: #cbd5e1;"><b>${item.vit}</b> victorias (para 100 LP)</span></div>
-                                    <div><input type="number" step="0.25" id="tarifa_${key}" value="${precioJuegoGuardado}" oninput="calcularTotalAdmin('${key}', ${item.vit})" class="input-precio-juego" required></div>
+                                    <div><input type="number" step="any" id="tarifa_${key}" value="${precioJuegoGuardado}" oninput="calcularTotalAdmin('${key}', ${item.vit})" class="input-precio-juego" required></div>
                                     <div><strong id="total_${key}" style="font-size: 0.95rem; color: #22c55e;">$${total100Lp}</strong></div>
                                     <div><span class="estado-listo">✓ Listo</span></div>
                                 </div>
@@ -515,7 +515,7 @@
                 html += `
                     <div class="fila-victoria-admin">
                         <div><strong style="font-size: 0.9rem; color: #fff;">${cat.label}</strong></div>
-                        <div><input type="number" step="0.25" id="vit_${cat.id}" value="${valorActual}" class="input-precio-juego" required></div>
+                        <div><input type="number" step="any" id="vit_${cat.id}" value="${valorActual}" class="input-precio-juego" required></div>
                         <div><span class="estado-listo">✓ Activo</span></div>
                     </div>
                 `;
