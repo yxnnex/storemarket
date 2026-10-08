@@ -402,3 +402,45 @@ select, input {
 .btn-alert-ok:hover {
     background: #f59e0b;
 }
+
+/* ========================================== */
+/* ESTILOS PARA PRECIOS EN OFERTA (Tachado + Nuevo) */
+/* ========================================== */
+.oferta-precio-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 10px 0;
+}
+
+.oferta-badge {
+    display: inline-block;
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: fit-content;
+}
+
+.oferta-precios-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.precio-original-tachado {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.precio-final-descuento {
+    font-size: 1.5rem;
+    color: #fbbf24;
+    font-weight: bold;
+}
