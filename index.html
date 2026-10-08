@@ -987,7 +987,6 @@
             const lDes = document.getElementById('liga-deseada').value;
             const divDeseadaSelect = document.getElementById('division-deseada');
             
-            // Ocultar/bloquear selector de división si se selecciona Maestro
             if (lDes === "Maestro") {
                 divDeseadaSelect.value = "1";
                 divDeseadaSelect.disabled = true;
@@ -1008,10 +1007,20 @@
             const diff = scoreDeseado - scoreActual;
 
             let precioTotal = 0;
+            const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
+
             if (diff > 0) {
                 let ligIter = lAct, divIter = parseInt(dAct);
                 for (let i = 0; i < diff; i++) {
-                    precioTotal += obtenerPrecioPorDivision(ligIter, tramoLp);
+                    const costoDiv = obtenerPrecioPorDivision(ligIter, tramoLp);
+                    
+                    if (i === 0 && lpActualInput > 0 && lpActualInput < 100) {
+                        const proporcionRestante = (100 - lpActualInput) / 100;
+                        precioTotal += costoDiv * proporcionRestante;
+                    } else {
+                        precioTotal += costoDiv;
+                    }
+
                     divIter--;
                     if (divIter < 1) {
                         divIter = 4;
@@ -1052,7 +1061,6 @@
             document.getElementById(id).addEventListener('input', actualizarBoost);
         });
 
-        // Modales y pasarela de pago
         const modalDetalles = document.getElementById('modal-detalles');
         const modalPago = document.getElementById('modal-pago');
         let itemSeleccionado = null, tipoItemActual = '';
