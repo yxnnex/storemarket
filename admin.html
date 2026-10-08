@@ -52,6 +52,10 @@
         .btn-eliminar { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
         .btn-eliminar:hover { background: rgba(239, 68, 68, 0.3); color: #ffffff; }
 
+        .btn-estado { padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; border: none; font-weight: bold; }
+        .btn-activo { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .btn-inactivo { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
         .liga-tarjeta {
             background: rgba(18, 20, 28, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -173,6 +177,7 @@
             <button class="tab-btn" onclick="cambiarTab('editar', event)">Editar cuentas</button>
             <button class="tab-btn" onclick="cambiarTab('historial', event)">Historial</button>
             <button class="tab-btn" onclick="cambiarTab('tarifas', event)">Tarifas de Boost</button>
+            <button class="tab-btn" onclick="cambiarTab('codigos', event)">Códigos Promo</button>
         </div>
 
         <div id="sec-publicar" class="admin-section activa">
@@ -227,6 +232,27 @@
                 </form>
             </div>
         </div>
+
+        <!-- SECCIÓN CÓDIGOS PROMOCIONALES -->
+        <div id="sec-codigos" class="admin-section">
+            <div class="admin-box">
+                <h2>Crear Código Promocional</h2>
+                <form id="form-crear-codigo">
+                    <div class="form-group"><label>Código (ej: EVENTO5)</label><input type="text" id="admin-codigo-texto" required style="text-transform: uppercase;"></div>
+                    <div class="form-group"><label>Descuento (%)</label><input type="number" min="1" max="100" id="admin-codigo-descuento" required placeholder="5"></div>
+                    <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold;">Guardar Código</button>
+                </form>
+            </div>
+            <div class="admin-box-full">
+                <h2>Códigos Promocionales Activos</h2>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Código</th><th>Descuento</th><th>Estado</th><th>Acciones</th></tr></thead>
+                        <tbody id="tabla-codigos-admin"><tr><td colspan="4" style="text-align: center; color: #8a99ad;">Cargando...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="toast-container" id="toast-container"></div>
@@ -263,6 +289,7 @@
                 renderizarGrillaAdmin();
                 cargarServiciosContratados();
                 cargarCuentasAdmin();
+                cargarCodigosAdmin();
             } else {
                 document.getElementById('login-overlay').style.display = 'flex';
                 document.getElementById('admin-content').style.display = 'none';
@@ -405,6 +432,42 @@
             } catch (err) { mostrarToast("Error al guardar tarifas.", "error"); }
         });
 
+        // GESTIÓN DE CÓDIGOS PROMOCIONALES EN ADMIN
+        document.getElementById('form-crear-codigo').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const codigo = document.getElementById('admin-codigo-texto').value.trim().toUpperCase();
+            const descuento = parseFloat(document.getElementById('admin-codigo-descuento').value);
+            try {
+                await addDoc(collection(db, "codigosPromo"), { codigo, descuento, activo: true });
+                mostrarToast("¡Código creado con éxito!", "exito");
+                document.getElementById('form-crear-codigo').reset();
+                cargarCodigosAdmin();
+            } catch (err) { mostrarToast("Error al crear código.", "error"); }
+        });
+
+        async function cargarCodigosAdmin() {
+            const tabla = document.getElementById('tabla-codigos-admin');
+            try {
+                const snapshot = await getDocs(collection(db, "codigosPromo"));
+                if (snapshot.empty) { tabla.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #8a99ad;">No hay códigos creados.</td></tr>`; return; }
+                let html = "";
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const estadoBtn = data.activo !== false ? `<button class="btn-estado btn-activo" onclick="toggleEstadoCodigo('${docSnap.id}', false)">Activo</button>` : `<button class="btn-estado btn-inactivo" onclick="toggleEstadoCodigo('${docSnap.id}', true)">Inactivo</button>`;
+                    html += `<tr><td><b>${data.codigo}</b></td><td style="color: #fbbf24;">${data.descuento}%</td><td>${estadoBtn}</td><td><button class="btn-eliminar" onclick="eliminarItem('codigosPromo', '${docSnap.id}')">Eliminar</button></td></tr>`;
+                });
+                tabla.innerHTML = html;
+            } catch(e) {}
+        }
+
+        window.toggleEstadoCodigo = async function(id, nuevoEstado) {
+            try {
+                await updateDoc(doc(db, "codigosPromo", id), { activo: nuevoEstado });
+                mostrarToast("Estado actualizado", "exito");
+                cargarCodigosAdmin();
+            } catch (e) { mostrarToast("Error al actualizar", "error"); }
+        }
+
         async function cargarCuentasAdmin() {
             const tabla = document.getElementById('tabla-cuentas-admin');
             try {
@@ -443,6 +506,7 @@
                 mostrarToast("Registro eliminado", "exito");
                 cargarCuentasAdmin();
                 cargarServiciosContratados();
+                if(col === 'codigosPromo') cargarCodigosAdmin();
             }
         }
     </script>
