@@ -465,18 +465,6 @@
             padding-top: 12px;
         }
 
-        .cuenta-precio-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .cuenta-precio-original {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            text-decoration: line-through;
-        }
-
         .cuenta-precio {
             font-size: 1.1rem;
             font-weight: bold;
@@ -784,7 +772,7 @@
 
                     <div id="promo-banner" class="promo-banner"></div>
 
-                    <div class="boost-total">USD $<span id="precio-boost">0.00</span></div>
+                    <div class="boost-total">USD <span id="precio-boost">0.00</span></div>
                     <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
                 </div>
             </div>
@@ -1008,7 +996,7 @@
 
             const dAct = divActualSelect.value;
             const dDes = divDeseadaSelect.value;
-            const tramoLpSelect = document.getElementById('lp-ganancia').value; // Ej: "17_19", "20_24", "25_30"
+            const tramoLpSelect = document.getElementById('lp-ganancia').value; 
             
             let lpPromedioVictoria = 27; 
             if (tramoLpSelect === "17_19") {
@@ -1048,25 +1036,40 @@
             const promoBanner = document.getElementById('promo-banner');
             const btnContratar = document.getElementById('btn-contratar-boost');
 
+            let htmlPrecioDisplay = "";
+
             if (esLigaCompleta) {
+                let precioOriginal = precioTotal;
                 let desc = precioTotal * 0.10;
                 precioTotal -= desc;
                 let siguienteLiga = ligasOrden[ligasOrden.indexOf(lAct) + 1] || "la siguiente liga";
-                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso en la misma liga, ¡a un paso de <b>${siguienteLiga}</b>! Aprovecha el descuento especial.`;
+                
+                promoBanner.innerHTML = `🚀 <b>¡OFERTA LIGA COMPLETA!</b><br>Estás contratando un impulso hasta la siguiente liga (<b>${siguienteLiga}</b>) con descuento aplicado.`;
                 promoBanner.style.display = "block";
                 btnContratar.classList.add('promo-active');
                 btnContratar.textContent = `¡Aprovechar Oferta de ${lAct}!`;
+
+                htmlPrecioDisplay = `<span style="text-decoration: line-through; color: #94a3b8; font-size: 1.1rem; margin-right: 10px;">USD $${precioOriginal.toFixed(2)}</span> <span style="color: #22c55e;">USD $${precioTotal.toFixed(2)}</span> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 5px;">¡10% OFF!</span>`;
             } else {
                 promoBanner.style.display = "none";
                 btnContratar.classList.remove('promo-active');
                 btnContratar.textContent = "Contratar servicio";
+                htmlPrecioDisplay = `USD $${precioTotal.toFixed(2)}`;
             }
 
             if (modoSeleccionado === 'duo') precioTotal *= 1.3;
             if (document.getElementById('chk-streaming').checked) precioTotal += 5;
             if (document.getElementById('chk-offline').checked) precioTotal += 3;
 
-            document.getElementById('precio-boost').textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
+            // Guardamos tanto el precio final como el desglose en el elemento visual
+            const spanPrecio = document.getElementById('precio-boost');
+            if (esLigaCompleta) {
+                // Si hay oferta de liga completa, recalculamos con los adicionales si aplican pero mostramos el desglose base o completo
+                spanPrecio.innerHTML = htmlPrecioDisplay;
+            } else {
+                spanPrecio.textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
+            }
+
             return precioTotal > 0 ? precioTotal : 0;
         }
 
@@ -1091,15 +1094,34 @@
             
             const origenTexto = lAct === "Maestro" ? "Maestro" : `${lAct} ${numARomano(document.getElementById('division-actual').value)}`;
             const destinoTexto = lDes === "Maestro" ? "Maestro" : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
+            const siguienteLigaNombre = ligasOrden[ligasOrden.indexOf(lAct) + 1] || "la siguiente liga";
+
+            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual').value === "4" && document.getElementById('division-deseada').value === "1" && lAct !== "Maestro");
+
+            let textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`;
+            
+            if (esLigaCompleta) {
+                textoTituloServicio = `Boost (${modoTexto}) Liga Completa de ${origenTexto} hasta ${siguienteLigaNombre}`;
+            }
 
             itemSeleccionado = {
-                titulo: `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`,
-                precio: precio.toFixed(2)
+                titulo: textoTituloServicio,
+                precio: precio.toFixed(2),
+                esOferta: esLigaCompleta,
+                precioOriginal: esLigaCompleta ? (precio / 0.9).toFixed(2) : null
             };
 
             document.getElementById('grupo-email').style.display = 'none';
             document.getElementById('grupo-boost-campos').style.display = 'block';
-            document.getElementById('modal-texto').innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total: <b style="color: #fbbf24;">USD $${itemSeleccionado.precio}</b>`;
+
+            let textoHtmlModal = `Servicio: <b>${itemSeleccionado.titulo}</b><br>`;
+            if (itemSeleccionado.esOferta) {
+                textoHtmlModal += `Total: <span style="text-decoration: line-through; color: #94a3b8;">USD $${itemSeleccionado.precioOriginal}</span> <b style="color: #22c55e;">USD $${itemSeleccionado.precio}</b> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px;">¡Oferta Aplicada!</span>`;
+            } else {
+                textoHtmlModal += `Total: <b style="color: #fbbf24;">USD $${itemSeleccionado.precio}</b>`;
+            }
+
+            document.getElementById('modal-texto').innerHTML = textoHtmlModal;
             document.getElementById('chk-terminos').checked = false;
             modalPago.classList.add('active');
         });
@@ -1162,19 +1184,6 @@
                     const c = docSnap.data();
                     const card = document.createElement('div');
                     card.className = 'cuenta-card';
-                    
-                    // Lógica para mostrar precio original tachado si tiene descuento (originalPrice o oldPrice)
-                    let htmlPrecios = `<span class="cuenta-precio">USD $${c.price}</span>`;
-                    const precioOriginal = c.originalPrice || c.oldPrice;
-                    if (precioOriginal && parseFloat(precioOriginal) > parseFloat(c.price)) {
-                        htmlPrecios = `
-                            <div class="cuenta-precio-container">
-                                <span class="cuenta-precio-original">USD $${precioOriginal}</span>
-                                <span class="cuenta-precio">USD $${c.price}</span>
-                            </div>
-                        `;
-                    }
-
                     card.innerHTML = `
                         <img src="${c.imageUrl}" class="cuenta-img" alt="Cuenta">
                         <div class="cuenta-body">
@@ -1188,7 +1197,7 @@
                                 </div>
                             </div>
                             <div class="cuenta-footer">
-                                ${htmlPrecios}
+                                <span class="cuenta-precio">USD $${c.price}</span>
                                 <button class="btn-comprar">Comprar</button>
                             </div>
                         </div>
