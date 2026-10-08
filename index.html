@@ -257,6 +257,11 @@
             box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
         }
 
+        select:disabled, input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .lp-gain-container {
             margin-top: 15px;
             padding-top: 15px;
@@ -966,12 +971,9 @@
         function obtenerPrecioPorDivision(liga, tramoLp) {
             const key = `${liga.toLowerCase()}_${tramoLp}`;
             if (tarifasFirebase[key] !== undefined) {
-                // tarifasFirebase[key] es el precio por juego/partida configurado en el admin.
-                // Multiplicamos por las victorias requeridas (6 para 17-19, 5 para 20-24, 4 para 25-30) para obtener el total por división.
                 const victoriasReq = tramoLp === "17_19" ? 6 : (tramoLp === "20_24" ? 5 : 4);
                 return tarifasFirebase[key] * victoriasReq;
             }
-            // Respaldos por defecto en caso de no haber datos cargados
             if (liga === "Hierro" || liga === "Bronce") return tramoLp === "17_19" ? 6 : (tramoLp === "20_24" ? 5 : 4);
             if (liga === "Plata" || liga === "Oro") return tramoLp === "17_19" ? 9 : (tramoLp === "20_24" ? 7.5 : 6);
             if (liga === "Platino") return tramoLp === "17_19" ? 12 : (tramoLp === "20_24" ? 10 : 8);
@@ -983,13 +985,23 @@
             const lAct = document.getElementById('liga-actual').value;
             const dAct = document.getElementById('division-actual').value;
             const lDes = document.getElementById('liga-deseada').value;
-            const dDes = document.getElementById('division-deseada').value;
+            const divDeseadaSelect = document.getElementById('division-deseada');
+            
+            // Ocultar/bloquear selector de división si se selecciona Maestro
+            if (lDes === "Maestro") {
+                divDeseadaSelect.value = "1";
+                divDeseadaSelect.disabled = true;
+            } else {
+                divDeseadaSelect.disabled = false;
+            }
+
+            const dDes = divDeseadaSelect.value;
             const tramoLp = document.getElementById('lp-ganancia').value;
 
             document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
             document.getElementById('txt-actual').textContent = `${lAct} Div. ${dAct}`;
             document.getElementById('img-deseado').src = rangosEmblemas[lDes] || "Hierro.png";
-            document.getElementById('txt-deseado').textContent = `${lDes} Div. ${dDes}`;
+            document.getElementById('txt-deseado').textContent = lDes === "Maestro" ? "Maestro" : `${lDes} Div. ${dDes}`;
 
             const scoreActual = (valoresLigas[lAct] * 4) + (5 - parseInt(dAct));
             const scoreDeseado = (valoresLigas[lDes] * 4) + (5 - parseInt(dDes));
@@ -1052,9 +1064,11 @@
 
             const numARomano = (num) => ({ "4": "IV", "3": "III", "2": "II", "1": "I" })[num] || num;
             const modoTexto = modoSeleccionado === 'solo' ? 'SOLOQ' : 'DUO';
+            const lDes = document.getElementById('liga-deseada').value;
+            const destinoTexto = lDes === "Maestro" ? "Maestro" : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
 
             itemSeleccionado = {
-                titulo: `Boost (${modoTexto}) de ${document.getElementById('liga-actual').value} ${numARomano(document.getElementById('division-actual').value)} a ${document.getElementById('liga-deseada').value} ${numARomano(document.getElementById('division-deseada').value)} [LP: ${document.getElementById('lp-ganancia').value}]`,
+                titulo: `Boost (${modoTexto}) de ${document.getElementById('liga-actual').value} ${numARomano(document.getElementById('division-actual').value)} a ${destinoTexto} [LP: ${document.getElementById('lp-ganancia').value}]`,
                 precio: precio.toFixed(2)
             };
 
