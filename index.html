@@ -154,6 +154,39 @@
             box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
         }
 
+        /* --- CONTENEDOR Y ANIMACIÓN DE TARJETAS APILADAS --- */
+        .boost-cards-stack {
+            position: relative;
+            width: 100%;
+            min-height: 520px;
+        }
+
+        .boost-subpanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: scale(0.92) translateY(30px);
+            pointer-events: none;
+            z-index: 1;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, z-index 0.5s;
+        }
+
+        .boost-subpanel.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        .boost-subpanel.behind {
+            opacity: 0.15;
+            transform: scale(0.94) translateY(-15px);
+            pointer-events: none;
+            z-index: 2;
+        }
+
         .boost-layout {
             display: grid;
             grid-template-columns: 1fr 1fr 340px;
@@ -169,7 +202,7 @@
         }
 
         .boost-card-compact {
-            background: rgba(18, 20, 28, 0.55);
+            background: rgba(18, 20, 28, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -228,10 +261,13 @@
             .boost-layout {
                 grid-template-columns: 1fr;
             }
+            .boost-cards-stack {
+                min-height: 1100px;
+            }
         }
 
         .boost-card {
-            background: rgba(18, 20, 28, 0.55);
+            background: rgba(18, 20, 28, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -745,21 +781,149 @@
                 <button class="boost-type-btn" data-boost="netas">Victorias netas</button>
             </div>
 
-            <!-- CONTENEDOR 1: IMPULSO DE RANGO -->
-            <div id="panel-boost-rango" class="boost-subpanel">
-                <div class="boost-layout">
-                    <div class="boost-card">
-                        <div class="rank-header">
-                            <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
-                            <div class="rank-info">
-                                <span>Rango actual</span>
-                                <h3 id="txt-actual">Hierro Div. 4</h3>
+            <!-- CONTENEDOR DE TARJETAS APILADAS CON ANIMACIÓN -->
+            <div class="boost-cards-stack">
+                <!-- CONTENEDOR 1: IMPULSO DE RANGO -->
+                <div id="panel-boost-rango" class="boost-subpanel active">
+                    <div class="boost-layout">
+                        <div class="boost-card">
+                            <div class="rank-header">
+                                <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
+                                <div class="rank-info">
+                                    <span>Rango actual</span>
+                                    <h3 id="txt-actual">Hierro Div. 4</h3>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Liga Actual</label>
+                                    <select id="liga-actual">
+                                        <option value="Hierro">Hierro</option>
+                                        <option value="Bronce">Bronce</option>
+                                        <option value="Plata">Plata</option>
+                                        <option value="Oro" selected>Oro</option>
+                                        <option value="Platino">Platino</option>
+                                        <option value="Esmeralda">Esmeralda</option>
+                                        <option value="Diamante">Diamante</option>
+                                        <option value="Maestro">Maestro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>División</label>
+                                    <select id="division-actual">
+                                        <option value="4">Div. IV</option>
+                                        <option value="3">Div. III</option>
+                                        <option value="2">Div. II</option>
+                                        <option value="1">Div. I</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>LP (opc.)</label>
+                                    <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
+                                </div>
+                            </div>
+
+                            <div class="lp-gain-container">
+                                <label for="lp-ganancia">¿Cuántos LP obtienes x victoria?</label>
+                                <select id="lp-ganancia">
+                                    <option value="17_19">17 a 19 LP</option>
+                                    <option value="20_24" selected>20 a 24 LP</option>
+                                    <option value="25_30">25 a 30 LP</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="form-row">
+
+                        <div class="boost-card">
+                            <div class="rank-header">
+                                <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
+                                <div class="rank-info">
+                                    <span>Rango deseado</span>
+                                    <h3 id="txt-deseado">Oro Div. 1</h3>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Liga Deseada</label>
+                                    <select id="liga-deseada">
+                                        <option value="Hierro">Hierro</option>
+                                        <option value="Bronce">Bronce</option>
+                                        <option value="Plata">Plata</option>
+                                        <option value="Oro" selected>Oro</option>
+                                        <option value="Platino">Platino</option>
+                                        <option value="Esmeralda">Esmeralda</option>
+                                        <option value="Diamante">Diamante</option>
+                                        <option value="Maestro">Maestro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>División</label>
+                                    <select id="division-deseada">
+                                        <option value="4">Div. IV</option>
+                                        <option value="3">Div. III</option>
+                                        <option value="2">Div. II</option>
+                                        <option value="1" selected>Div. I</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>LP (opc.)</label>
+                                    <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="boost-card">
+                            <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Personalizar Pedido</h3>
+                            
+                            <div class="mode-selector">
+                                <div class="mode-btn active" data-mode="solo">Solo Q</div>
+                                <div class="mode-btn" data-mode="duo">Duo</div>
+                            </div>
+
+                            <div class="options-group">
+                                <label class="toggle-option">
+                                    <span>Transmisión en vivo</span> 
+                                    <input type="checkbox" id="chk-streaming">
+                                </label>
+                                <label class="toggle-option">
+                                    <span>Modo Offline</span> 
+                                    <input type="checkbox" id="chk-offline">
+                                </label>
+                            </div>
+
+                            <div id="promo-banner" class="promo-banner"></div>
+
+                            <div class="boost-total">USD <span id="precio-boost">0.00</span></div>
+                            <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO -->
+                <div id="panel-boost-posicionamiento" class="boost-subpanel">
+                    <div class="boost-layout-centered">
+                        <div class="boost-card-compact card-posicionamiento">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Partidas de Posicionamiento</h3>
+                            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
+                            
                             <div class="form-group">
-                                <label>Liga Actual</label>
-                                <select id="liga-actual">
+                                <label>¿Cuántas partidas de posicionamiento quieres?</label>
+                                <select id="pos-cantidad">
+                                    <option value="1">1 Partida</option>
+                                    <option value="2">2 Partidas</option>
+                                    <option value="3">3 Partidas</option>
+                                    <option value="4">4 Partidas</option>
+                                    <option value="5" selected>5 Partidas</option>
+                                    <option value="6">6 Partidas</option>
+                                    <option value="7">7 Partidas</option>
+                                    <option value="8">8 Partidas</option>
+                                    <option value="9">9 Partidas</option>
+                                    <option value="10">10 Partidas</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>¿Cuál fue el último rango de tu cuenta?</label>
+                                <select id="pos-rango">
                                     <option value="Hierro">Hierro</option>
                                     <option value="Bronce">Bronce</option>
                                     <option value="Plata">Plata</option>
@@ -767,177 +931,52 @@
                                     <option value="Platino">Platino</option>
                                     <option value="Esmeralda">Esmeralda</option>
                                     <option value="Diamante">Diamante</option>
-                                    <option value="Maestro">Maestro</option>
+                                    <option value="Maestro">Maestro o superior</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>División</label>
-                                <select id="division-actual">
-                                    <option value="4">Div. IV</option>
-                                    <option value="3">Div. III</option>
-                                    <option value="2">Div. II</option>
-                                    <option value="1">Div. I</option>
-                                </select>
+
+                            <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
+                                <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
+                                <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-pos">0.00</span></div>
+                                <button class="btn-contratar" id="btn-contratar-pos">Contratar servicio</button>
                             </div>
-                            <div class="form-group">
-                                <label>LP (opc.)</label>
-                                <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
-                            </div>
-                        </div>
-
-                        <div class="lp-gain-container">
-                            <label for="lp-ganancia">¿Cuántos LP obtienes x victoria?</label>
-                            <select id="lp-ganancia">
-                                <option value="17_19">17 a 19 LP</option>
-                                <option value="20_24" selected>20 a 24 LP</option>
-                                <option value="25_30">25 a 30 LP</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="boost-card">
-                        <div class="rank-header">
-                            <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
-                            <div class="rank-info">
-                                <span>Rango deseado</span>
-                                <h3 id="txt-deseado">Oro Div. 1</h3>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Liga Deseada</label>
-                                <select id="liga-deseada">
-                                    <option value="Hierro">Hierro</option>
-                                    <option value="Bronce">Bronce</option>
-                                    <option value="Plata">Plata</option>
-                                    <option value="Oro" selected>Oro</option>
-                                    <option value="Platino">Platino</option>
-                                    <option value="Esmeralda">Esmeralda</option>
-                                    <option value="Diamante">Diamante</option>
-                                    <option value="Maestro">Maestro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>División</label>
-                                <select id="division-deseada">
-                                    <option value="4">Div. IV</option>
-                                    <option value="3">Div. III</option>
-                                    <option value="2">Div. II</option>
-                                    <option value="1" selected>Div. I</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>LP (opc.)</label>
-                                <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="boost-card">
-                        <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Personalizar Pedido</h3>
-                        
-                        <div class="mode-selector">
-                            <div class="mode-btn active" data-mode="solo">Solo Q</div>
-                            <div class="mode-btn" data-mode="duo">Duo</div>
-                        </div>
-
-                        <div class="options-group">
-                            <label class="toggle-option">
-                                <span>Transmisión en vivo</span> 
-                                <input type="checkbox" id="chk-streaming">
-                            </label>
-                            <label class="toggle-option">
-                                <span>Modo Offline</span> 
-                                <input type="checkbox" id="chk-offline">
-                            </label>
-                        </div>
-
-                        <div id="promo-banner" class="promo-banner"></div>
-
-                        <div class="boost-total">USD <span id="precio-boost">0.00</span></div>
-                        <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO -->
-            <div id="panel-boost-posicionamiento" class="boost-subpanel" style="display: none;">
-                <div class="boost-layout-centered">
-                    <div class="boost-card-compact card-posicionamiento">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Partidas de Posicionamiento</h3>
-                        <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
-                        
-                        <div class="form-group">
-                            <label>¿Cuántas partidas de posicionamiento quieres?</label>
-                            <select id="pos-cantidad">
-                                <option value="1">1 Partida</option>
-                                <option value="2">2 Partidas</option>
-                                <option value="3">3 Partidas</option>
-                                <option value="4">4 Partidas</option>
-                                <option value="5" selected>5 Partidas</option>
-                                <option value="6">6 Partidas</option>
-                                <option value="7">7 Partidas</option>
-                                <option value="8">8 Partidas</option>
-                                <option value="9">9 Partidas</option>
-                                <option value="10">10 Partidas</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>¿Cuál fue el último rango de tu cuenta?</label>
-                            <select id="pos-rango">
-                                <option value="Hierro">Hierro</option>
-                                <option value="Bronce">Bronce</option>
-                                <option value="Plata">Plata</option>
-                                <option value="Oro" selected>Oro</option>
-                                <option value="Platino">Platino</option>
-                                <option value="Esmeralda">Esmeralda</option>
-                                <option value="Diamante">Diamante</option>
-                                <option value="Maestro">Maestro o superior</option>
-                            </select>
-                        </div>
-
-                        <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
-                            <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
-                            <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-pos">0.00</span></div>
-                            <button class="btn-contratar" id="btn-contratar-pos">Contratar servicio</button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
-            <div id="panel-boost-netas" class="boost-subpanel" style="display: none;">
-                <div class="boost-layout-centered">
-                    <div class="boost-card-compact card-netas">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Victorias Netas</h3>
-                        <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
-                        
-                        <div class="form-group">
-                            <label>Selecciona tu Liga Actual</label>
-                            <select id="netas-liga">
-                                <option value="Diamante" selected>Diamante</option>
-                                <option value="Maestro">Maestro</option>
-                                <option value="Gran Maestro">Gran Maestro</option>
-                                <option value="Challenger">Challenger</option>
-                            </select>
-                        </div>
+                <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
+                <div id="panel-boost-netas" class="boost-subpanel">
+                    <div class="boost-layout-centered">
+                        <div class="boost-card-compact card-netas">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Victorias Netas (Antidecay)</h3>
+                            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
+                            
+                            <div class="form-group">
+                                <label>Selecciona tu Liga Actual</label>
+                                <select id="netas-liga">
+                                    <option value="Diamante" selected>Diamante</option>
+                                    <option value="Maestro">Maestro</option>
+                                    <option value="Gran Maestro">Gran Maestro</option>
+                                    <option value="Challenger">Challenger</option>
+                                </select>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Cantidad de Victorias Netas / Días a cubrir</label>
-                            <select id="netas-cantidad">
-                                <option value="1" selected>1 Victoria</option>
-                                <option value="2">2 Victorias</option>
-                                <option value="3">3 Victorias</option>
-                                <option value="4">4 Victorias</option>
-                                <option value="5">5 Victorias</option>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label>Cantidad de Victorias Netas / Días a cubrir</label>
+                                <select id="netas-cantidad">
+                                    <option value="1" selected>1 Victoria</option>
+                                    <option value="2">2 Victorias</option>
+                                    <option value="3">3 Victorias</option>
+                                    <option value="4">4 Victorias</option>
+                                    <option value="5">5 Victorias</option>
+                                </select>
+                            </div>
 
-                        <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
-                            <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
-                            <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-netas">0.00</span></div>
-                            <button class="btn-contratar" id="btn-contratar-netas">Contratar servicio</button>
+                            <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
+                                <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
+                                <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-netas">0.00</span></div>
+                                <button class="btn-contratar" id="btn-contratar-netas">Contratar servicio</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1123,19 +1162,26 @@
         boostTypeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 boostTypeBtns.forEach(b => b.classList.remove('active'));
-                subpanels.forEach(p => p.style.display = 'none');
                 btn.classList.add('active');
+                
                 const tipo = btn.getAttribute('data-boost');
-                if (tipo === 'rango') {
-                    document.getElementById('panel-boost-rango').style.display = 'block';
-                    actualizarBoost();
-                } else if (tipo === 'posicionamiento') {
-                    document.getElementById('panel-boost-posicionamiento').style.display = 'block';
-                    actualizarPosicionamiento();
-                } else if (tipo === 'netas') {
-                    document.getElementById('panel-boost-netas').style.display = 'block';
-                    actualizarNetas();
-                }
+                let targetId = 'panel-boost-rango';
+                if (tipo === 'posicionamiento') targetId = 'panel-boost-posicionamiento';
+                if (tipo === 'netas') targetId = 'panel-boost-netas';
+
+                subpanels.forEach(p => {
+                    if (p.id === targetId) {
+                        p.classList.add('active');
+                        p.classList.remove('behind');
+                    } else {
+                        p.classList.remove('active');
+                        p.classList.add('behind');
+                    }
+                });
+
+                if (tipo === 'rango') actualizarBoost();
+                else if (tipo === 'posicionamiento') actualizarPosicionamiento();
+                else if (tipo === 'netas') actualizarNetas();
             });
         });
 
