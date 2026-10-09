@@ -37,84 +37,101 @@
             z-index: 1;
         }
 
+        /* --- ENCABEZADO EN DOS NIVELES --- */
         header {
             width: 100%;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             margin-bottom: 30px;
             background: rgba(18, 20, 28, 0.55);
-            padding: 20px 25px;
+            backdrop-filter: blur(12px);
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             box-sizing: border-box;
-            flex-wrap: wrap;
-            gap: 15px;
+            overflow: hidden;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 25px;
         }
 
         .logo-area {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            align-items: center;
+            gap: 12px;
         }
 
         .logo-img {
-            height: 40px;
+            height: 38px;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
         }
 
-        .logo-area p {
-            font-size: 0.85rem;
+        .logo-text-group h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin: 0;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text-group p {
+            font-size: 0.78rem;
             color: #8a99ad;
-            margin: 4px 0 0 0;
+            margin: 2px 0 0 0;
         }
 
-        .tabs-nav {
+        .header-bottom-nav {
             display: flex;
-            gap: 6px;
-            background: rgba(11, 14, 20, 0.7);
-            padding: 5px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            align-items: center;
+            gap: 25px;
+            padding: 10px 25px;
+            background: rgba(11, 14, 20, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+        /* Botones de navegación limpios y con luminiscencia */
         .tab-btn {
             background: transparent;
             border: none;
             color: #8a99ad;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.88rem;
+            padding: 6px 4px;
+            font-weight: 700;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 6px;
+            position: relative;
         }
 
         .tab-btn::after {
             content: "⌄";
-            font-size: 0.9rem;
-            color: #fbbf24;
+            font-size: 0.85rem;
+            color: #8a99ad;
+            transition: transform 0.2s ease, color 0.3s ease;
         }
 
         .tab-btn:hover {
             color: #ffffff;
-            background: rgba(251, 191, 36, 0.1);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .tab-btn.active {
-            background-color: #fbbf24;
-            color: #0b0e14;
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+            color: #fbbf24;
+            font-weight: 800;
+            text-shadow: 0 0 12px rgba(251, 191, 36, 0.7), 0 0 25px rgba(251, 191, 36, 0.4);
         }
 
         .tab-btn.active::after {
-            color: #0b0e14;
+            color: #fbbf24;
+            transform: rotate(180deg);
         }
 
         .tab-content {
@@ -181,7 +198,7 @@
         }
 
         .boost-subpanel.behind {
-            opacity: 0 !important;
+            opacity: 0 !important; /* Inviolable para evitar superposiciones desprolijas */
             transform: scale(0.95) translateY(20px);
             pointer-events: none;
             z-index: 1;
@@ -754,12 +771,18 @@
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
+        <!-- HEADER EN DOS NIVELES -->
         <header>
-            <div class="logo-area">
-                <img src="lp.png" alt="Nexus Store Logo" class="logo-img">
-                <p>Cuentas</p>
+            <div class="header-top">
+                <div class="logo-area">
+                    <img src="lp.png" alt="Nexus Store Logo" class="logo-img">
+                    <div class="logo-text-group">
+                        <h1>LP STORE</h1>
+                        <p>Cuentas & Elo Boosting Pro</p>
+                    </div>
+                </div>
             </div>
-            <nav class="tabs-nav">
+            <nav class="header-bottom-nav">
                 <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
                 <button class="tab-btn" data-target="seccion-boost">Boost</button>
             </nav>
