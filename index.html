@@ -6,7 +6,7 @@
     <title>Nexus Store - Plataforma Pro</title>
     <style>
         body {
-            background-color: #000000; /* Negro Obsidiana */
+            background-color: #000000; /* Negro Puro */
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -37,17 +37,18 @@
             z-index: 1;
         }
 
-        /* --- ENCABEZADO EN DOS NIVELES --- */
+        /* --- ENCABEZADO ESTILO VIDRIO AHUMADO --- */
         header {
             width: 100%;
             display: flex;
             flex-direction: column;
             margin-bottom: 30px;
-            background: rgba(18, 20, 28, 0.65);
-            backdrop-filter: blur(12px);
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            background: rgba(12, 12, 16, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -91,7 +92,7 @@
             align-items: center;
             gap: 25px;
             padding: 10px 25px;
-            background: rgba(11, 14, 20, 0.6);
+            background: rgba(0, 0, 0, 0.3);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -116,7 +117,7 @@
 
         .tab-btn.active {
             color: #fbbf24;
-            font-weight: 700; /* Mismo grosor para evitar movimientos en el contenedor */
+            font-weight: 700;
             text-shadow: 0 0 12px rgba(251, 191, 36, 0.7), 0 0 25px rgba(251, 191, 36, 0.4);
         }
 
@@ -137,9 +138,9 @@
         }
 
         .boost-type-btn {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(15, 15, 20, 0.45);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #8a99ad;
             padding: 9px 20px;
             border-radius: 20px;
@@ -153,7 +154,7 @@
             background-color: #fbbf24;
             color: #0b0e14;
             border-color: #fbbf24;
-            box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+            box-shadow: 0 0 14px rgba(251, 191, 36, 0.45);
         }
 
         /* --- CONTENEDOR Y ANIMACIÓN DE TARJETAS APILADAS --- */
@@ -204,16 +205,29 @@
         }
 
         .boost-card-compact {
-            background: rgba(18, 20, 28, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
+            background: rgba(12, 12, 16, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
             padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
             box-sizing: border-box;
             width: 100%;
             max-width: 500px;
+        }
+
+        /* --- TARJETAS PRINCIPALES ESTILO GLASS --- */
+        .boost-card {
+            background: rgba(12, 12, 16, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
+            box-sizing: border-box;
+            width: 100%;
         }
 
         /* --- ESTILOS PERSONALIZADOS POR SERVICIO --- */
@@ -266,27 +280,15 @@
             }
         }
 
-        .boost-card {
-            background: rgba(18, 20, 28, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            box-sizing: border-box;
-            width: 100%;
-        }
-
         .rank-header {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
-            background: rgba(11, 14, 20, 0.5);
+            background: rgba(0, 0, 0, 0.35);
             padding: 14px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .rank-emblem {
@@ -339,18 +341,19 @@
         select, input {
             width: 100%;
             padding: 12px;
-            background: rgba(11, 14, 20, 0.6);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             color: #ffffff;
             font-size: 0.85rem;
             box-sizing: border-box;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, background 0.2s;
         }
 
         select:focus, input:focus {
             outline: none;
             border-color: #fbbf24;
+            background: rgba(0, 0, 0, 0.6);
             box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
         }
 
@@ -394,7 +397,7 @@
         }
 
         .mode-btn {
-            background: rgba(11, 14, 20, 0.5);
+            background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.07);
             color: #8a99ad;
             padding: 10px;
@@ -417,7 +420,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(11, 14, 20, 0.5);
+            background: rgba(0, 0, 0, 0.35);
             padding: 11px 14px;
             border-radius: 8px;
             font-size: 0.85rem;
@@ -464,8 +467,8 @@
         }
 
         .promo-banner {
-            background: linear-gradient(135deg, rgba(243, 186, 47, 0.2), rgba(56, 189, 248, 0.15));
-            border: 1px solid rgba(243, 186, 47, 0.4);
+            background: linear-gradient(135deg, rgba(243, 186, 47, 0.18), rgba(56, 189, 248, 0.12));
+            border: 1px solid rgba(243, 186, 47, 0.35);
             padding: 12px;
             border-radius: 8px;
             font-size: 0.8rem;
@@ -474,7 +477,7 @@
             margin-bottom: 12px;
             display: none;
             line-height: 1.4;
-            box-shadow: 0 0 15px rgba(243, 186, 47, 0.2);
+            box-shadow: 0 0 15px rgba(243, 186, 47, 0.15);
         }
 
         .btn-contratar.promo-active {
@@ -495,16 +498,17 @@
         }
 
         .cuenta-card {
-            background: rgba(18, 20, 28, 0.55);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 14px;
+            background: rgba(12, 12, 16, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
             overflow: hidden;
             transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.6);
         }
 
         .cuenta-card:hover {
@@ -588,23 +592,23 @@
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 14, 20, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
             display: flex; justify-content: center; align-items: center;
             z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
         .modal-box {
-            background: rgba(18, 20, 28, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(14, 14, 18, 0.85);
+            backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 40px; 
             width: 100%; 
             max-width: 620px; 
             position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             max-height: 90vh;
             overflow-y: auto;
             box-sizing: border-box;
@@ -648,7 +652,7 @@
         }
 
         .terminos-box {
-            background: rgba(11, 14, 20, 0.6);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
             padding: 16px;
@@ -694,8 +698,8 @@
         .custom-alert-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 14, 20, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
             display: flex; justify-content: center; align-items: center;
             z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
@@ -703,12 +707,12 @@
             opacity: 1; pointer-events: auto;
         }
         .custom-alert-box {
-            background: rgba(18, 20, 28, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(14, 14, 18, 0.9);
+            backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 30px; width: 100%; max-width: 420px; text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             box-sizing: border-box;
         }
         .custom-alert-box h4 {
@@ -1030,7 +1034,7 @@
                 </div>
             </div>
 
-            <div class="form-group" style="background: rgba(11, 14, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
+            <div class="form-group" style="background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fbbf24; margin-bottom: 0;">
                     <input type="checkbox" id="chk-tiene-codigo" style="width: 16px; height: 16px; accent-color: #fbbf24; cursor: pointer;">
                     <span>¿Tienes un código promocional?</span>
