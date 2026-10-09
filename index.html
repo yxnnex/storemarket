@@ -6,7 +6,7 @@
     <title>Nexus Store - Plataforma Pro</title>
     <style>
         body {
-            background-color: #0b0e14;
+            background-color: #0b1b0e; /* Negro Obsidiana */
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -43,11 +43,11 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 30px;
-            background: rgba(18, 20, 28, 0.55);
+            background: rgba(18, 20, 28, 0.65);
             backdrop-filter: blur(12px);
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -91,11 +91,11 @@
             align-items: center;
             gap: 25px;
             padding: 10px 25px;
-            background: rgba(11, 14, 20, 0.5);
+            background: rgba(11, 14, 20, 0.6);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Botones de navegación limpios sin flechas ni saltos */
+        /* Botones de navegación fijos sin cambio de grosor/tamaño */
         .tab-btn {
             background: transparent;
             border: none;
@@ -104,7 +104,7 @@
             font-weight: 700;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
             display: inline-block;
             position: relative;
         }
@@ -116,7 +116,7 @@
 
         .tab-btn.active {
             color: #fbbf24;
-            font-weight: 800;
+            font-weight: 700; /* Mismo grosor para evitar movimientos en el contenedor */
             text-shadow: 0 0 12px rgba(251, 191, 36, 0.7), 0 0 25px rgba(251, 191, 36, 0.4);
         }
 
@@ -145,7 +145,7 @@
             border-radius: 20px;
             font-size: 0.85rem;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.2s;
         }
 
@@ -153,7 +153,6 @@
             background-color: #fbbf24;
             color: #0b0e14;
             border-color: #fbbf24;
-            font-weight: bold;
             box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
         }
 
@@ -211,14 +210,13 @@
             border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             box-sizing: border-box;
             width: 100%;
             max-width: 500px;
         }
 
         /* --- ESTILOS PERSONALIZADOS POR SERVICIO --- */
-        /* Partidas de Posicionamiento (Verde) */
         .card-posicionamiento {
             border: 1px solid rgba(34, 197, 94, 0.4) !important;
             box-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.18) !important;
@@ -239,7 +237,6 @@
             background-color: #16a34a !important;
         }
 
-        /* Victorias Netas (DeepSkyBlue) */
         .card-netas {
             border: 1px solid rgba(0, 191, 255, 0.4) !important;
             box-shadow: 0 8px 32px 0 rgba(0, 191, 255, 0.18) !important;
@@ -276,7 +273,7 @@
             border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             box-sizing: border-box;
             width: 100%;
         }
@@ -507,7 +504,7 @@
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
 
         .cuenta-card:hover {
@@ -1078,6 +1075,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        /* --- ANIMACIÓN DE PARTÍCULAS (VIOLETA, CELESTE, AMARILLO) --- */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
@@ -1089,6 +1087,12 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
+        const coloresParticulas = [
+            'rgba(168, 85, 247, 0.45)', // Violeta
+            'rgba(56, 189, 248, 0.4)',  // Celeste
+            'rgba(251, 191, 36, 0.45)'  // Amarillo
+        ];
+
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -1096,7 +1100,7 @@
                 this.size = Math.random() * 2.5 + 0.5;
                 this.speedX = (Math.random() - 0.5) * 0.4;
                 this.speedY = (Math.random() - 0.5) * 0.4;
-                this.color = Math.random() > 0.5 ? 'rgba(251, 191, 36, 0.35)' : 'rgba(56, 189, 248, 0.3)';
+                this.color = coloresParticulas[Math.floor(Math.random() * coloresParticulas.length)];
             }
             update() {
                 this.x += this.speedX;
