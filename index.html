@@ -181,6 +181,49 @@
             max-width: 500px;
         }
 
+        /* --- ESTILOS PERSONALIZADOS POR SERVICIO --- */
+        /* Partidas de Posicionamiento (Verde) */
+        .card-posicionamiento {
+            border: 1px solid rgba(34, 197, 94, 0.4) !important;
+            box-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.18) !important;
+        }
+        .card-posicionamiento h3 {
+            color: #22c55e !important;
+        }
+        .card-posicionamiento .boost-total {
+            color: #22c55e !important;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.35) !important;
+        }
+        .card-posicionamiento .btn-contratar {
+            background-color: #22c55e !important;
+            color: #0b0e14 !important;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35) !important;
+        }
+        .card-posicionamiento .btn-contratar:hover {
+            background-color: #16a34a !important;
+        }
+
+        /* Victorias Netas (DeepSkyBlue) */
+        .card-netas {
+            border: 1px solid rgba(0, 191, 255, 0.4) !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 191, 255, 0.18) !important;
+        }
+        .card-netas h3 {
+            color: #00bfff !important;
+        }
+        .card-netas .boost-total {
+            color: #00bfff !important;
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.35) !important;
+        }
+        .card-netas .btn-contratar {
+            background-color: #00bfff !important;
+            color: #0b0e14 !important;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.35) !important;
+        }
+        .card-netas .btn-contratar:hover {
+            background-color: #009acd !important;
+        }
+
         @media (max-width: 1024px) {
             .boost-layout {
                 grid-template-columns: 1fr;
@@ -820,8 +863,8 @@
             <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO -->
             <div id="panel-boost-posicionamiento" class="boost-subpanel" style="display: none;">
                 <div class="boost-layout-centered">
-                    <div class="boost-card-compact">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #fbbf24; text-transform: uppercase;">Partidas de Posicionamiento</h3>
+                    <div class="boost-card-compact card-posicionamiento">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Partidas de Posicionamiento</h3>
                         <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
                         
                         <div class="form-group">
@@ -866,8 +909,8 @@
             <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
             <div id="panel-boost-netas" class="boost-subpanel" style="display: none;">
                 <div class="boost-layout-centered">
-                    <div class="boost-card-compact">
-                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #fbbf24; text-transform: uppercase;">Victorias Netas (Antidecay)</h3>
+                    <div class="boost-card-compact card-netas">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Victorias Netas (Antidecay)</h3>
                         <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
                         
                         <div class="form-group">
