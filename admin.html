@@ -213,6 +213,7 @@
             <button class="tab-btn" onclick="cambiarTab('editar', event)">Editar cuentas</button>
             <button class="tab-btn" onclick="cambiarTab('historial', event)">Historial</button>
             <button class="tab-btn" onclick="cambiarTab('tarifas', event)">Tarifas de Boost</button>
+            <button class="tab-btn" onclick="cambiarTab('duo', event)">Tarifas de Duo</button>
             <button class="tab-btn" onclick="cambiarTab('victorias', event)">Tarifas Posicionamiento y Netas</button>
             <button class="tab-btn" onclick="cambiarTab('codigos', event)">Códigos Promo</button>
         </div>
@@ -266,6 +267,25 @@
                 <form id="form-guardar-tarifas">
                     <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;"></div>
                     <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold; padding: 14px;">Guardar Todas las Tarifas en Firebase</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- NUEVA SECCIÓN: TARIFAS DE DUO POR RANGO -->
+        <div id="sec-duo" class="admin-section">
+            <div class="admin-box-full" style="border-color: rgba(168, 85, 247, 0.4);">
+                <h2 style="color: #c084fc; border-left-color: #a855f7;">Configurar Recargo / Precio por Modo Duo (Según Rango)</h2>
+                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Define el multiplicador o valor adicional que se aplicará automáticamente cuando el cliente seleccione la modalidad Duo Q según su rango actual.</p>
+                <form id="form-guardar-duo">
+                    <div class="liga-tarjeta" style="margin-bottom: 20px;">
+                        <div class="tabla-victorias-admin">
+                            <span>Rango / Tramo Duo</span>
+                            <span>Multiplicador (Ej: 1.3 = +30%)</span>
+                            <span>Estado</span>
+                        </div>
+                        <div id="grilla-duo-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
+                    </div>
+                    <button type="submit" class="btn-subir" style="background-color: #a855f7; color: #ffffff; font-weight: bold; padding: 14px;">Guardar Tarifas de Duo en Firebase</button>
                 </form>
             </div>
         </div>
@@ -343,6 +363,7 @@
                 document.getElementById('login-overlay').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
                 renderizarGrillaAdmin();
+                renderizarGrillaDuo();
                 renderizarGrillaVictorias();
                 cargarServiciosContratados();
                 cargarCuentasAdmin();
@@ -519,6 +540,48 @@
                 await setDoc(doc(db, "configuracion", "tarifasBoost"), nuevasTarifas);
                 mostrarToast("¡Tarifas de Boost guardadas con éxito!", "exito");
             } catch (err) { mostrarToast("Error al guardar tarifas.", "error"); }
+        });
+
+        // CONFIGURACIÓN DE TARIFAS DE DUO POR RANGO
+        const rangosDuoConfig = [
+            { id: "bronce_oro", label: "Bronce a Oro", def: 1.3 },
+            { id: "platino_esmeralda", label: "Platino a Esmeralda", def: 1.35 },
+            { id: "diamante_1_4", label: "Diamante IV a I", def: 1.4 },
+            { id: "maestro_plus", label: "Maestro+", def: 1.5 }
+        ];
+
+        async function renderizarGrillaDuo() {
+            const container = document.getElementById('grilla-duo-container');
+            let tarifasDuoGuardadas = {};
+            try {
+                const docSnap = await getDoc(doc(db, "configuracion", "tarifasDuo"));
+                if (docSnap.exists()) tarifasDuoGuardadas = docSnap.data();
+            } catch(e) {}
+
+            let html = "";
+            rangosDuoConfig.forEach(cat => {
+                const valorActual = tarifasDuoGuardadas[cat.id] !== undefined ? tarifasDuoGuardadas[cat.id] : cat.def;
+                html += `
+                    <div class="fila-victoria-admin">
+                        <div><strong style="font-size: 0.9rem; color: #fff;">${cat.label}</strong></div>
+                        <div><input type="number" step="any" id="duo_${cat.id}" value="${valorActual}" class="input-precio-juego" required></div>
+                        <div><span class="estado-listo">✓ Activo</span></div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        document.getElementById('form-guardar-duo').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                let nuevasTarifasDuo = {};
+                rangosDuoConfig.forEach(cat => {
+                    nuevasTarifasDuo[cat.id] = parseFloat(document.getElementById(`duo_${cat.id}`).value);
+                });
+                await setDoc(doc(db, "configuracion", "tarifasDuo"), nuevasTarifasDuo);
+                mostrarToast("¡Tarifas de Duo guardadas con éxito!", "exito");
+            } catch (err) { mostrarToast("Error al guardar tarifas de duo.", "error"); }
         });
 
         const categoriasVictorias = [
