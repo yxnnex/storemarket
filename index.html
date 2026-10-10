@@ -10,17 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: #000000 url('fondoVexor.png') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
-            margin: 0;
-            padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
@@ -39,8 +41,13 @@
             max-width: 1250px;
             width: 100%;
             margin: 0 auto;
+            padding: 20px;
             position: relative;
             z-index: 1;
+            flex: 1; /* Hace que el contenedor principal ocupe el espacio y empuje el footer al fondo */
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
         }
 
         /* --- ENCABEZADO TRANSPARENTE CON LOGO A LA IZQUIERDA Y NOMBRE CENTRADO --- */
@@ -83,7 +90,7 @@
         }
 
         .vexor-title-img {
-            height: 52px; /* Más grande según pediste */
+            height: 52px;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85));
@@ -130,6 +137,7 @@
 
         .tab-content {
             display: none;
+            flex: 1;
         }
 
         .tab-content.active {
@@ -886,14 +894,16 @@
             color: #0b0e14;
         }
 
+        /* --- FOOTER SIEMPRE FIJO AL FONDO --- */
         .site-footer {
             width: 100%;
             max-width: 1250px;
-            margin: 60px auto 20px auto;
-            padding-top: 20px;
+            margin: 40px auto 20px auto;
+            padding: 20px 20px 0 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
             font-family: 'Segoe UI', sans-serif;
+            box-sizing: border-box;
         }
         .site-footer p {
             font-size: 0.8rem;
@@ -924,7 +934,7 @@
                 <div class="title-area-center">
                     <img src="vexornombre.png" alt="VeXor" class="vexor-title-img">
                 </div>
-                <div style="width: 52px;"></div> <!-- Balance grid spacing -->
+                <div style="width: 52px;"></div>
             </div>
             <nav class="header-bottom-nav">
                 <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
@@ -1165,12 +1175,12 @@
                     </div>
                 </div>
 
-                <div class="faq-category-title">⚡ Boost</div>
+                <div class="faq-category-title">⚡ Boost (Impulso)</div>
 
                 <div class="faq-item">
                     <div class="faq-question">¿Cuántos días tardan en completar un pedido de boost?</div>
                     <div class="faq-answer">
-                        Los tiempos varían según el tamaño del servicio y las ligas a escalar. Priorizamos un trabajo rápido pero con absoluta discreción, camuflándonos bajo las normativas y políticas de seguridad de Riot Games. En algunos casos, recomendamos realizarlo de forma paulatina para evitar alertas del sistema. Los plazos también dependen de la disponibilidad horaria que nos brindes para operar en la cuenta.
+                        Los tiempos varían según el tamaño del servicio y las ligas a escalar. Priorizamos un trabajo rápido pero con absoluta discreción, camuflándonos bajo las normativas y políticas de seguridad de Riot Games. En algunos casos, recomendamos realizarlo de forma paulina para evitar alertas del sistema. Los plazos también dependen de la disponibilidad horaria que nos brindes para operar en la cuenta.
                     </div>
                 </div>
 
@@ -1191,12 +1201,13 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
                     <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta ARAM, Flex, Normales) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- FOOTER ANCLADO AL FONDO -->
         <footer class="site-footer">
             <div class="confianza-footer">
                 <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
@@ -1299,10 +1310,10 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5 + 0.3; // Pequeñas
+                this.size = Math.random() * 1.5 + 0.3;
                 this.speedX = (Math.random() - 0.5) * 0.3;
                 this.speedY = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.6 + 0.2; // Translucidez blanca
+                this.opacity = Math.random() * 0.6 + 0.2;
             }
             update() {
                 this.x += this.speedX;
