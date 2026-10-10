@@ -52,7 +52,7 @@
             justify-content: center;
             margin-bottom: 40px;
             padding: 10px 0;
-            background: transparent; /* Sin fondo contenedor */
+            background: transparent;
             border: none;
             box-shadow: none;
         }
@@ -124,6 +124,82 @@
 
         .tab-content.active {
             display: block;
+        }
+
+        /* --- ESTILOS PARA EL FAQ --- */
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .faq-category-title {
+            font-size: 1.1rem;
+            color: #c084fc;
+            margin: 20px 0 10px 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 3px solid #a855f7;
+            padding-left: 10px;
+        }
+
+        .faq-item {
+            background: rgba(12, 10, 18, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .faq-question {
+            padding: 18px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f8fafc;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.2rem;
+            color: #a855f7;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+            padding: 0 22px;
+            color: #94a3b8;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid transparent;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 18px 22px;
+            border-top-color: rgba(255, 255, 255, 0.05);
         }
 
         .boost-types-nav {
@@ -814,6 +890,7 @@
             <nav class="header-bottom-nav">
                 <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
                 <button class="tab-btn" data-target="seccion-boost">Boost</button>
+                <button class="tab-btn" data-target="seccion-faq">FAQ</button>
             </nav>
         </header>
 
@@ -1035,6 +1112,52 @@
             </div>
         </div>
 
+        <!-- SECCIÓN 3: PREGUNTAS FRECUENTES (FAQ) -->
+        <div id="seccion-faq" class="tab-content">
+            <h2 style="font-size: 1.3rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 1px;">PREGUNTAS FRECUENTES</h2>
+            
+            <div class="faq-container">
+                <div class="faq-category-title">📂 Cuentas</div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">¿Cómo funciona el proceso de compra de una cuenta?</div>
+                    <div class="faq-answer">
+                        Una vez que elijas la cuenta que se ajuste a tus necesidades (revisando campeones, esencia azul, skins, elo, nivel, etc.) y completes el proceso de pago, recibiremos tu solicitud de forma inmediata. Al corroborar la transacción, te llegará automáticamente al correo electrónico adjunto el usuario, la contraseña y los datos de acceso. Si la cuenta lo permite, podrás cambiar el correo por el tuyo para que sea 100% tu propiedad. <em>Nota: Recuerda leer nuestros términos y condiciones antes de adquirir cualquier producto digital.</em>
+                    </div>
+                </div>
+
+                <div class="faq-category-title">⚡ Boost (Impulso)</div>
+
+                <div class="faq-item">
+                    <div class="faq-question">¿Cuántos días tardan en completar un pedido de boost?</div>
+                    <div class="faq-answer">
+                        Los tiempos varían según el tamaño del servicio y las ligas a escalar. Priorizamos un trabajo rápido pero con absoluta discreción, camuflándonos bajo las normativas y políticas de seguridad de Riot Games. En algunos casos, recomendamos realizarlo de forma paulatina para evitar alertas del sistema. Los plazos también dependen de la disponibilidad horaria que nos brindes para operar en la cuenta.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">¿Cómo es el acceso a mi cuenta durante el servicio de Solo Q?</div>
+                    <div class="faq-answer">
+                        Al contratar el servicio, el booster asignado se pondrá en contacto contigo para coordinar los detalles. Podrás cambiar tu contraseña temporalmente mientras dure el proceso. Acordaremos los días y horarios en los que el profesional podrá ingresar. Recibirás una notificación cada vez que el booster se conecte y al finalizar su sesión de juego. Una vez concluido el trabajo por completo, se te dará aviso para que recuperes el control total y vuelvas a cambiar tu contraseña.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">¿Cómo se desarrollan las partidas si contrato el modo Duo?</div>
+                    <div class="faq-answer">
+                        En la modalidad Duo, el booster te contactará para agregarte e invitarte a las partidas desde su cuenta correspondiente. El profesional podrá alternar entre distintas cuentas de apoyo según las necesidades de emparejamiento (matchmaking). Al terminar cada sesión diaria, el equipo revisará que los objetivos solicitados se cumplan bajo los estándares de calidad de VeXor.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
+                    <div class="faq-answer">
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <footer class="site-footer">
             <div class="confianza-footer">
                 <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
@@ -1209,6 +1332,19 @@
             });
         });
 
+        // ACORDEÓN DE FAQ
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                faqItems.forEach(i => i.classList.remove('active'));
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
         const boostTypeBtns = document.querySelectorAll('.boost-type-btn');
         const subpanels = document.querySelectorAll('.boost-subpanel');
 
@@ -1344,7 +1480,6 @@
                 precioTotal = totalPartidasEstimadas * precioPorJuego;
             }
 
-            // Aplicar recargo de Duo antes si está seleccionado
             if (modoSeleccionado === 'duo') {
                 precioTotal *= 1.3;
             }
