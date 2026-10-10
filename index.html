@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VeXor</title>
-    <!-- FUENTE TIPOGRÁFICA TIPO GAMER / ULTRA MODERNA -->
+    <!-- FUENTE EXACTA ESTILO GAMER / CYBERPUNK (RAJDHANI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
         body {
             background: #000000 url('fondoVexor.png') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
-            font-family: 'Montserrat', 'Segoe UI', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -43,41 +43,50 @@
             z-index: 1;
         }
 
-        /* --- ENCABEZADO TRANSPARENTE FLOTANTE (CENTRADO) --- */
+        /* --- ENCABEZADO TRANSPARENTE CON LOGO A LA IZQUIERDA Y NOMBRE CENTRADO --- */
         header {
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 40px;
-            padding: 10px 0;
+            margin-bottom: 35px;
             background: transparent;
             border: none;
             box-shadow: none;
         }
 
-        .header-brand-centered {
-            display: flex;
-            flex-direction: column;
+        .header-top-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 18px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .logo-area-left {
+            justify-self: start;
+            display: flex;
+            align-items: center;
         }
 
         .logo-img {
-            height: 55px;
+            height: 52px;
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.7));
         }
 
+        .title-area-center {
+            justify-self: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .vexor-title-img {
-            height: 38px;
+            height: 52px; /* Más grande según pediste */
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.8));
+            filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.85));
         }
 
         .header-bottom-nav {
@@ -89,26 +98,27 @@
             border: none;
         }
 
-        /* BOTONES DEL MENÚ ESTILO MINIMALISTA Y TRANSPARENTE */
+        /* BOTONES DEL MENÚ ESTILO IDÉNTICO A LA CAPTURA */
         .tab-btn {
             background: transparent;
             border: none;
             color: #a0aec0;
             padding: 6px 16px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
+            font-weight: 600;
+            font-size: 1.15rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
             cursor: pointer;
             transition: color 0.25s ease, text-shadow 0.25s ease, border-color 0.25s ease;
             display: inline-block;
             position: relative;
             border-bottom: 2px solid transparent;
+            font-family: 'Rajdhani', sans-serif;
         }
 
         .tab-btn:hover {
             color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
         }
 
         .tab-btn.active {
@@ -136,13 +146,14 @@
         }
 
         .faq-category-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #c084fc;
             margin: 20px 0 10px 5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             border-left: 3px solid #a855f7;
             padding-left: 10px;
+            font-weight: 700;
         }
 
         .faq-item {
@@ -162,7 +173,7 @@
 
         .faq-question {
             padding: 18px 22px;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #f8fafc;
             cursor: pointer;
@@ -170,11 +181,12 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
+            letter-spacing: 1px;
         }
 
         .faq-question::after {
             content: '+';
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             color: #a855f7;
             font-weight: bold;
             transition: transform 0.3s ease;
@@ -190,10 +202,11 @@
             transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
             padding: 0 22px;
             color: #94a3b8;
-            font-size: 0.88rem;
+            font-size: 1rem;
             line-height: 1.6;
             background: rgba(0, 0, 0, 0.3);
             border-top: 1px solid transparent;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .faq-item.active .faq-answer {
@@ -217,9 +230,11 @@
             color: #94a3b8;
             padding: 9px 22px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             cursor: pointer;
             font-weight: 600;
+            letter-spacing: 1px;
+            font-family: 'Rajdhani', sans-serif;
             transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
@@ -388,7 +403,7 @@
         }
 
         .rank-info span {
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             color: #8a99ad;
             display: block;
             text-transform: uppercase;
@@ -396,10 +411,11 @@
         }
 
         .rank-info h3 {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             color: #f8fafc;
             font-weight: bold;
             margin: 0;
+            letter-spacing: 1px;
         }
 
         .form-row {
@@ -421,10 +437,11 @@
 
         label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: #94a3b8;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         select, input {
@@ -434,8 +451,10 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
             color: #ffffff;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
             transition: border-color 0.2s, background 0.2s;
         }
 
@@ -492,9 +511,10 @@
             padding: 10px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 1rem;
             cursor: pointer;
             text-align: center;
+            letter-spacing: 1px;
             transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
@@ -526,10 +546,11 @@
             background: rgba(0, 0, 0, 0.4);
             padding: 11px 14px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             border: 1px solid rgba(255, 255, 255, 0.06);
             color: #cbd5e1;
             cursor: pointer;
+            font-weight: 600;
         }
 
         .toggle-option input {
@@ -540,12 +561,13 @@
         }
 
         .boost-total {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: bold;
             color: #c084fc;
             text-align: center;
             margin: 15px 0;
             text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+            letter-spacing: 1px;
         }
 
         .btn-contratar {
@@ -556,8 +578,10 @@
             padding: 13px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1.5px;
             transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
             text-align: center;
@@ -575,7 +599,7 @@
             border: 1px solid rgba(168, 85, 247, 0.45);
             padding: 12px;
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: #e9d5ff;
             text-align: center;
             margin-bottom: 12px;
@@ -644,7 +668,7 @@
         }
 
         .cuenta-server {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             background: rgba(168, 85, 247, 0.25);
             color: #e9d5ff;
             padding: 3px 8px;
@@ -655,14 +679,15 @@
         }
 
         .cuenta-titulo {
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: bold;
             margin-bottom: 10px;
             color: #ffffff;
+            letter-spacing: 0.5px;
         }
 
         .cuenta-detalles-info {
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             color: #94a3b8;
             margin-bottom: 15px;
             display: flex;
@@ -679,7 +704,7 @@
         }
 
         .cuenta-precio {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: #c084fc;
         }
@@ -692,7 +717,9 @@
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
             transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
         }
 
@@ -729,10 +756,11 @@
 
         .modal-box h3 {
             text-align: center;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 25px;
             color: #f8fafc;
             margin-top: 0;
+            letter-spacing: 1px;
         }
 
         .modal-box #modal-texto, .modal-box #modal-detalles-texto {
@@ -741,6 +769,8 @@
             margin-bottom: 20px;
             color: #cbd5e1;
             word-break: break-word;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.95rem;
         }
 
         .modal-box .form-group {
@@ -758,14 +788,14 @@
             display: flex; flex-direction: column; gap: 14px; margin-top: 25px;
         }
         .btn-pagar-paypal {
-            background-color: #0070ba; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.95rem;
+            background-color: #0070ba; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s;
         }
         .btn-pagar-paypal:hover {
             background-color: #005ea6;
         }
         .btn-pagar-alias {
-            background-color: #22c55e; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.95rem;
+            background-color: #22c55e; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s;
         }
         .btn-pagar-alias:hover {
@@ -780,10 +810,11 @@
             margin-bottom: 18px;
             max-height: 150px;
             overflow-y: auto;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #94a3b8;
             line-height: 1.6;
             text-align: left;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .terminos-box::-webkit-scrollbar {
@@ -800,11 +831,12 @@
             justify-content: flex-start;
             gap: 12px;
             margin: 15px 0 25px 0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #cbd5e1;
             cursor: pointer;
             text-align: left;
             line-height: 1.5;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .terminos-check-container input {
@@ -837,15 +869,16 @@
             box-sizing: border-box;
         }
         .custom-alert-box h4 {
-            color: #c084fc; font-size: 1.2rem; margin-top: 0; margin-bottom: 12px;
+            color: #c084fc; font-size: 1.3rem; margin-top: 0; margin-bottom: 12px; letter-spacing: 1px;
         }
         .custom-alert-box p {
-            color: #cbd5e1; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5;
+            color: #cbd5e1; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;
         }
         .btn-alert-ok {
             background: #a855f7; color: #ffffff; border: none;
             padding: 12px 25px; font-weight: bold; border-radius: 8px;
-            cursor: pointer; font-size: 0.9rem; width: 100%; text-transform: uppercase;
+            cursor: pointer; font-size: 1rem; width: 100%; text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s, color 0.2s;
         }
         .btn-alert-ok:hover {
@@ -860,16 +893,17 @@
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
+            font-family: 'Segoe UI', sans-serif;
         }
         .site-footer p {
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: #8a99ad;
             line-height: 1.6;
             margin: 0;
         }
         .confianza-footer {
             margin-bottom: 14px;
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             color: #cbd5e1;
             line-height: 1.5;
         }
@@ -881,11 +915,16 @@
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
-        <!-- HEADER COMPLETAMENTE TRANSPARENTE Y CENTRADO -->
+        <!-- HEADER EN Malla Grid: LOGO ESQUINA IZQUIERDA Y NOMBRE CENTRADO ARRIBA -->
         <header>
-            <div class="header-brand-centered">
-                <img src="VexorLogo.png" alt="VeXor Logo" class="logo-img">
-                <img src="vexornombre.png" alt="VeXor" class="vexor-title-img">
+            <div class="header-top-grid">
+                <div class="logo-area-left">
+                    <img src="VexorLogo.png" alt="VeXor Logo" class="logo-img">
+                </div>
+                <div class="title-area-center">
+                    <img src="vexornombre.png" alt="VeXor" class="vexor-title-img">
+                </div>
+                <div style="width: 52px;"></div> <!-- Balance grid spacing -->
             </div>
             <nav class="header-bottom-nav">
                 <button class="tab-btn active" data-target="seccion-cuentas">Cuentas</button>
@@ -896,7 +935,7 @@
 
         <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
         <div id="seccion-cuentas" class="tab-content active">
-            <h2 style="font-size: 1.3rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 1px;">CUENTAS DISPONIBLES</h2>
+            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">CUENTAS DISPONIBLES</h2>
             <div id="grid-cuentas" class="grid-cuentas">
                 <p style="color: #94a3b8;">Cargando catálogo...</p>
             </div>
@@ -1001,7 +1040,7 @@
                         </div>
 
                         <div class="boost-card">
-                            <h3 style="font-size: 0.95rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase;">Personalizar Pedido</h3>
+                            <h3 style="font-size: 1rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase; letter-spacing: 1px;">Personalizar Pedido</h3>
                             
                             <div class="mode-selector">
                                 <div class="mode-btn active" data-mode="solo">Solo Q</div>
@@ -1031,8 +1070,8 @@
                 <div id="panel-boost-posicionamiento" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-posicionamiento">
-                            <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Partidas de Posicionamiento</h3>
-                            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Partidas de Posicionamiento</h3>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
                             
                             <div class="form-group">
                                 <label>¿Cuántas partidas de posicionamiento quieres?</label>
@@ -1065,7 +1104,7 @@
                             </div>
 
                             <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
-                                <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
+                                <label style="text-align: center; font-size: 0.8rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px; letter-spacing: 1px;">Resumen del Pedido</label>
                                 <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-pos">0.00</span></div>
                                 <button class="btn-contratar" id="btn-contratar-pos">Contratar servicio</button>
                             </div>
@@ -1077,8 +1116,8 @@
                 <div id="panel-boost-netas" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-netas">
-                            <h3 style="font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase;">Victorias Netas</h3>
-                            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Victorias Netas</h3>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6; font-family: 'Segoe UI', sans-serif;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
                             
                             <div class="form-group">
                                 <label>Selecciona tu Liga Actual</label>
@@ -1102,7 +1141,7 @@
                             </div>
 
                             <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
-                                <label style="text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px;">Resumen del Pedido</label>
+                                <label style="text-align: center; font-size: 0.8rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px; letter-spacing: 1px;">Resumen del Pedido</label>
                                 <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-netas">0.00</span></div>
                                 <button class="btn-contratar" id="btn-contratar-netas">Contratar servicio</button>
                             </div>
@@ -1114,7 +1153,7 @@
 
         <!-- SECCIÓN 3: PREGUNTAS FRECUENTES (FAQ) -->
         <div id="seccion-faq" class="tab-content">
-            <h2 style="font-size: 1.3rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 1px;">PREGUNTAS FRECUENTES</h2>
+            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">PREGUNTAS FRECUENTES</h2>
             
             <div class="faq-container">
                 <div class="faq-category-title">📂 Cuentas</div>
