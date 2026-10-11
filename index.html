@@ -343,7 +343,7 @@
         }
         .card-netas h3 { color: #00bfff !important; }
         .card-netas .boost-total { color: #00bfff !important; text-shadow: 0 0 10px rgba(0, 191, 255, 0.35) !important; }
-        .card-netas .btn-contratar { background-color: #00bfff !important; color: #00bfff !important; color: #0b0e14 !important; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.35) !important; }
+        .card-netas .btn-contratar { background-color: #00bfff !important; color: #0b0e14 !important; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.35) !important; }
 
         @media (max-width: 1024px) {
             .boost-layout { grid-template-columns: 1fr; }
@@ -1541,7 +1541,9 @@
                     });
                     grid.appendChild(card);
                 });
-            } catch(e) {}
+            } catch(e) {
+                grid.innerHTML = "<p style='color: #ef4444;'>Error al cargar las cuentas.</p>";
+            }
         }
 
         document.getElementById('btn-ir-a-pago').addEventListener('click', () => {
