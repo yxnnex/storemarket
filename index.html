@@ -50,7 +50,6 @@
             box-sizing: border-box;
         }
 
-        /* --- ENCABEZADO TRANSPARENTE CON LOGO A LA IZQUIERDA Y NOMBRE CENTRADO --- */
         header {
             width: 100%;
             display: flex;
@@ -105,7 +104,6 @@
             border: none;
         }
 
-        /* BOTONES DEL MENÚ ESTILO IDÉNTICO A LA CAPTURA */
         .tab-btn {
             background: transparent;
             border: none;
@@ -144,7 +142,6 @@
             display: block;
         }
 
-        /* --- ESTILOS PARA EL FAQ --- */
         .faq-container {
             max-width: 900px;
             margin: 0 auto;
@@ -267,7 +264,6 @@
             box-shadow: 0 0 16px rgba(250, 204, 21, 0.7);
         }
 
-        /* --- CONTENEDOR Y ANIMACIÓN DE TARJETAS APILADAS --- */
         .boost-cards-stack {
             position: relative;
             width: 100%;
@@ -327,7 +323,6 @@
             max-width: 500px;
         }
 
-        /* --- TARJETAS PRINCIPALES ESTILO GLASS --- */
         .boost-card {
             background: rgba(12, 10, 18, 0.55);
             backdrop-filter: blur(20px);
@@ -340,7 +335,6 @@
             width: 100%;
         }
 
-        /* --- ESTILOS PERSONALIZADOS POR SERVICIO --- */
         .card-posicionamiento {
             border: 1px solid rgba(34, 197, 94, 0.4) !important;
             box-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.18) !important;
@@ -614,6 +608,19 @@
             display: none;
             line-height: 1.4;
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+        }
+
+        .master-banner {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #e9d5ff;
+            text-align: center;
+            margin-top: 15px;
+            line-height: 1.4;
+            display: none;
         }
 
         .btn-contratar.promo-active {
@@ -918,7 +925,6 @@
             color: #0b0e14;
         }
 
-        /* --- FOOTER SIEMPRE FIJO AL FONDO --- */
         .site-footer {
             width: 100%;
             max-width: 1250px;
@@ -945,11 +951,9 @@
 </head>
 <body>
 
-    <!-- CANVAS PARA PARTÍCULAS BLANCAS PEQUEÑAS SOBRE FONDO VEXOR -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
-        <!-- HEADER EN Malla Grid: LOGO ESQUINA IZQUIERDA Y NOMBRE CENTRADO ARRIBA -->
         <header>
             <div class="header-top-grid">
                 <div class="logo-area-left">
@@ -967,7 +971,6 @@
             </nav>
         </header>
 
-        <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
         <div id="seccion-cuentas" class="tab-content active">
             <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">CUENTAS DISPONIBLES</h2>
             <div id="grid-cuentas" class="grid-cuentas">
@@ -975,7 +978,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 2: BOOST PRO -->
         <div id="seccion-boost" class="tab-content">
             <div class="boost-types-nav">
                 <button class="boost-type-btn active" data-boost="rango">Impulso de rango</button>
@@ -983,11 +985,10 @@
                 <button class="boost-type-btn" data-boost="netas">Victorias netas</button>
             </div>
 
-            <!-- CONTENEDOR DE TARJETAS APILADAS CON ANIMACIÓN -->
             <div class="boost-cards-stack">
-                <!-- CONTENEDOR 1: IMPULSO DE RANGO -->
                 <div id="panel-boost-rango" class="boost-subpanel active">
                     <div class="boost-layout">
+                        <!-- RANGO ACTUAL -->
                         <div class="boost-card">
                             <div class="rank-header">
                                 <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
@@ -1010,7 +1011,7 @@
                                         <option value="Maestro">Maestro</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="grupo-division-actual">
                                     <label>División</label>
                                     <select id="division-actual">
                                         <option value="4">Div. IV</option>
@@ -1020,12 +1021,12 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>LP (opc.)</label>
-                                    <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
+                                    <label>LP Actuales</label>
+                                    <input type="number" id="lp-actual" placeholder="0-100" min="0" max="500" value="0">
                                 </div>
                             </div>
 
-                            <div class="lp-gain-container">
+                            <div class="lp-gain-container" id="grupo-lp-ganancia">
                                 <label for="lp-ganancia">¿Cuántos LP obtienes x victoria?</label>
                                 <select id="lp-ganancia">
                                     <option value="17_19">17 a 19 LP</option>
@@ -1035,6 +1036,7 @@
                             </div>
                         </div>
 
+                        <!-- RANGO DESEADO -->
                         <div class="boost-card">
                             <div class="rank-header">
                                 <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
@@ -1057,7 +1059,7 @@
                                         <option value="Maestro">Maestro</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="grupo-division-deseada">
                                     <label>División</label>
                                     <select id="division-deseada">
                                         <option value="4">Div. IV</option>
@@ -1066,13 +1068,31 @@
                                         <option value="1" selected>Div. I</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <!-- INPUT NORMAL LP DESEADO -->
+                                <div class="form-group" id="grupo-lp-deseado-normal">
                                     <label>LP (opc.)</label>
                                     <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
                                 </div>
+                                <!-- DROPDOWN LP PARA MAESTRO -->
+                                <div class="form-group" id="grupo-lp-deseado-maestro" style="display: none;">
+                                    <label>LP a Sumar</label>
+                                    <select id="select-lp-maestro">
+                                        <option value="50">+50 LP</option>
+                                        <option value="100" selected>+100 LP</option>
+                                        <option value="150">+150 LP</option>
+                                        <option value="200">+200 LP</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- BANNER DE RECOMENDACIÓN MAESTRO (DECAY) -->
+                            <div id="master-banner" class="master-banner">
+                                💡 <b>¿Quieres evitar el decay o mantenerte en Maestro?</b><br>
+                                Te recomendamos contratar <a href="#" id="link-ir-netas" style="color: #facc15; font-weight: bold; text-decoration: underline;">Victorias Netas</a> para sumar días de reserva sin subir de rango.
                             </div>
                         </div>
 
+                        <!-- RESUMEN -->
                         <div class="boost-card">
                             <h3 style="font-size: 1rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase; letter-spacing: 1px;">Personalizar Pedido</h3>
                             
@@ -1101,7 +1121,6 @@
                     </div>
                 </div>
 
-                <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO -->
                 <div id="panel-boost-posicionamiento" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-posicionamiento">
@@ -1147,7 +1166,6 @@
                     </div>
                 </div>
 
-                <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
                 <div id="panel-boost-netas" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-netas">
@@ -1157,8 +1175,8 @@
                             <div class="form-group">
                                 <label>Selecciona tu Liga Actual</label>
                                 <select id="netas-liga">
-                                    <option value="Diamante" selected>Diamante</option>
-                                    <option value="Maestro">Maestro</option>
+                                    <option value="Diamante">Diamante</option>
+                                    <option value="Maestro" selected>Maestro</option>
                                     <option value="Gran Maestro">Gran Maestro</option>
                                     <option value="Challenger">Challenger</option>
                                 </select>
@@ -1186,7 +1204,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 3: PREGUNTAS FRECUENTES (FAQ) -->
         <div id="seccion-faq" class="tab-content">
             <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">PREGUNTAS FRECUENTES</h2>
             
@@ -1196,7 +1213,7 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Cómo funciona el proceso de compra de una cuenta?</div>
                     <div class="faq-answer">
-                        Una vez que elijas la cuenta que se ajuste a tus necesidades (revisando campeones, esencia azul, skins, elo, nivel, etc.) y completes el proceso de pago, recibiremos tu solicitud de forma inmediata. Al corroborar la transacción, te llegará automáticamente al correo electrónico adjunto el usuario, la contraseña y los datos de acceso. Si la cuenta lo permite, podrás cambiar el correo por el tuyo para que sea 100% tu propiedad. <em>Nota: Recuerda leer nuestros términos y condiciones antes de adquirir cualquier producto digital.</em>
+                        Una vez que elijas la cuenta que se ajuste a tus necesidades y completes el proceso de pago, recibiremos tu solicitud de forma inmediata. Al corroborar la transacción, te llegará automáticamente al correo electrónico adjunto el usuario, la contraseña y los datos de acceso.
                     </div>
                 </div>
 
@@ -1205,43 +1222,20 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Cuántos días tardan en completar un pedido de boost?</div>
                     <div class="faq-answer">
-                        Los tiempos varían según el tamaño del servicio y las ligas a escalar. Priorizamos un trabajo rápido pero con absoluta discreción, camuflándonos bajo las normativas y políticas de seguridad de Riot Games. En algunos casos, recomendamos realizarlo de forma paulina para evitar alertas del sistema. Los plazos también dependen de la disponibilidad horaria que nos brindes para operar en la cuenta.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">¿Cómo es el acceso a mi cuenta durante el servicio de Solo Q?</div>
-                    <div class="faq-answer">
-                        Al contratar el servicio, el booster asignado se pondrá en contacto contigo para coordinar los detalles. Podrás cambiar tu contraseña temporalmente mientras dure el proceso. Acordaremos los días y horarios en los que el profesional podrá ingresar. Recibirás una notificación cada vez que el booster se conecte y al finalizar su sesión de juego. Una vez concluido el trabajo por completo, se te dará aviso para que recuperes el control total y vuelvas a cambiar tu contraseña.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">¿Cómo se desarrollan las partidas si contrato el modo Duo?</div>
-                    <div class="faq-answer">
-                        En la modalidad Duo, el booster te contactará para agregarte e invitarte a las partidas desde su cuenta correspondiente. El profesional podrá alternar entre distintas cuentas de apoyo según las necesidades de emparejamiento (matchmaking). Al terminar cada sesión diaria, el equipo revisará que los objetivos solicitados se cumplan bajo los estándares de calidad de VeXor.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
-                    <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
+                        Los tiempos varían según el tamaño del servicio y las ligas a escalar. Priorizamos un trabajo rápido pero con absoluta discreción, camuflándonos bajo las normativas y políticas de seguridad de Riot Games.
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- FOOTER ANCLADO AL FONDO -->
         <footer class="site-footer">
             <div class="confianza-footer">
                 <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
             </div>
-            <p><strong>Aviso Legal:</strong> Los servicios de boosting y la compraventa de cuentas de League of Legends infringen las Condiciones de Uso de Riot Games. Al contratar o adquirir cualquiera de estos servicios, el usuario acepta bajo su absoluta responsabilidad los riesgos derivados, incluyendo suspensiones o baneos de cuentas. Nuestra plataforma no se hace responsable por sanciones aplicadas por el sistema de juego ni por el mal uso que se le dé a las cuentas tras su entrega.</p>
+            <p><strong>Aviso Legal:</strong> Los servicios de boosting y la compraventa de cuentas de League of Legends infringen las Condiciones de Uso de Riot Games. Al contratar o adquirir cualquiera de estos servicios, el usuario acepta bajo su absoluta responsabilidad los riesgos derivados.</p>
         </footer>
     </div>
 
-    <!-- MODAL DE DETALLES DE CUENTA -->
     <div id="modal-detalles" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-detalles-cerrar" class="modal-close">&times;</button>
@@ -1251,7 +1245,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE PAGO -->
     <div id="modal-pago" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-cerrar" class="modal-close">&times;</button>
@@ -1319,7 +1312,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        /* --- ANIMACIÓN DE PARTÍCULAS BLANCAS PEQUEÑAS SOBRE FONDO VEXOR --- */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
@@ -1407,46 +1399,52 @@
             });
         });
 
-        // ACORDEÓN DE FAQ
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
             const question = item.querySelector('.faq-question');
             question.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
                 faqItems.forEach(i => i.classList.remove('active'));
-                if (!isActive) {
-                    item.classList.add('active');
-                }
+                if (!isActive) item.classList.add('active');
             });
         });
 
         const boostTypeBtns = document.querySelectorAll('.boost-type-btn');
         const subpanels = document.querySelectorAll('.boost-subpanel');
 
+        function cambiarPestanaSubpanel(tipo) {
+            let targetId = 'panel-boost-rango';
+            if (tipo === 'posicionamiento') targetId = 'panel-boost-posicionamiento';
+            if (tipo === 'netas') targetId = 'panel-boost-netas';
+
+            boostTypeBtns.forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-boost') === tipo);
+            });
+
+            subpanels.forEach(p => {
+                if (p.id === targetId) {
+                    p.classList.add('active');
+                    p.classList.remove('behind');
+                } else {
+                    p.classList.remove('active');
+                    p.classList.add('behind');
+                }
+            });
+
+            if (tipo === 'rango') actualizarBoost();
+            else if (tipo === 'posicionamiento') actualizarPosicionamiento();
+            else if (tipo === 'netas') actualizarNetas();
+        }
+
         boostTypeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                boostTypeBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const tipo = btn.getAttribute('data-boost');
-                let targetId = 'panel-boost-rango';
-                if (tipo === 'posicionamiento') targetId = 'panel-boost-posicionamiento';
-                if (tipo === 'netas') targetId = 'panel-boost-netas';
-
-                subpanels.forEach(p => {
-                    if (p.id === targetId) {
-                        p.classList.add('active');
-                        p.classList.remove('behind');
-                    } else {
-                        p.classList.remove('active');
-                        p.classList.add('behind');
-                    }
-                });
-
-                if (tipo === 'rango') actualizarBoost();
-                else if (tipo === 'posicionamiento') actualizarPosicionamiento();
-                else if (tipo === 'netas') actualizarNetas();
+                cambiarPestanaSubpanel(btn.getAttribute('data-boost'));
             });
+        });
+
+        document.getElementById('link-ir-netas').addEventListener('click', (e) => {
+            e.preventDefault();
+            cambiarPestanaSubpanel('netas');
         });
 
         const modeBtns = document.querySelectorAll('.mode-btn');
@@ -1473,13 +1471,9 @@
         async function cargarTarifasTienda() {
             try {
                 const docSnap = await getDoc(doc(db, "configuracion", "tarifasBoost"));
-                if (docSnap.exists()) {
-                    tarifasFirebase = docSnap.data();
-                }
-                const docSnapVit = await getDoc(doc(doc(db, "configuracion", "tarifasVictorias")));
-                if (docSnapVit.exists()) {
-                    tarifasVictoriasFirebase = docSnapVit.data();
-                }
+                if (docSnap.exists()) tarifasFirebase = docSnap.data();
+                const docSnapVit = await getDoc(doc(db, "configuracion", "tarifasVictorias"));
+                if (docSnapVit.exists()) tarifasVictoriasFirebase = docSnapVit.data();
             } catch (err) { console.error(err); }
             actualizarBoost();
             actualizarPosicionamiento();
@@ -1490,177 +1484,220 @@
             const keyEspecifica = `${liga.toLowerCase()}_${division}_${tramoLp}`;
             const keyGeneral = `${liga.toLowerCase()}_${tramoLp}`;
 
-            if (tarifasFirebase[keyEspecifica] !== undefined) {
-                return parseFloat(tarifasFirebase[keyEspecifica]);
-            }
-            if (tarifasFirebase[keyGeneral] !== undefined) {
-                return parseFloat(tarifasFirebase[keyGeneral]);
-            }
+            if (tarifasFirebase[keyEspecifica] !== undefined) return parseFloat(tarifasFirebase[keyEspecifica]);
+            if (tarifasFirebase[keyGeneral] !== undefined) return parseFloat(tarifasFirebase[keyGeneral]);
 
+            if (liga === "Maestro") return 5.0;
             if (liga === "Diamante") return division === 2 || division === 1 ? 4.0 : 3.5;
             if (liga === "Platino") return 2.25;
-            if (liga === "Oro" || liga === "Plata") return 1.5;
             return 1.5;
         }
 
         function actualizarBoost() {
             const lAct = document.getElementById('liga-actual').value;
-            const divActualSelect = document.getElementById('division-actual');
             const lDes = document.getElementById('liga-deseada').value;
+
+            const divActualSelect = document.getElementById('division-actual');
             const divDeseadaSelect = document.getElementById('division-deseada');
-            
-            if (lAct === "Maestro") {
-                divActualSelect.value = "1";
-                divActualSelect.disabled = true;
-            } else {
-                divActualSelect.disabled = false;
-            }
+            const grupoDivActual = document.getElementById('grupo-division-actual');
+            const grupoDivDeseada = document.getElementById('grupo-division-deseada');
 
-            if (lDes === "Maestro") {
-                divDeseadaSelect.value = "1";
-                divDeseadaSelect.disabled = true;
-            } else {
-                divDeseadaSelect.disabled = false;
-            }
+            const grupoLpNormal = document.getElementById('grupo-lp-deseado-normal');
+            const grupoLpMaestro = document.getElementById('grupo-lp-deseado-maestro');
+            const masterBanner = document.getElementById('master-banner');
+            const grupoLpGanancia = document.getElementById('grupo-lp-ganancia');
 
-            const dAct = divActualSelect.value;
-            const dDes = divDeseadaSelect.value;
-            const tramoLpSelect = document.getElementById('lp-ganancia').value; 
+            let esModoMaestro = (lAct === "Maestro" && lDes === "Maestro");
 
-            document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
-            document.getElementById('txt-actual').textContent = lAct === "Maestro" ? "Maestro" : `${lAct} Div. ${dAct}`;
-            document.getElementById('img-deseado').src = rangosEmblemas[lDes] || "Hierro.png";
-            document.getElementById('txt-deseado').textContent = lDes === "Maestro" ? "Maestro" : `${lDes} Div. ${dDes}`;
+            if (esModoMaestro) {
+                grupoDivActual.style.display = "none";
+                grupoDivDeseada.style.display = "none";
+                grupoLpNormal.style.display = "none";
+                grupoLpGanancia.style.display = "none";
 
-            const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
-            const lpDeseadoInput = parseInt(document.getElementById('lp-deseado').value) || 0;
+                grupoLpMaestro.style.display = "block";
+                masterBanner.style.display = "block";
 
-            const getScoreTotalLP = (liga, division, lp) => {
-                if (liga === "Maestro") return 8 * 400 + lp;
-                const idxLiga = ligasOrden.indexOf(liga);
-                const divNum = parseInt(division);
-                return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
-            };
+                const lpActual = parseInt(document.getElementById('lp-actual').value) || 0;
+                const lpASumar = parseInt(document.getElementById('select-lp-maestro').value) || 100;
 
-            const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
-            const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
-            const diffLP = scoreDeseado - scoreActual;
+                document.getElementById('img-actual').src = rangosEmblemas["Maestro"];
+                document.getElementById('txt-actual').textContent = `Maestro (${lpActual} LP)`;
+                document.getElementById('img-deseado').src = rangosEmblemas["Maestro"];
+                document.getElementById('txt-deseado').textContent = `Maestro (${lpActual + lpASumar} LP)`;
 
-            let precioTotal = 0;
+                const precioPorVictoria = tarifasVictoriasFirebase['maestro_plus'] || 4.5;
+                const victoriasEstimadas = Math.ceil(lpASumar / 20); 
+                let precioTotal = victoriasEstimadas * precioPorVictoria;
 
-            if (diffLP > 0) {
-                let lpRestante = diffLP;
-                let ligaActualIter = lAct;
-                let divActualIter = parseInt(dAct);
-
-                while (lpRestante > 0 && ligaActualIter !== "Maestro") {
-                    let lpSalto = Math.min(lpRestante, 100);
-                    let precioPartidaTramo = obtenerPrecioPorVictoriaEspecifico(ligaActualIter, divActualIter, tramoLpSelect);
-                    let partidasEnTramo = lpSalto / 100; 
-                    let precioTramoDiv = precioPartidaTramo * 5;
-
-                    precioTotal += partidasEnTramo * precioTramoDiv;
-
-                    lpRestante -= lpSalto;
-                    divActualIter--;
-
-                    if (divActualIter < 1) {
-                        const idxLiga = ligasOrden.indexOf(ligaActualIter);
-                        if (idxLiga < ligasOrden.length - 1) {
-                            ligaActualIter = ligasOrden[idxLiga + 1];
-                            divActualIter = 4;
-                        } else {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
-            const promoBanner = document.getElementById('promo-banner');
-            const btnContratar = document.getElementById('btn-contratar-boost');
-            const btnIgnorar = document.getElementById('btn-ignorar-oferta');
-
-            let htmlPrecioDisplay = "";
-
-            if (esLigaCompleta && !ignorarOfertaLiga) {
-                const idxSiguiente = ligasOrden.indexOf(lAct) + 1;
-                const siguienteLiga = ligasOrden[idxSiguiente] || "la siguiente liga";
-
-                const scoreSiguienteLiga = getScoreTotalLP(siguienteLiga, "4", 0);
-                const diffLPSiguiente = scoreSiguienteLiga - scoreActual;
-                
-                let lpRestanteOferta = diffLPSiguiente;
-                let ligaIterOferta = lAct;
-                let divIterOferta = parseInt(dAct);
-                let precioOfertaBase = 0;
-
-                while (lpRestanteOferta > 0 && ligaIterOferta !== "Maestro") {
-                    let lpSalto = Math.min(lpRestanteOferta, 100);
-                    let precioPartidaTramo = obtenerPrecioPorVictoriaEspecifico(ligaIterOferta, divIterOferta, tramoLpSelect);
-                    let partidasEnTramo = lpSalto / 100;
-                    let precioTramoDiv = precioPartidaTramo * 5;
-
-                    precioOfertaBase += partidasEnTramo * precioTramoDiv;
-
-                    lpRestanteOferta -= lpSalto;
-                    divIterOferta--;
-
-                    if (divIterOferta < 1) {
-                        const idxLiga = ligasOrden.indexOf(ligaIterOferta);
-                        if (idxLiga < ligasOrden.length - 1) {
-                            ligaIterOferta = ligasOrden[idxLiga + 1];
-                            divIterOferta = 4;
-                        } else {
-                            break;
-                        }
-                    }
-                }
-
-                if (modoSeleccionado === 'duo') {
-                    precioOfertaBase *= 1.3;
-                }
-
-                const porcentajeDescuento = 0.10;
-                let precioFinalOferta = precioOfertaBase * (1 - porcentajeDescuento);
-
-                if (document.getElementById('chk-streaming').checked) precioFinalOferta += 5;
-                if (document.getElementById('chk-offline').checked) precioFinalOferta += 3;
-
-                let textoSiguienteDestino = siguienteLiga === "Maestro" ? "Maestro" : `${siguienteLiga} Div. IV`;
-
-                promoBanner.innerHTML = `🚀 <b>¡NO TE PIERDAS ESTA OFERTA!</b><br>Estás contratando un impulso en la misma liga, estás a un paso de <b>${siguienteLiga}</b>, ¡aprovecha un descuento especial para avanzar al siguiente nivel!`;
-                promoBanner.style.display = "block";
-
-                btnContratar.classList.add('promo-active');
-                btnContratar.textContent = `¡Aprovechar Oferta (${textoSiguienteDestino})!`;
-
-                if (btnIgnorar) {
-                    btnIgnorar.textContent = `Mantener ${lAct} Div. I`;
-                    btnIgnorar.style.display = "block";
-                }
-
-                htmlPrecioDisplay = `<span style="text-decoration: line-through; color: #94a3b8; font-size: 1.1rem; margin-right: 10px;">USD $${precioOfertaBase.toFixed(2)}</span> <span style="color: #22c55e;">USD $${precioFinalOferta.toFixed(2)}</span> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 5px;">¡10% OFF!</span>`;
-
-                document.getElementById('precio-boost').innerHTML = htmlPrecioDisplay;
-                return precioFinalOferta;
-
-            } else {
-                if (modoSeleccionado === 'duo') {
-                    precioTotal *= 1.3;
-                }
-
+                if (modoSeleccionado === 'duo') precioTotal *= 1.3;
                 if (document.getElementById('chk-streaming').checked) precioTotal += 5;
                 if (document.getElementById('chk-offline').checked) precioTotal += 3;
 
-                promoBanner.style.display = "none";
+                document.getElementById('promo-banner').style.display = "none";
+                document.getElementById('btn-ignorar-oferta').style.display = "none";
+
+                const btnContratar = document.getElementById('btn-contratar-boost');
                 btnContratar.classList.remove('promo-active');
                 btnContratar.textContent = "Contratar servicio";
-                
-                if (btnIgnorar) btnIgnorar.style.display = "none";
 
-                document.getElementById('precio-boost').textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
-                return precioTotal > 0 ? precioTotal : 0;
+                document.getElementById('precio-boost').textContent = precioTotal.toFixed(2);
+                return precioTotal;
+
+            } else {
+                grupoDivActual.style.display = "block";
+                grupoDivDeseada.style.display = "block";
+                grupoLpNormal.style.display = "block";
+                grupoLpGanancia.style.display = "block";
+
+                grupoLpMaestro.style.display = "none";
+                masterBanner.style.display = "none";
+
+                if (lAct === "Maestro") {
+                    divActualSelect.value = "1";
+                    divActualSelect.disabled = true;
+                } else {
+                    divActualSelect.disabled = false;
+                }
+
+                if (lDes === "Maestro") {
+                    divDeseadaSelect.value = "1";
+                    divDeseadaSelect.disabled = true;
+                } else {
+                    divDeseadaSelect.disabled = false;
+                }
+
+                const dAct = divActualSelect.value;
+                const dDes = divDeseadaSelect.value;
+                const tramoLpSelect = document.getElementById('lp-ganancia').value; 
+
+                document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
+                document.getElementById('txt-actual').textContent = lAct === "Maestro" ? "Maestro" : `${lAct} Div. ${dAct}`;
+                document.getElementById('img-deseado').src = rangosEmblemas[lDes] || "Hierro.png";
+                document.getElementById('txt-deseado').textContent = lDes === "Maestro" ? "Maestro" : `${lDes} Div. ${dDes}`;
+
+                const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
+                const lpDeseadoInput = parseInt(document.getElementById('lp-deseado').value) || 0;
+
+                const getScoreTotalLP = (liga, division, lp) => {
+                    if (liga === "Maestro") return 8 * 400 + lp;
+                    const idxLiga = ligasOrden.indexOf(liga);
+                    const divNum = parseInt(division);
+                    return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
+                };
+
+                const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
+                const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
+                const diffLP = scoreDeseado - scoreActual;
+
+                let precioTotal = 0;
+
+                if (diffLP > 0) {
+                    let lpRestante = diffLP;
+                    let ligaActualIter = lAct;
+                    let divActualIter = parseInt(dAct);
+
+                    while (lpRestante > 0 && ligaActualIter !== "Maestro") {
+                        let lpSalto = Math.min(lpRestante, 100);
+                        let precioPartidaTramo = obtenerPrecioPorVictoriaEspecifico(ligaActualIter, divActualIter, tramoLpSelect);
+                        let partidasEnTramo = lpSalto / 100; 
+                        let precioTramoDiv = precioPartidaTramo * 5;
+
+                        precioTotal += partidasEnTramo * precioTramoDiv;
+
+                        lpRestante -= lpSalto;
+                        divActualIter--;
+
+                        if (divActualIter < 1) {
+                            const idxLiga = ligasOrden.indexOf(ligaActualIter);
+                            if (idxLiga < ligasOrden.length - 1) {
+                                ligaActualIter = ligasOrden[idxLiga + 1];
+                                divActualIter = 4;
+                            } else break;
+                        }
+                    }
+                }
+
+                let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
+                const promoBanner = document.getElementById('promo-banner');
+                const btnContratar = document.getElementById('btn-contratar-boost');
+                const btnIgnorar = document.getElementById('btn-ignorar-oferta');
+
+                let htmlPrecioDisplay = "";
+
+                if (esLigaCompleta && !ignorarOfertaLiga) {
+                    const idxSiguiente = ligasOrden.indexOf(lAct) + 1;
+                    const siguienteLiga = ligasOrden[idxSiguiente] || "la siguiente liga";
+
+                    const scoreSiguienteLiga = getScoreTotalLP(siguienteLiga, "4", 0);
+                    const diffLPSiguiente = scoreSiguienteLiga - scoreActual;
+                    
+                    let lpRestanteOferta = diffLPSiguiente;
+                    let ligaIterOferta = lAct;
+                    let divIterOferta = parseInt(dAct);
+                    let precioOfertaBase = 0;
+
+                    while (lpRestanteOferta > 0 && ligaIterOferta !== "Maestro") {
+                        let lpSalto = Math.min(lpRestanteOferta, 100);
+                        let precioPartidaTramo = obtenerPrecioPorVictoriaEspecifico(ligaIterOferta, divIterOferta, tramoLpSelect);
+                        let partidasEnTramo = lpSalto / 100;
+                        let precioTramoDiv = precioPartidaTramo * 5;
+
+                        precioOfertaBase += partidasEnTramo * precioTramoDiv;
+
+                        lpRestanteOferta -= lpSalto;
+                        divIterOferta--;
+
+                        if (divIterOferta < 1) {
+                            const idxLiga = ligasOrden.indexOf(ligaIterOferta);
+                            if (idxLiga < ligasOrden.length - 1) {
+                                ligaIterOferta = ligasOrden[idxLiga + 1];
+                                divIterOferta = 4;
+                            } else break;
+                        }
+                    }
+
+                    if (modoSeleccionado === 'duo') precioOfertaBase *= 1.3;
+
+                    const porcentajeDescuento = 0.10;
+                    let precioFinalOferta = precioOfertaBase * (1 - porcentajeDescuento);
+
+                    if (document.getElementById('chk-streaming').checked) precioFinalOferta += 5;
+                    if (document.getElementById('chk-offline').checked) precioFinalOferta += 3;
+
+                    let textoSiguienteDestino = siguienteLiga === "Maestro" ? "Maestro" : `${siguienteLiga} Div. IV`;
+
+                    promoBanner.innerHTML = `🚀 <b>¡NO TE PIERDAS ESTA OFERTA!</b><br>Estás contratando un impulso en la misma liga, estás a un paso de <b>${siguienteLiga}</b>, ¡aprovecha un descuento especial para avanzar al siguiente nivel!`;
+                    promoBanner.style.display = "block";
+
+                    btnContratar.classList.add('promo-active');
+                    btnContratar.textContent = `¡Aprovechar Oferta (${textoSiguienteDestino})!`;
+
+                    if (btnIgnorar) {
+                        btnIgnorar.textContent = `Mantener ${lAct} Div. I`;
+                        btnIgnorar.style.display = "block";
+                    }
+
+                    htmlPrecioDisplay = `<span style="text-decoration: line-through; color: #94a3b8; font-size: 1.1rem; margin-right: 10px;">USD $${precioOfertaBase.toFixed(2)}</span> <span style="color: #22c55e;">USD $${precioFinalOferta.toFixed(2)}</span> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 5px;">¡10% OFF!</span>`;
+
+                    document.getElementById('precio-boost').innerHTML = htmlPrecioDisplay;
+                    return precioFinalOferta;
+
+                } else {
+                    if (modoSeleccionado === 'duo') precioTotal *= 1.3;
+
+                    if (document.getElementById('chk-streaming').checked) precioTotal += 5;
+                    if (document.getElementById('chk-offline').checked) precioTotal += 3;
+
+                    promoBanner.style.display = "none";
+                    btnContratar.classList.remove('promo-active');
+                    btnContratar.textContent = "Contratar servicio";
+                    
+                    if (btnIgnorar) btnIgnorar.style.display = "none";
+
+                    document.getElementById('precio-boost').textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
+                    return precioTotal > 0 ? precioTotal : 0;
+                }
             }
         }
 
@@ -1672,9 +1709,10 @@
             });
         }
 
-        ['liga-actual', 'division-actual', 'liga-deseada', 'division-deseada'].forEach(id => {
+        ['liga-actual', 'division-actual', 'liga-deseada', 'division-deseada', 'select-lp-maestro'].forEach(id => {
             document.getElementById(id).addEventListener('change', () => {
                 ignorarOfertaLiga = false;
+                actualizarBoost();
             });
         });
 
@@ -1708,7 +1746,7 @@
             return total;
         }
 
-        ['liga-actual', 'division-actual', 'lp-actual', 'lp-ganancia', 'liga-deseada', 'division-deseada', 'lp-deseado', 'chk-streaming', 'chk-offline'].forEach(id => {
+        ['liga-actual', 'division-actual', 'lp-actual', 'lp-ganancia', 'liga-deseada', 'division-deseada', 'lp-deseado', 'chk-streaming', 'chk-offline', 'select-lp-maestro'].forEach(id => {
             document.getElementById(id).addEventListener('change', actualizarBoost);
             document.getElementById(id).addEventListener('input', actualizarBoost);
         });
@@ -1807,25 +1845,23 @@
             const lAct = document.getElementById('liga-actual').value;
             const lDes = document.getElementById('liga-deseada').value;
             
-            const origenTexto = lAct === "Maestro" ? "Maestro" : `${lAct} ${numARomano(document.getElementById('division-actual').value)}`;
-            const destinoTexto = lDes === "Maestro" ? "Maestro" : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
-            const siguienteLigaNombre = ligasOrden[ligasOrden.indexOf(lAct) + 1] || "la siguiente liga";
+            let textoTituloServicio = "";
 
-            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual').value === "4" && document.getElementById('division-deseada').value === "1" && lAct !== "Maestro" && !ignorarOfertaLiga);
-
-            let textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`;
-            
-            if (esLigaCompleta) {
-                const destinoOfertaNombre = siguienteLigaNombre === "Maestro" ? "Maestro" : `${siguienteLigaNombre} Div. IV`;
-                textoTituloServicio = `Boost (${modoTexto}) Liga Completa con Oferta a ${destinoOfertaNombre}`;
+            if (lAct === "Maestro" && lDes === "Maestro") {
+                const lpAct = parseInt(document.getElementById('lp-actual').value) || 0;
+                const lpASumar = parseInt(document.getElementById('select-lp-maestro').value) || 100;
+                textoTituloServicio = `Boost (${modoTexto}) Maestro [${lpAct} LP] a Maestro [${lpAct + lpASumar} LP] (+${lpASumar} LP)`;
+            } else {
+                const origenTexto = lAct === "Maestro" ? "Maestro" : `${lAct} ${numARomano(document.getElementById('division-actual').value)}`;
+                const destinoTexto = lDes === "Maestro" ? "Maestro" : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
+                textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`;
             }
 
             itemSeleccionado = {
                 titulo: textoTituloServicio,
                 precio: precio.toFixed(2),
                 precioOriginalBase: precio.toFixed(2),
-                esOferta: esLigaCompleta,
-                precioOriginal: esLigaCompleta ? (precio / 0.9).toFixed(2) : null
+                esOferta: false
             };
 
             descuentoAplicadoPorcentaje = 0;
@@ -1842,7 +1878,6 @@
             modalPago.classList.add('active');
         });
 
-        // Contratar Posicionamiento
         document.getElementById('btn-contratar-pos').addEventListener('click', () => {
             const precio = actualizarPosicionamiento();
             tipoItemActual = 'boost';
@@ -1870,7 +1905,6 @@
             modalPago.classList.add('active');
         });
 
-        // Contratar Victorias Netas / Decay
         document.getElementById('btn-contratar-netas').addEventListener('click', () => {
             const precio = actualizarNetas();
             tipoItemActual = 'boost';
