@@ -1201,7 +1201,7 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
                     <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y organicó, totalmente invisible ante los sistemas de revisión automatizados.
                     </div>
                 </div>
             </div>
@@ -1443,6 +1443,7 @@
 
         let tarifasFirebase = {};
         let tarifasVictoriasFirebase = {};
+        let ignorarOfertaLiga = false;
 
         async function cargarTarifasTienda() {
             try {
@@ -1540,7 +1541,7 @@
 
             let htmlPrecioDisplay = "";
 
-            if (esLigaCompleta) {
+            if (esLigaCompleta && !ignorarOfertaLiga) {
                 let precioOriginal = precioTotal;
                 let desc = precioTotal * 0.10;
                 precioTotal -= desc;
@@ -1548,6 +1549,11 @@
                 
                 promoBanner.innerHTML = `🚀 <b>¡NO TE PIERDAS ESTA OFERTA!</b><br>Estás contratando un impulso en la misma liga, estás a un paso de <b>${siguienteLiga}</b>, aprovecha un descuento especial para avanzar al siguiente nivel!.`;
                 promoBanner.style.display = "block";
+                
+                if (!document.getElementById('btn-ignorar-oferta')) {
+                    promoBanner.innerHTML += `<br><button type="button" id="btn-ignorar-oferta" style="margin-top:8px; background:transparent; border:1px solid #a855f7; color:#e9d5ff; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem; font-family:'Rajdhani',sans-serif;">No aprovechar oferta</button>`;
+                }
+
                 btnContratar.classList.add('promo-active');
                 btnContratar.textContent = `¡Aprovechar Oferta!`;
 
@@ -1563,14 +1569,30 @@
             if (document.getElementById('chk-offline').checked) precioTotal += 3;
 
             const spanPrecio = document.getElementById('precio-boost');
-            if (esLigaCompleta) {
+            if (esLigaCompleta && !ignorarOfertaLiga) {
                 spanPrecio.innerHTML = htmlPrecioDisplay;
             } else {
                 spanPrecio.textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
             }
 
+            setTimeout(() => {
+                const btnIgnorar = document.getElementById('btn-ignorar-oferta');
+                if (btnIgnorar) {
+                    btnIgnorar.onclick = () => {
+                        ignorarOfertaLiga = true;
+                        actualizarBoost();
+                    };
+                }
+            }, 100);
+
             return precioTotal > 0 ? precioTotal : 0;
         }
+
+        ['liga-actual', 'division-actual', 'liga-deseada', 'division-deseada'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                ignorarOfertaLiga = false;
+            });
+        });
 
         function actualizarPosicionamiento() {
             const cant = parseInt(document.getElementById('pos-cantidad').value) || 1;
@@ -1705,7 +1727,7 @@
             const destinoTexto = lDes === "Maestro" ? "Maestro" : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
             const siguienteLigaNombre = ligasOrden[ligasOrden.indexOf(lAct) + 1] || "la siguiente liga";
 
-            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual').value === "4" && document.getElementById('division-deseada').value === "1" && lAct !== "Maestro");
+            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual').value === "4" && document.getElementById('division-deseada').value === "1" && lAct !== "Maestro" && !ignorarOfertaLiga);
 
             let textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`;
             
