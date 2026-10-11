@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Store - Panel Admin Pro</title>
+    <title>Vexor - Panel Admin Pro</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0b0e14; color: #ffffff; padding: 20px; min-height: 100vh; }
@@ -263,7 +263,7 @@
         <div id="sec-tarifas" class="admin-section">
             <div class="admin-box-full" style="border-color: rgba(251, 191, 36, 0.3);">
                 <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas de Boost por Liga y LP</h2>
-                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Diamante incluye sus tramos independientes por división con sus respectivas ganancias de LP.</p>
+                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Configura las tarifas estándar, Diamante por divisiones, y **Maestro** desglosado por tramos de LP y rangos de ganancia (17-19, 20-24, 25-30 LP).</p>
                 <form id="form-guardar-tarifas">
                     <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;"></div>
                     <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold; padding: 14px;">Guardar Todas las Tarifas en Firebase</button>
@@ -271,7 +271,6 @@
             </div>
         </div>
 
-        <!-- NUEVA SECCIÓN: TARIFAS DE DUO POR RANGO -->
         <div id="sec-duo" class="admin-section">
             <div class="admin-box-full" style="border-color: rgba(168, 85, 247, 0.4);">
                 <h2 style="color: #c084fc; border-left-color: #a855f7;">Configurar Recargo / Precio por Modo Duo (Según Rango)</h2>
@@ -396,7 +395,6 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // PUBLICAR O EDITAR CUENTA EN LA TIENDA
         document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
             e.preventDefault();
             const titulo = document.getElementById('admin-titulo').value.trim();
@@ -441,6 +439,18 @@
             { div: "Diamante II a I", sub: [ {id: "ii_i_17_19", label: "17 a 19 LP", vit: 6}, {id: "ii_i_20_24", label: "20 a 24 LP", vit: 5}, {id: "ii_i_25_30", label: "25 a 30 LP", vit: 4} ] }
         ];
 
+        // TRAMOS DE MAESTRO POR RANGO DE LP Y GANANCIA
+        const tramosMaestroLP = [
+            { rango: "0 a 100 LP", sub: [ {id: "0_100_17_19", label: "17 a 19 LP", def: 5.5}, {id: "0_100_20_24", label: "20 a 24 LP", def: 5.0}, {id: "0_100_25_30", label: "25 a 30 LP", def: 4.5} ] },
+            { rango: "100 a 200 LP", sub: [ {id: "100_200_17_19", label: "17 a 19 LP", def: 6.5}, {id: "100_200_20_24", label: "20 a 24 LP", def: 6.0}, {id: "100_200_25_30", label: "25 a 30 LP", def: 5.5} ] },
+            { rango: "200 a 300 LP", sub: [ {id: "200_300_17_19", label: "17 a 19 LP", def: 7.5}, {id: "200_300_20_24", label: "20 a 24 LP", def: 7.0}, {id: "200_300_25_30", label: "25 a 30 LP", def: 6.5} ] },
+            { rango: "300 a 400 LP", sub: [ {id: "300_400_17_19", label: "17 a 19 LP", def: 9.0}, {id: "300_400_20_24", label: "20 a 24 LP", def: 8.5}, {id: "300_400_25_30", label: "25 a 30 LP", def: 8.0} ] },
+            { rango: "400 a 500 LP", sub: [ {id: "400_500_17_19", label: "17 a 19 LP", def: 11.0}, {id: "400_500_20_24", label: "20 a 24 LP", def: 10.0}, {id: "400_500_25_30", label: "25 a 30 LP", def: 9.0} ] },
+            { rango: "500 a 600 LP", sub: [ {id: "500_600_17_19", label: "17 a 19 LP", def: 13.0}, {id: "500_600_20_24", label: "20 a 24 LP", def: 12.0}, {id: "500_600_25_30", label: "25 a 30 LP", def: 11.0} ] },
+            { rango: "600 a 700 LP", sub: [ {id: "600_700_17_19", label: "17 a 19 LP", def: 15.0}, {id: "600_700_20_24", label: "20 a 24 LP", def: 14.0}, {id: "600_700_25_30", label: "25 a 30 LP", def: 13.0} ] },
+            { rango: "700 a 840 LP (Gran Maestro)", sub: [ {id: "700_840_17_19", label: "17 a 19 LP", def: 18.0}, {id: "700_840_20_24", label: "20 a 24 LP", def: 16.0}, {id: "700_840_25_30", label: "25 a 30 LP", def: 14.0} ] }
+        ];
+
         async function renderizarGrillaAdmin() {
             const container = document.getElementById('grilla-tarifas-container');
             let tarifasGuardadas = {};
@@ -452,6 +462,7 @@
             let html = "";
             ligasLista.forEach(liga => {
                 const esDiamante = liga === "Diamante";
+                const esMaestro = liga === "Maestro";
 
                 html += `
                     <div class="liga-tarjeta">
@@ -460,19 +471,38 @@
                             <span class="badge-liga-admin">Liga ${liga}</span>
                         </div>
                         <div class="tabla-tarifas-head">
-                            <span>${esDiamante ? 'División y LP' : 'Ganancia de LP'}</span>
+                            <span>${esMaestro ? 'Tramo LP / Ganancia' : (esDiamante ? 'División y LP' : 'Ganancia de LP')}</span>
                             <span>Victorias req.</span>
                             <span>Precio x Juego ($ USD)</span>
-                            <span>Total 100 LP</span>
+                            <span>Total Bloque</span>
                             <span>Estado</span>
                         </div>
                         <div>
                 `;
 
-                if (!esDiamante) {
+                if (esMaestro) {
+                    tramosMaestroLP.forEach(tramoRango => {
+                        html += `<div style="margin: 12px 0 6px 0; font-size: 0.9rem; color: #c084fc; font-weight: bold; border-bottom: 1px dashed rgba(168,85,247,0.3); padding-bottom: 4px;">👑 Rango: ${tramoRango.rango}</div>`;
+                        tramoRango.sub.forEach(item => {
+                            const key = `maestro_${item.id}`;
+                            const precioJuegoGuardado = tarifasGuardadas[key] !== undefined ? tarifasGuardadas[key] : item.def;
+                            const totalBloque = (precioJuegoGuardado * 5).toFixed(2);
+
+                            html += `
+                                <div class="fila-tarifa-admin">
+                                    <div><strong style="font-size: 0.85rem; color: #fff; padding-left: 10px;">↳ ${item.label}</strong></div>
+                                    <div><span style="font-size: 0.82rem; color: #cbd5e1;"><b>~5</b> vits (por bloque)</span></div>
+                                    <div><input type="number" step="any" id="tarifa_${key}" value="${precioJuegoGuardado}" oninput="calcularTotalAdmin('${key}', 5)" class="input-precio-juego" required></div>
+                                    <div><strong id="total_${key}" style="font-size: 0.95rem; color: #22c55e;">$${totalBloque}</strong></div>
+                                    <div><span class="estado-listo">✓ Listo</span></div>
+                                </div>
+                            `;
+                        });
+                    });
+                } else if (!esDiamante) {
                     tramosEstandar.forEach(tramo => {
                         const key = `${liga.toLowerCase()}_${tramo.id}`;
-                        let defJuego = liga === "Bronce" ? 1.25 : (liga === "Plata" || liga === "Oro" ? 1.50 : (liga === "Platino" ? 2.00 : (liga === "Esmeralda" ? 2.50 : (liga === "Maestro" ? 3.50 : 1.00))));
+                        let defJuego = liga === "Bronce" ? 1.25 : (liga === "Plata" || liga === "Oro" ? 1.50 : (liga === "Platino" ? 2.00 : (liga === "Esmeralda" ? 2.50 : 1.00)));
                         const precioJuegoGuardado = tarifasGuardadas[key] !== undefined ? tarifasGuardadas[key] : defJuego;
                         const total100Lp = (precioJuegoGuardado * tramo.victorias).toFixed(2);
 
@@ -523,7 +553,14 @@
             try {
                 let nuevasTarifas = {};
                 ligasLista.forEach(liga => {
-                    if (liga !== "Diamante") {
+                    if (liga === "Maestro") {
+                        tramosMaestroLP.forEach(tramoRango => {
+                            tramoRango.sub.forEach(item => {
+                                const key = `maestro_${item.id}`;
+                                nuevasTarifas[key] = parseFloat(document.getElementById(`tarifa_${key}`).value);
+                            });
+                        });
+                    } else if (liga !== "Diamante") {
                         tramosEstandar.forEach(tramo => {
                             const key = `${liga.toLowerCase()}_${tramo.id}`;
                             nuevasTarifas[key] = parseFloat(document.getElementById(`tarifa_${key}`).value);
@@ -542,7 +579,6 @@
             } catch (err) { mostrarToast("Error al guardar tarifas.", "error"); }
         });
 
-        // CONFIGURACIÓN DE TARIFAS DE DUO POR RANGO
         const rangosDuoConfig = [
             { id: "bronce_oro", label: "Bronce a Oro", def: 1.3 },
             { id: "platino_esmeralda", label: "Platino a Esmeralda", def: 1.35 },
@@ -652,7 +688,7 @@
             } catch(e) {}
         }
 
-        window.toggleEstadoCodigo = async function(id, nuevoEstado) {
+        window.toggleEstadoCordigo = async function(id, nuevoEstado) {
             try {
                 await updateDoc(doc(db, "codigosPromo", id), { activo: nuevoEstado });
                 mostrarToast("Estado actualizado", "exito");
