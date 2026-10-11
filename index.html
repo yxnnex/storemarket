@@ -1521,13 +1521,6 @@
             const dAct = divActualSelect.value;
             const dDes = divDeseadaSelect.value;
             const tramoLpSelect = document.getElementById('lp-ganancia').value; 
-            
-            let lpPromedioVictoria = 27; 
-            if (tramoLpSelect === "17_19") {
-                lpPromedioVictoria = 18; 
-            } else if (tramoLpSelect === "20_24") {
-                lpPromedioVictoria = 22; 
-            }
 
             document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
             document.getElementById('txt-actual').textContent = lAct === "Maestro" ? "Maestro" : `${lAct} Div. ${dAct}`;
@@ -1551,9 +1544,9 @@
             let precioTotal = 0;
 
             if (diffLP > 0) {
-                const totalPartidasEstimadas = Math.ceil(diffLP / lpPromedioVictoria);
-                const precioPorJuego = obtenerPrecioPorVictoria(lAct, tramoLpSelect);
-                precioTotal = totalPartidasEstimadas * precioPorJuego;
+                const precioPorDivision = obtenerPrecioPorVictoria(lAct, tramoLpSelect) * 5;
+                const cantidadDivisiones = diffLP / 100;
+                precioTotal = cantidadDivisiones * precioPorDivision;
             }
 
             let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
@@ -1570,9 +1563,9 @@
                 const scoreSiguienteLiga = getScoreTotalLP(siguienteLiga, "4", 0);
                 const diffLPSiguiente = scoreSiguienteLiga - scoreActual;
                 
-                const partidasSiguiente = Math.ceil(diffLPSiguiente / lpPromedioVictoria);
-                const precioPorJuegoSiguiente = obtenerPrecioPorVictoria(lAct, tramoLpSelect);
-                let precioOfertaBase = partidasSiguiente * precioPorJuegoSiguiente;
+                const precioPorDivision = obtenerPrecioPorVictoria(lAct, tramoLpSelect) * 5;
+                const cantidadDivisionesSiguiente = diffLPSiguiente / 100;
+                let precioOfertaBase = cantidadDivisionesSiguiente * precioPorDivision;
 
                 if (modoSeleccionado === 'duo') {
                     precioOfertaBase *= 1.3;
