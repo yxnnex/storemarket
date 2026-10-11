@@ -628,6 +628,30 @@
             box-shadow: 0 4px 20px rgba(250, 204, 21, 0.8);
         }
 
+        #btn-ignorar-oferta {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #94a3b8;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+        }
+
+        #btn-ignorar-oferta:hover {
+            border-color: #ef4444;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
         .grid-cuentas {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1072,6 +1096,7 @@
 
                             <div class="boost-total">USD <span id="precio-boost">0.00</span></div>
                             <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
+                            <button type="button" id="btn-ignorar-oferta">No aprovechar oferta</button>
                         </div>
                     </div>
                 </div>
@@ -1201,7 +1226,7 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
                     <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y organicó, totalmente invisible ante los sistemas de revisión automatizados.
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
                     </div>
                 </div>
             </div>
@@ -1538,6 +1563,7 @@
             let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
             const promoBanner = document.getElementById('promo-banner');
             const btnContratar = document.getElementById('btn-contratar-boost');
+            const btnIgnorar = document.getElementById('btn-ignorar-oferta');
 
             let htmlPrecioDisplay = "";
 
@@ -1550,18 +1576,17 @@
                 promoBanner.innerHTML = `🚀 <b>¡NO TE PIERDAS ESTA OFERTA!</b><br>Estás contratando un impulso en la misma liga, estás a un paso de <b>${siguienteLiga}</b>, aprovecha un descuento especial para avanzar al siguiente nivel!.`;
                 promoBanner.style.display = "block";
                 
-                if (!document.getElementById('btn-ignorar-oferta')) {
-                    promoBanner.innerHTML += `<br><button type="button" id="btn-ignorar-oferta" style="margin-top:8px; background:transparent; border:1px solid #a855f7; color:#e9d5ff; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem; font-family:'Rajdhani',sans-serif;">No aprovechar oferta</button>`;
-                }
-
                 btnContratar.classList.add('promo-active');
                 btnContratar.textContent = `¡Aprovechar Oferta!`;
+                if (btnIgnorar) btnIgnorar.style.display = "block";
 
                 htmlPrecioDisplay = `<span style="text-decoration: line-through; color: #94a3b8; font-size: 1.1rem; margin-right: 10px;">USD $${precioOriginal.toFixed(2)}</span> <span style="color: #22c55e;">USD $${precioTotal.toFixed(2)}</span> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 5px;">¡10% OFF!</span>`;
             } else {
                 promoBanner.style.display = "none";
                 btnContratar.classList.remove('promo-active');
                 btnContratar.textContent = "Contratar servicio";
+                if (btnIgnorar) btnIgnorar.style.display = "none";
+                
                 htmlPrecioDisplay = `USD $${precioTotal.toFixed(2)}`;
             }
 
@@ -1575,17 +1600,15 @@
                 spanPrecio.textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
             }
 
-            setTimeout(() => {
-                const btnIgnorar = document.getElementById('btn-ignorar-oferta');
-                if (btnIgnorar) {
-                    btnIgnorar.onclick = () => {
-                        ignorarOfertaLiga = true;
-                        actualizarBoost();
-                    };
-                }
-            }, 100);
-
             return precioTotal > 0 ? precioTotal : 0;
+        }
+
+        const btnIgnorarElem = document.getElementById('btn-ignorar-oferta');
+        if (btnIgnorarElem) {
+            btnIgnorarElem.addEventListener('click', () => {
+                ignorarOfertaLiga = true;
+                actualizarBoost();
+            });
         }
 
         ['liga-actual', 'division-actual', 'liga-deseada', 'division-deseada'].forEach(id => {
