@@ -808,7 +808,7 @@
             <div class="boost-types-nav">
                 <button class="boost-type-btn active" data-boost="rango">Impulso de rango</button>
                 <button class="boost-type-btn" data-boost="posicionamiento">Partidas de posicionamiento</button>
-                <button class="boost-type-btn" data-boost="netas">Victorias netas</button>
+                <button class="boost-type-btn" data-boost="netas">ANTIDECAY</button>
             </div>
 
             <div class="boost-cards-stack">
@@ -911,7 +911,7 @@
 
                             <div id="master-banner" class="master-banner">
                                 💡 <b>¿Quieres evitar el decay o mantenerte en Maestro?</b><br>
-                                Te recomendamos contratar <a href="#" id="link-ir-netas" style="color: #facc15; font-weight: bold; text-decoration: underline;">Victorias Netas</a> para sumar días de reserva.
+                                Te recomendamos contratar <a href="#" id="link-ir-netas" style="color: #facc15; font-weight: bold; text-decoration: underline;">ANTIDECAY</a> para sumar días de reserva.
                             </div>
                         </div>
 
@@ -960,8 +960,7 @@
                                 <label>Último Rango</label>
                                 <select id="pos-rango">
                                     <option value="Hierro">Hierro</option><option value="Bronce">Bronce</option><option value="Plata">Plata</option>
-                                    <option value="Oro" selected>Oro</option><option value="Platino">Platino</option><option value="Esmeralda">Esmeralda</option>
-                                    <option value="Diamante">Diamante</option><option value="Maestro">Maestro o superior</option>
+                                    <option value="Oro" selected>Oro</option><option value="Platino">Platino</option><option value="Esmeralda">Esmeralda</option><option value="Diamante">Diamante</option><option value="Maestro">Maestro o superior</option>
                                 </select>
                             </div>
 
@@ -973,12 +972,14 @@
                     </div>
                 </div>
 
-                <!-- VICTORIAS NETAS -->
+                <!-- ANTIDECAY / DÍAS DE RESERVA -->
                 <div id="panel-boost-netas" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-netas">
-                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase;">Victorias Netas</h3>
-                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px;">Evita el decay y mantente en la cima.</p>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase;">Dias de reserva</h3>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 15px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">
+                                Evita el decay y mantente en la cima.<br>Cada partida jugada te otorga 1 día de protección.
+                            </p>
                             
                             <div class="form-group">
                                 <label>Liga Actual</label>
@@ -989,13 +990,23 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Cantidad de Victorias</label>
-                                <select id="netas-cantidad">
-                                    <option value="1" selected>1 Victoria</option><option value="2">2 Victorias</option><option value="3">3 Victorias</option><option value="5">5 Victorias</option>
+                                <label>Cantidad de partidas</label>
+                                <select id="netas-cantidad" onchange="actualizarInfoDiasReserva()">
+                                    <option value="1">1 Día de protección (1 partida)</option>
+                                    <option value="3">3 Días de protección (3 partidas)</option>
+                                    <option value="7" selected>7 Días de protección (1 semana limpia / 7 partidas)</option>
+                                    <option value="14">14 Días de protección (Reserva máxima / 14 partidas)</option>
                                 </select>
                             </div>
 
-                            <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
+                            <!-- CARTEL INFORMATIVO INTERACTIVO -->
+                            <div style="background: rgba(0, 191, 255, 0.12); border: 1px solid rgba(0, 191, 255, 0.3); padding: 10px 14px; border-radius: 8px; text-align: center; margin-bottom: 15px;">
+                                <span id="txt-resultado-reserva" style="font-size: 0.85rem; color: #e0f2fe; font-weight: 600;">
+                                    🛡️ Resultado: Tu cuenta ganará 7 días de protección total antes de que comience el decay
+                                </span>
+                            </div>
+
+                            <div style="border-top: 1px solid rgba(255,255,255,0.07); padding-top: 15px;">
                                 <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-netas">0.00</span></div>
                                 <button class="btn-contratar" id="btn-contratar-netas">Contratar servicio</button>
                             </div>
@@ -1005,7 +1016,7 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 3: PREGUNTAS FRECUENTES (FAQ COMPLETA RECUPERADA) -->
+        <!-- SECCIÓN 3: FAQ -->
         <div id="seccion-faq" class="tab-content">
             <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">PREGUNTAS FRECUENTES</h2>
             
@@ -1051,16 +1062,13 @@
             </div>
         </div>
 
-        <!-- FOOTER ANCLADO AL FONDO -->
         <footer class="site-footer">
-            <div class="confianza-footer">
-                <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
-            </div>
-            <p><strong>Aviso Legal:</strong> Los servicios de boosting y la compraventa de cuentas de League of Legends infringen las Condiciones de Uso de Riot Games. Al contratar o adquirir cualquiera de estos servicios, el usuario acepta bajo su absoluta responsabilidad los riesgos derivados, incluyendo suspensiones o baneos de cuentas. Nuestra plataforma no se hace responsable por sanciones aplicadas por el sistema de juego ni por el mal uso que se le dé a las cuentas tras su entrega.</p>
+            <div class="confianza-footer"><p><strong>¿Por qué confiar en nosotros?</strong> Años de experiencia, discreción y seguridad garantizada.</p></div>
+            <p><strong>Aviso Legal:</strong> Los servicios infringen las Condiciones de Uso de Riot Games bajo absoluta responsabilidad del usuario.</p>
         </footer>
     </div>
 
-    <!-- MODAL DE DETALLES DE CUENTA -->
+    <!-- MODAL DETALLES -->
     <div id="modal-detalles" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-detalles-cerrar" class="modal-close">&times;</button>
@@ -1070,7 +1078,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE PAGO -->
+    <!-- MODAL PAGO -->
     <div id="modal-pago" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-cerrar" class="modal-close">&times;</button>
@@ -1191,7 +1199,6 @@
             });
         });
 
-        // ACORDEÓN FAQ (SECCIÓN DE PREGUNTAS DESPLEGABLES)
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
             const question = item.querySelector('.faq-question');
@@ -1416,8 +1423,17 @@
             return precio;
         }
 
+        window.actualizarInfoDiasReserva = function() {
+            const cant = document.getElementById('netas-cantidad').value;
+            const txtResumen = document.getElementById('txt-resultado-reserva');
+            if (txtResumen) {
+                txtResumen.innerHTML = `🛡️ Resultado: Tu cuenta ganará ${cant} ${cant === '1' ? 'día' : 'días'} de protección total antes de que comience el decay`;
+            }
+            actualizarNetas();
+        }
+
         ['pos-cantidad', 'pos-rango'].forEach(id => document.getElementById(id).addEventListener('change', actualizarPosicionamiento));
-        ['netas-liga', 'netas-cantidad'].forEach(id => document.getElementById(id).addEventListener('change', actualizarNetas));
+        ['netas-liga', 'netas-cantidad'].forEach(id => document.getElementById(id).addEventListener('change', actualizarInfoDiasReserva));
 
         let itemSeleccionado = null, tipoItemActual = '', descuentoAplicadoPorcentaje = 0;
 
@@ -1446,7 +1462,9 @@
         document.getElementById('btn-contratar-netas').addEventListener('click', () => {
             const precio = actualizarNetas();
             tipoItemActual = 'boost';
-            itemSeleccionado = { titulo: `Victorias Netas (${document.getElementById('netas-cantidad').value} vits) - ${document.getElementById('netas-liga').value}`, precio: precio.toFixed(2), precioOriginalBase: precio.toFixed(2) };
+            const cant = document.getElementById('netas-cantidad').value;
+            const liga = document.getElementById('netas-liga').value;
+            itemSeleccionado = { titulo: `Antidecay / Días de reserva (${cant} ${cant === '1' ? 'partida' : 'partidas'}) - ${liga}`, precio: precio.toFixed(2), precioOriginalBase: precio.toFixed(2) };
             abrirModalPago();
         });
 
