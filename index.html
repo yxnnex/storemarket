@@ -150,17 +150,6 @@
             gap: 15px;
         }
 
-        .faq-category-title {
-            font-size: 1.2rem;
-            color: #c084fc;
-            margin: 20px 0 10px 5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-left: 3px solid #a855f7;
-            padding-left: 10px;
-            font-weight: 700;
-        }
-
         .faq-item {
             background: rgba(12, 10, 18, 0.55);
             backdrop-filter: blur(20px);
@@ -847,7 +836,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>LP Actuales</label>
-                                    <input type="number" id="lp-actual" placeholder="0-100" min="0" max="840" value="0">
+                                    <input type="number" id="lp-actual" placeholder="0-840" min="0" max="840" value="0">
                                 </div>
                             </div>
 
@@ -936,7 +925,7 @@
 
                             <div class="boost-total">USD <span id="precio-boost">0.00</span></div>
                             <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
-                            <button type="button" id="btn-ignorar-oferta">Mantener liga actual</button>
+                            <button type="button" id="btn-ignorar-oferta" style="display:none;">Mantener liga actual</button>
                         </div>
                     </div>
                 </div>
@@ -1198,7 +1187,6 @@
 
         let tarifasFirebase = {};
         let tarifasVictoriasFirebase = {};
-        let ignorarOfertaLiga = false;
 
         async function cargarTarifasTienda() {
             try {
@@ -1221,18 +1209,16 @@
         }
 
         function obtenerPrecioMaestroPorLpYGanancia(lpActual, tramoLp) {
-            let tramoStr = "0_100";
-            if (lpActual >= 700) tramoStr = "700_840";
-            else if (lpActual >= 600) tramoStr = "600_700";
-            else if (lpActual >= 500) tramoStr = "500_600";
-            else if (lpActual >= 400) tramoStr = "400_500";
-            else if (lpActual >= 300) tramoStr = "300_400";
-            else if (lpActual >= 200) tramoStr = "200_300";
-            else if (lpActual >= 100) tramoStr = "100_200";
+            let tramoStr = "0_150";
+            if (lpActual >= 750) tramoStr = "750_840";
+            else if (lpActual >= 600) tramoStr = "600_750";
+            else if (lpActual >= 450) tramoStr = "450_600";
+            else if (lpActual >= 300) tramoStr = "300_450";
+            else if (lpActual >= 150) tramoStr = "150_300";
 
             const key = `maestro_${tramoStr}_${tramoLp}`;
             if (tarifasFirebase[key] !== undefined) return parseFloat(tarifasFirebase[key]);
-            return 5.0; // Valor por defecto si no está configurado
+            return 5.0;
         }
 
         function actualizarBoost() {
@@ -1251,7 +1237,7 @@
                 grupoDivActual.style.display = "none";
                 grupoDivDeseada.style.display = "none";
                 grupoLpNormal.style.display = "none";
-                grupoLpGanancia.style.display = "block"; // Se mantiene visible para calcular por ganancia de LP
+                grupoLpGanancia.style.display = "block";
 
                 grupoLpMaestro.style.display = "block";
                 masterBanner.style.display = "block";
@@ -1266,19 +1252,12 @@
                 document.getElementById('txt-deseado').textContent = `Maestro (${lpActual + lpASumar} LP)`;
 
                 const precioPorJuego = obtenerPrecioMaestroPorLpYGanancia(lpActual, tramoLpSelect);
-                const victoriasEstimadas = Math.ceil(lpASumar / 20); // ~5 victorias por bloque de 100 LP
+                const victoriasEstimadas = Math.ceil(lpASumar / 20);
                 let precioTotal = victoriasEstimadas * precioPorJuego;
 
                 if (modoSeleccionado === 'duo') precioTotal *= 1.3;
                 if (document.getElementById('chk-streaming').checked) precioTotal += 5;
                 if (document.getElementById('chk-offline').checked) precioTotal += 3;
-
-                document.getElementById('promo-banner').style.display = "none";
-                document.getElementById('btn-ignorar-oferta').style.display = "none";
-
-                const btnContratar = document.getElementById('btn-contratar-boost');
-                btnContratar.classList.remove('promo-active');
-                btnContratar.textContent = "Contratar servicio";
 
                 document.getElementById('precio-boost').textContent = precioTotal.toFixed(2);
                 return precioTotal;
@@ -1350,11 +1329,6 @@
                 if (modoSeleccionado === 'duo') precioTotal *= 1.3;
                 if (document.getElementById('chk-streaming').checked) precioTotal += 5;
                 if (document.getElementById('chk-offline').checked) precioTotal += 3;
-
-                document.getElementById('promo-banner').style.display = "none";
-                document.getElementById('btn-contratar-boost').classList.remove('promo-active');
-                document.getElementById('btn-contratar-boost').textContent = "Contratar servicio";
-                document.getElementById('btn-ignorar-oferta').style.display = "none";
 
                 document.getElementById('precio-boost').textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
                 return precioTotal > 0 ? precioTotal : 0;
