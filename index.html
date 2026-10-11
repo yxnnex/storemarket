@@ -1613,7 +1613,7 @@
             document.getElementById('modal-pago').classList.remove('active');
         });
 
-        /* --- CARGA DE CUENTAS RESTAURADA CORRECTAMENTE DESDE EL INDEX 5 --- */
+        /* --- CARGA DE CUENTAS CON MANEJO DE ERRORES SEGURO --- */
         async function cargarCatalogo() {
             const grid = document.getElementById('grid-cuentas');
             try {
@@ -1663,8 +1663,8 @@
                     grid.appendChild(card);
                 });
             } catch(e) {
-                console.error("Error al cargar el catálogo de cuentas:", e);
-                grid.innerHTML = "<p style='color: #ef4444;'>Error al conectar con la base de datos de cuentas.</p>";
+                console.error("Error al cargar cuentas:", e);
+                grid.innerHTML = `<p style='color: #ef4444;'>Error al conectar con la base de datos de cuentas: ${e.message}</p>`;
             }
         }
 
