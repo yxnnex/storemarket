@@ -343,7 +343,7 @@
         }
         .card-netas h3 { color: #00bfff !important; }
         .card-netas .boost-total { color: #00bfff !important; text-shadow: 0 0 10px rgba(0, 191, 255, 0.35) !important; }
-        .card-netas .btn-contratar { background-color: #00bfff !important; color: #0b0e14 !important; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.35) !important; }
+        .card-netas .btn-contratar { background-color: #00bfff !important; color: #00bfff !important; color: #0b0e14 !important; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.35) !important; }
 
         @media (max-width: 1024px) {
             .boost-layout { grid-template-columns: 1fr; }
@@ -993,8 +993,18 @@
                                 <label>Cantidad de partidas</label>
                                 <select id="netas-cantidad" onchange="actualizarInfoDiasReserva()">
                                     <option value="1">1 Día de protección (1 partida)</option>
+                                    <option value="2">2 Días de protección (2 partidas)</option>
                                     <option value="3">3 Días de protección (3 partidas)</option>
-                                    <option value="7" selected>7 Días de protección (1 semana limpia / 7 partidas)</option>
+                                    <option value="4">4 Días de protección (4 partidas)</option>
+                                    <option value="5">5 Días de protección (5 partidas)</option>
+                                    <option value="6">6 Días de protección (6 partidas)</option>
+                                    <option value="7" selected>7 Días de protección (1 semana / 7 partidas)</option>
+                                    <option value="8">8 Días de protección (8 partidas)</option>
+                                    <option value="9">9 Días de protección (9 partidas)</option>
+                                    <option value="10">10 Días de protección (10 partidas)</option>
+                                    <option value="11">11 Días de protección (11 partidas)</option>
+                                    <option value="12">12 Días de protección (12 partidas)</option>
+                                    <option value="13">13 Días de protección (13 partidas)</option>
                                     <option value="14">14 Días de protección (Reserva máxima / 14 partidas)</option>
                                 </select>
                             </div>
