@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vexor - Panel Admin Pro</title>
+    <title>Nexus Store - Panel Admin Pro</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0b0e14; color: #ffffff; padding: 20px; min-height: 100vh; }
@@ -56,22 +56,34 @@
         .btn-activo { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
         .btn-inactivo { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        .liga-tarjeta {
+        /* ESTILOS DE DESPLEGABLES PARA LIGAS */
+        details.liga-tarjeta {
             background: rgba(18, 20, 28, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 22px;
+            padding: 14px 20px;
+            margin-bottom: 14px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
         }
 
-        .liga-header-admin {
+        details.liga-tarjeta[open] {
+            padding-bottom: 20px;
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        summary.liga-header-admin {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 12px;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            list-style: none;
+        }
+
+        summary.liga-header-admin::-webkit-details-marker {
+            display: none;
         }
 
         .liga-titulo-admin {
@@ -84,6 +96,17 @@
             text-transform: uppercase;
         }
 
+        .liga-desplegar-icon {
+            font-size: 0.85rem;
+            color: #8a99ad;
+            transition: transform 0.2s ease;
+        }
+
+        details[open] .liga-desplegar-icon {
+            transform: rotate(180deg);
+            color: #fbbf24;
+        }
+
         .badge-liga-admin {
             background: rgba(251, 191, 36, 0.12);
             color: #fbbf24;
@@ -92,6 +115,12 @@
             font-size: 0.78rem;
             font-weight: bold;
             border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .liga-contenido-body {
+            margin-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 16px;
         }
 
         .tabla-tarifas-head {
@@ -263,9 +292,9 @@
         <div id="sec-tarifas" class="admin-section">
             <div class="admin-box-full" style="border-color: rgba(251, 191, 36, 0.3);">
                 <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas de Boost por Liga y LP</h2>
-                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Configura las tarifas estándar, Diamante por divisiones, y **Maestro** desglosado por tramos de LP y rangos de ganancia (17-19, 20-24, 25-30 LP).</p>
+                <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 20px;">Haz clic en cada liga para desplegar y ajustar sus tarifas. Maestro incluye tramos cada 150 LP combinados con la ganancia de LP.</p>
                 <form id="form-guardar-tarifas">
-                    <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;"></div>
+                    <div id="grilla-tarifas-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px;"></div>
                     <button type="submit" class="btn-subir" style="background-color: #fbbf24; color: #0b0e14; font-weight: bold; padding: 14px;">Guardar Todas las Tarifas en Firebase</button>
                 </form>
             </div>
@@ -276,7 +305,7 @@
                 <h2 style="color: #c084fc; border-left-color: #a855f7;">Configurar Recargo / Precio por Modo Duo (Según Rango)</h2>
                 <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Define el multiplicador o valor adicional que se aplicará automáticamente cuando el cliente seleccione la modalidad Duo Q según su rango actual.</p>
                 <form id="form-guardar-duo">
-                    <div class="liga-tarjeta" style="margin-bottom: 20px;">
+                    <div class="liga-tarjeta" style="margin-bottom: 20px; display: block;">
                         <div class="tabla-victorias-admin">
                             <span>Rango / Tramo Duo</span>
                             <span>Multiplicador (Ej: 1.3 = +30%)</span>
@@ -294,7 +323,7 @@
                 <h2 style="color: #fbbf24; border-left-color: #fbbf24;">Configurar Tarifas por Partida / Victoria (Posicionamiento y Antidecay)</h2>
                 <p style="color: #8a99ad; font-size: 0.85rem; margin-bottom: 25px;">Define el valor unitario por victoria aplicable tanto para las partidas de posicionamiento como para las victorias netas (antidecay) según la liga de referencia.</p>
                 <form id="form-guardar-victorias">
-                    <div class="liga-tarjeta" style="margin-bottom: 20px;">
+                    <div class="liga-tarjeta" style="margin-bottom: 20px; display: block;">
                         <div class="tabla-victorias-admin">
                             <span>Liga / Nivel</span>
                             <span>Valor por Victoria (USD $)</span>
@@ -439,16 +468,14 @@
             { div: "Diamante II a I", sub: [ {id: "ii_i_17_19", label: "17 a 19 LP", vit: 6}, {id: "ii_i_20_24", label: "20 a 24 LP", vit: 5}, {id: "ii_i_25_30", label: "25 a 30 LP", vit: 4} ] }
         ];
 
-        // TRAMOS DE MAESTRO POR RANGO DE LP Y GANANCIA
+        // TRAMOS DE MAESTRO CADA 150 LP
         const tramosMaestroLP = [
-            { rango: "0 a 100 LP", sub: [ {id: "0_100_17_19", label: "17 a 19 LP", def: 5.5}, {id: "0_100_20_24", label: "20 a 24 LP", def: 5.0}, {id: "0_100_25_30", label: "25 a 30 LP", def: 4.5} ] },
-            { rango: "100 a 200 LP", sub: [ {id: "100_200_17_19", label: "17 a 19 LP", def: 6.5}, {id: "100_200_20_24", label: "20 a 24 LP", def: 6.0}, {id: "100_200_25_30", label: "25 a 30 LP", def: 5.5} ] },
-            { rango: "200 a 300 LP", sub: [ {id: "200_300_17_19", label: "17 a 19 LP", def: 7.5}, {id: "200_300_20_24", label: "20 a 24 LP", def: 7.0}, {id: "200_300_25_30", label: "25 a 30 LP", def: 6.5} ] },
-            { rango: "300 a 400 LP", sub: [ {id: "300_400_17_19", label: "17 a 19 LP", def: 9.0}, {id: "300_400_20_24", label: "20 a 24 LP", def: 8.5}, {id: "300_400_25_30", label: "25 a 30 LP", def: 8.0} ] },
-            { rango: "400 a 500 LP", sub: [ {id: "400_500_17_19", label: "17 a 19 LP", def: 11.0}, {id: "400_500_20_24", label: "20 a 24 LP", def: 10.0}, {id: "400_500_25_30", label: "25 a 30 LP", def: 9.0} ] },
-            { rango: "500 a 600 LP", sub: [ {id: "500_600_17_19", label: "17 a 19 LP", def: 13.0}, {id: "500_600_20_24", label: "20 a 24 LP", def: 12.0}, {id: "500_600_25_30", label: "25 a 30 LP", def: 11.0} ] },
-            { rango: "600 a 700 LP", sub: [ {id: "600_700_17_19", label: "17 a 19 LP", def: 15.0}, {id: "600_700_20_24", label: "20 a 24 LP", def: 14.0}, {id: "600_700_25_30", label: "25 a 30 LP", def: 13.0} ] },
-            { rango: "700 a 840 LP (Gran Maestro)", sub: [ {id: "700_840_17_19", label: "17 a 19 LP", def: 18.0}, {id: "700_840_20_24", label: "20 a 24 LP", def: 16.0}, {id: "700_840_25_30", label: "25 a 30 LP", def: 14.0} ] }
+            { rango: "0 a 150 LP", sub: [ {id: "0_150_17_19", label: "17 a 19 LP", def: 5.5}, {id: "0_150_20_24", label: "20 a 24 LP", def: 5.0}, {id: "0_150_25_30", label: "25 a 30 LP", def: 4.5} ] },
+            { rango: "150 a 300 LP", sub: [ {id: "150_300_17_19", label: "17 a 19 LP", def: 6.5}, {id: "150_300_20_24", label: "20 a 24 LP", def: 6.0}, {id: "150_300_25_30", label: "25 a 30 LP", def: 5.5} ] },
+            { rango: "300 a 450 LP", sub: [ {id: "300_450_17_19", label: "17 a 19 LP", def: 8.5}, {id: "300_450_20_24", label: "20 a 24 LP", def: 7.5}, {id: "300_450_25_30", label: "25 a 30 LP", def: 7.0} ] },
+            { rango: "450 a 600 LP", sub: [ {id: "450_600_17_19", label: "17 a 19 LP", def: 11.5}, {id: "450_600_20_24", label: "20 a 24 LP", def: 10.0}, {id: "450_600_25_30", label: "25 a 30 LP", def: 9.0} ] },
+            { rango: "600 a 750 LP", sub: [ {id: "600_750_17_19", label: "17 a 19 LP", def: 14.5}, {id: "600_750_20_24", label: "20 a 24 LP", def: 13.0}, {id: "600_750_25_30", label: "25 a 30 LP", def: 12.0} ] },
+            { rango: "750 a 840 LP (Gran Maestro)", sub: [ {id: "750_840_17_19", label: "17 a 19 LP", def: 18.0}, {id: "750_840_20_24", label: "20 a 24 LP", def: 16.0}, {id: "750_840_25_30", label: "25 a 30 LP", def: 14.0} ] }
         ];
 
         async function renderizarGrillaAdmin() {
@@ -465,24 +492,28 @@
                 const esMaestro = liga === "Maestro";
 
                 html += `
-                    <div class="liga-tarjeta">
-                        <div class="liga-header-admin">
+                    <details class="liga-tarjeta">
+                        <summary class="liga-header-admin">
                             <span class="liga-titulo-admin">🛡️ ${liga.toUpperCase()}</span>
-                            <span class="badge-liga-admin">Liga ${liga}</span>
-                        </div>
-                        <div class="tabla-tarifas-head">
-                            <span>${esMaestro ? 'Tramo LP / Ganancia' : (esDiamante ? 'División y LP' : 'Ganancia de LP')}</span>
-                            <span>Victorias req.</span>
-                            <span>Precio x Juego ($ USD)</span>
-                            <span>Total Bloque</span>
-                            <span>Estado</span>
-                        </div>
-                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="badge-liga-admin">Liga ${liga}</span>
+                                <span class="liga-desplegar-icon">▼</span>
+                            </div>
+                        </summary>
+                        <div class="liga-contenido-body">
+                            <div class="tabla-tarifas-head">
+                                <span>${esMaestro ? 'Tramo LP / Ganancia' : (esDiamante ? 'División y LP' : 'Ganancia de LP')}</span>
+                                <span>Victorias req.</span>
+                                <span>Precio x Juego ($ USD)</span>
+                                <span>Total Bloque</span>
+                                <span>Estado</span>
+                            </div>
+                            <div>
                 `;
 
                 if (esMaestro) {
                     tramosMaestroLP.forEach(tramoRango => {
-                        html += `<div style="margin: 12px 0 6px 0; font-size: 0.9rem; color: #c084fc; font-weight: bold; border-bottom: 1px dashed rgba(168,85,247,0.3); padding-bottom: 4px;">👑 Rango: ${tramoRango.rango}</div>`;
+                        html += `<div style="margin: 12px 0 6px 0; font-size: 0.88rem; color: #c084fc; font-weight: bold; border-bottom: 1px dashed rgba(168,85,247,0.3); padding-bottom: 4px;">👑 Rango LP: ${tramoRango.rango}</div>`;
                         tramoRango.sub.forEach(item => {
                             const key = `maestro_${item.id}`;
                             const precioJuegoGuardado = tarifasGuardadas[key] !== undefined ? tarifasGuardadas[key] : item.def;
@@ -518,7 +549,7 @@
                     });
                 } else {
                     tramosDiamante.forEach(tramoDiv => {
-                        html += `<div style="margin: 10px 0 5px 0; font-size: 0.9rem; color: #fbbf24; font-weight: bold; border-bottom: 1px dashed rgba(251,191,36,0.2); padding-bottom: 4px;">📌 ${tramoDiv.div}</div>`;
+                        html += `<div style="margin: 10px 0 5px 0; font-size: 0.88rem; color: #fbbf24; font-weight: bold; border-bottom: 1px dashed rgba(251,191,36,0.2); padding-bottom: 4px;">📌 ${tramoDiv.div}</div>`;
                         tramoDiv.sub.forEach(item => {
                             const key = `diamante_${item.id}`;
                             const precioJuegoGuardado = tarifasGuardadas[key] !== undefined ? tarifasGuardadas[key] : 3.50;
@@ -537,7 +568,7 @@
                     });
                 }
 
-                html += `</div></div>`;
+                html += `</div></div></details>`;
             });
             container.innerHTML = html;
         }
@@ -688,7 +719,7 @@
             } catch(e) {}
         }
 
-        window.toggleEstadoCordigo = async function(id, nuevoEstado) {
+        window.toggleEstadoCodigo = async function(id, nuevoEstado) {
             try {
                 await updateDoc(doc(db, "codigosPromo", id), { activo: nuevoEstado });
                 mostrarToast("Estado actualizado", "exito");
