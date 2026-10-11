@@ -9,9 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <!-- PAYPAL SDK (LIVE / PRODUCCIÓN) -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AbIdoELfCuOc8qOJDYy3oDakRc2DFU0ezIhgWcRhncbz-kB6O6CqhvDjb7sNM52uH3YzqWv4EUCiZmic&currency=USD"></script>
-
     <style>
         html, body {
             height: 100%;
@@ -798,6 +795,13 @@
         .payment-options {
             display: flex; flex-direction: column; gap: 14px; margin-top: 25px;
         }
+        .btn-pagar-paypal {
+            background-color: #0070ba; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
+            transition: background-color 0.2s;
+        }
+        .btn-pagar-paypal:hover {
+            background-color: #005ea6;
+        }
         .btn-pagar-alias {
             background-color: #22c55e; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s;
@@ -1272,8 +1276,7 @@
             </label>
 
             <div class="payment-options">
-                <!-- CONTENEDOR DEL BOTÓN INTELIGENTE DE PAYPAL / TARJETAS -->
-                <div id="paypal-button-container"></div>
+                <button id="btn-pagar-paypal" class="btn-pagar-paypal">Pagar con PayPal</button>
                 <button id="btn-pagar-alias" class="btn-pagar-alias">Pagar por Alias / Transferencia (WhatsApp)</button>
             </div>
         </div>
@@ -1829,34 +1832,23 @@
             modalPago.classList.remove('active');
         });
 
-        /* --- BOTÓN INTELIGENTE DE PAYPAL SDK --- */
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                if(!document.getElementById('chk-terminos').checked) {
-                    mostrarAlerta("Debes aceptar los Términos y Condiciones antes de pagar.");
-                    throw new Error("Términos no aceptados");
-                }
-                const montoFinal = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
-                return actions.order.create({
-                    purchase_units: [{ amount: { value: montoFinal } }]
-                });
-            },
-            onApprove: async function(data, actions) {
-                return actions.order.capture().then(async function(details) {
-                    const final = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
-                    if(tipoItemActual === 'boost') {
-                        const lid = document.getElementById('input-lol-id').value;
-                        const disc = document.getElementById('input-discord-user').value;
-                        await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${final}`, fecha: new Date().toISOString() }).catch(()=>{});
-                    } else {
-                        const mail = document.getElementById('email-cliente').value;
-                        await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${final}`, fecha: new Date().toISOString() }).catch(()=>{});
-                    }
-                    mostrarAlerta(`¡Pago completado con éxito por ${details.payer.name.given_name}! Te contactaremos pronto.`);
-                    modalPago.classList.remove('active');
-                });
+        document.getElementById('btn-pagar-paypal').addEventListener('click', async () => {
+            if(!document.getElementById('chk-terminos').checked) { mostrarAlerta("Debes aceptar los Términos y Condiciones."); return; }
+            const precioFinalEnvio = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
+
+            if (tipoItemActual === 'boost') {
+                const lid = document.getElementById('input-lol-id').value, disc = document.getElementById('input-discord-user').value;
+                if(!lid || !disc) { mostrarAlerta("Ingresa tus datos."); return; }
+                await addDoc(collection(db, "pedidosBoost"), { tipo: "Boost", clienteDiscord: `${disc} (${lid})`, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
+            } else {
+                const mail = document.getElementById('email-cliente').value;
+                if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
+                let mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
+                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
-        }).render('#paypal-button-container');
+            window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
+            modalPago.classList.remove('active');
+        });
 
         async function cargarCatalogo() {
             const grid = document.getElementById('grid-cuentas');
