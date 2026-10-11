@@ -1486,16 +1486,21 @@
             actualizarNetas();
         }
 
-        function obtenerPrecioPorVictoria(liga, tramoLp) {
-            const key = `${liga.toLowerCase()}_${tramoLp}`;
-            if (tarifasFirebase[key] !== undefined) {
-                return parseFloat(tarifasFirebase[key]);
+        function obtenerPrecioPorVictoriaEspecifico(liga, division, tramoLp) {
+            const keyEspecifica = `${liga.toLowerCase()}_${division}_${tramoLp}`;
+            const keyGeneral = `${liga.toLowerCase()}_${tramoLp}`;
+
+            if (tarifasFirebase[keyEspecifica] !== undefined) {
+                return parseFloat(tarifasFirebase[keyEspecifica]);
             }
-            if (liga === "Hierro" || liga === "Bronce") return 1.5;
-            if (liga === "Plata" || liga === "Oro") return 2.0;
-            if (liga === "Platino") return 2.5;
-            if (liga === "Esmeralda") return 3.0;
-            return 3.5;
+            if (tarifasFirebase[keyGeneral] !== undefined) {
+                return parseFloat(tarifasFirebase[keyGeneral]);
+            }
+
+            if (liga === "Diamante") return division === 2 || division === 1 ? 4.0 : 3.5;
+            if (liga === "Platino") return 2.25;
+            if (liga === "Oro" || liga === "Plata") return 1.5;
+            return 1.5;
         }
 
         function actualizarBoost() {
@@ -1544,9 +1549,31 @@
             let precioTotal = 0;
 
             if (diffLP > 0) {
-                const precioPorDivision = obtenerPrecioPorVictoria(lAct, tramoLpSelect) * 5;
-                const cantidadDivisiones = diffLP / 100;
-                precioTotal = cantidadDivisiones * precioPorDivision;
+                let lpRestante = diffLP;
+                let ligaActualIter = lAct;
+                let divActualIter = parseInt(dAct);
+
+                while (lpRestante > 0 && ligaActualIter !== "Maestro") {
+                    let lpSalto = Math.min(lpRestante, 100);
+                    let precioPartidaTramo = obtenerPrecioPorVictoriaEspecifico(ligaActualIter, divActualIter, tramoLpSelect);
+                    let partidasEnTramo = lpSalto / 100; 
+                    let precioTramoDiv = precioPartidaTramo * 5;
+
+                    precioTotal += partidasEnTramo * precioTramoDiv;
+
+                    lpRestante -= lpSalto;
+                    divActualIter--;
+
+                    if (divActualIter < 1) {
+                        const idxLiga = ligasOrden.indexOf(ligaActualIter);
+                        if (idxLiga < ligasOrden.length - 1) {
+                            ligaActualIter = ligasOrden[idxLiga + 1];
+                            divActualIter = 4;
+                        } else {
+                            break;
+                        }
+                    }
+                }
             }
 
             let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
@@ -1563,9 +1590,32 @@
                 const scoreSiguienteLiga = getScoreTotalLP(siguienteLiga, "4", 0);
                 const diffLPSiguiente = scoreSiguienteLiga - scoreActual;
                 
-                const precioPorDivision = obtenerPrecioPorVictoria(lAct, tramoLpSelect) * 5;
-                const cantidadDivisionesSiguiente = diffLPSiguiente / 100;
-                let precioOfertaBase = cantidadDivisionesSiguiente * precioPorDivision;
+                let lpRestanteOferta = diffLPSiguiente;
+                let ligaIterOferta = lAct;
+                let divIterOferta = parseInt(dAct);
+                let precioOfertaBase = 0;
+
+                while (lpRestanteOferta > 0 && ligaIterOferta !== "Maestro") {
+                    let lpSalto = Math.min(lpRestanteOferta, 100);
+                    let precioPartidaTramo = obtenerPrecioPorVictoriaEspecifico(ligaIterOferta, divIterOferta, tramoLpSelect);
+                    let partidasEnTramo = lpSalto / 100;
+                    let precioTramoDiv = precioPartidaTramo * 5;
+
+                    precioOfertaBase += partidasEnTramo * precioTramoDiv;
+
+                    lpRestanteOferta -= lpSalto;
+                    divIterOferta--;
+
+                    if (divIterOferta < 1) {
+                        const idxLiga = ligasOrden.indexOf(ligaIterOferta);
+                        if (idxLiga < ligasOrden.length - 1) {
+                            ligaIterOferta = ligasOrden[idxLiga + 1];
+                            divIterOferta = 4;
+                        } else {
+                            break;
+                        }
+                    }
+                }
 
                 if (modoSeleccionado === 'duo') {
                     precioOfertaBase *= 1.3;
