@@ -1005,7 +1005,7 @@
                                     <option value="11">11 partidas</option>
                                     <option value="12">12 partidas</option>
                                     <option value="13">13 partidas</option>
-                                    <option value="14">14 partidas)</option>
+                                    <option value="14">14 partidas</option>
                                 </select>
                             </div>
 
@@ -1066,7 +1066,7 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
                     <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta: ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta: ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y organicamente seguro.
                     </div>
                 </div>
             </div>
@@ -1526,7 +1526,10 @@
             try {
                 const snapshot = await getDocs(collection(db, "skin"));
                 grid.innerHTML = "";
-                if(snapshot.empty) { grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas.</p>"; return; }
+                if(snapshot.empty) { 
+                    grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas registradas.</p>"; 
+                    return; 
+                }
                 snapshot.forEach(docSnap => {
                     const c = docSnap.data();
                     const card = document.createElement('div');
@@ -1542,6 +1545,7 @@
                     grid.appendChild(card);
                 });
             } catch(e) {
+                console.error("Error al cargar cuentas:", e);
                 grid.innerHTML = "<p style='color: #ef4444;'>Error al cargar las cuentas.</p>";
             }
         }
