@@ -1476,7 +1476,7 @@
                 if (docSnap.exists()) {
                     tarifasFirebase = docSnap.data();
                 }
-                const docSnapVit = await getDoc(doc(db, "configuracion", "tarifasVictorias"));
+                const docSnapVit = await getDoc(doc(doc(db, "configuracion", "tarifasVictorias")));
                 if (docSnapVit.exists()) {
                     tarifasVictoriasFirebase = docSnapVit.data();
                 }
@@ -1627,11 +1627,13 @@
                 if (document.getElementById('chk-streaming').checked) precioFinalOferta += 5;
                 if (document.getElementById('chk-offline').checked) precioFinalOferta += 3;
 
+                let textoSiguienteDestino = siguienteLiga === "Maestro" ? "Maestro" : `${siguienteLiga} Div. IV`;
+
                 promoBanner.innerHTML = `🚀 <b>¡NO TE PIERDAS ESTA OFERTA!</b><br>Estás contratando un impulso en la misma liga, estás a un paso de <b>${siguienteLiga}</b>, ¡aprovecha un descuento especial para avanzar al siguiente nivel!`;
                 promoBanner.style.display = "block";
 
                 btnContratar.classList.add('promo-active');
-                btnContratar.textContent = `¡Aprovechar Oferta (${siguienteLiga} Div. IV)!`;
+                btnContratar.textContent = `¡Aprovechar Oferta (${textoSiguienteDestino})!`;
 
                 if (btnIgnorar) {
                     btnIgnorar.textContent = `Mantener ${lAct} Div. I`;
@@ -1814,7 +1816,8 @@
             let textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`;
             
             if (esLigaCompleta) {
-                textoTituloServicio = `Boost (${modoTexto}) Liga Completa con Oferta a ${siguienteLigaNombre} Div. IV`;
+                const destinoOfertaNombre = siguienteLigaNombre === "Maestro" ? "Maestro" : `${siguienteLigaNombre} Div. IV`;
+                textoTituloServicio = `Boost (${modoTexto}) Liga Completa con Oferta a ${destinoOfertaNombre}`;
             }
 
             itemSeleccionado = {
