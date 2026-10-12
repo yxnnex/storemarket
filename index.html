@@ -996,8 +996,8 @@
                                     <h3 id="txt-actual">Hierro Div. 4</h3>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
+                            <div class="form-row" id="row-actual-inputs">
+                                <div class="form-group" style="flex: 1.5;">
                                     <label>Liga Actual</label>
                                     <select id="liga-actual">
                                         <option value="Hierro">Hierro</option>
@@ -1010,7 +1010,7 @@
                                         <option value="Maestro">Maestro</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="group-div-actual" style="flex: 1.3;">
                                     <label>División</label>
                                     <select id="division-actual">
                                         <option value="4">Div. IV</option>
@@ -1019,7 +1019,7 @@
                                         <option value="1">Div. I</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="group-lp-actual" style="flex: 1;">
                                     <label>LP (opc.)</label>
                                     <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
                                 </div>
@@ -1043,8 +1043,8 @@
                                     <h3 id="txt-deseado">Oro Div. 1</h3>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
+                            <div class="form-row" id="row-deseado-inputs">
+                                <div class="form-group" style="flex: 1.5;">
                                     <label>Liga Deseada</label>
                                     <select id="liga-deseada">
                                         <option value="Hierro">Hierro</option>
@@ -1057,7 +1057,7 @@
                                         <option value="Maestro">Maestro</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="group-div-deseada" style="flex: 1.3;">
                                     <label>División</label>
                                     <select id="division-deseada">
                                         <option value="4">Div. IV</option>
@@ -1066,10 +1066,13 @@
                                         <option value="1" selected>Div. I</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="group-lp-deseada" style="flex: 1;">
                                     <label>LP (opc.)</label>
                                     <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
                                 </div>
+                            </div>
+                            <div id="maestro-decay-aviso" style="display: none; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); border-radius: 8px; padding: 12px; margin-top: 15px; font-size: 0.85rem; color: #e9d5ff; text-align: center; font-family: 'Segoe UI', sans-serif;">
+                                💡 ¿Quieres evitar el decay o mantenerte en Maestro?<br>Te recomendamos contratar <b>ANTIDECAY</b> para sumar días de reserva.
                             </div>
                         </div>
 
@@ -1498,65 +1501,158 @@
             return 3.5;
         }
 
+        function obtenerPrecioBloqueMaestro(tramoKey) {
+            const key = `maestro_${tramoKey}`;
+            if (tarifasFirebase[key] !== undefined) {
+                return parseFloat(tarifasFirebase[key]);
+            }
+            return 5.0; // Valor por defecto por bloque de ~5 partidas en Maestro
+        }
+
         function actualizarBoost() {
             const lAct = document.getElementById('liga-actual').value;
-            const divActualSelect = document.getElementById('division-actual');
             const lDes = document.getElementById('liga-deseada').value;
-            const divDeseadaSelect = document.getElementById('division-deseada');
             
-            if (lAct === "Maestro") {
-                divActualSelect.value = "1";
-                divActualSelect.disabled = true;
-            } else {
-                divActualSelect.disabled = false;
-            }
-
-            if (lDes === "Maestro") {
-                divDeseadaSelect.value = "1";
-                divDeseadaSelect.disabled = true;
-            } else {
-                divDeseadaSelect.disabled = false;
-            }
-
-            const dAct = divActualSelect.value;
-            const dDes = divDeseadaSelect.value;
-            const tramoLpSelect = document.getElementById('lp-ganancia').value; 
-            
-            let lpPromedioVictoria = 27; 
-            if (tramoLpSelect === "17_19") {
-                lpPromedioVictoria = 18; 
-            } else if (tramoLpSelect === "20_24") {
-                lpPromedioVictoria = 22; 
-            }
-
-            document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
-            document.getElementById('txt-actual').textContent = lAct === "Maestro" ? "Maestro" : `${lAct} Div. ${dAct}`;
-            document.getElementById('img-deseado').src = rangosEmblemas[lDes] || "Hierro.png";
-            document.getElementById('txt-deseado').textContent = lDes === "Maestro" ? "Maestro" : `${lDes} Div. ${dDes}`;
-
-            const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
-            const lpDeseadoInput = parseInt(document.getElementById('lp-deseado').value) || 0;
-
-            const getScoreTotalLP = (liga, division, lp) => {
-                if (liga === "Maestro") return 8 * 400 + lp;
-                const idxLiga = ligasOrden.indexOf(liga);
-                const divNum = parseInt(division);
-                return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
-            };
-
-            const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
-            const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
-            const diffLP = scoreDeseado - scoreActual;
+            const groupDivActual = document.getElementById('group-div-actual');
+            const groupLpActual = document.getElementById('group-lp-actual');
+            const groupDivDeseada = document.getElementById('group-div-deseada');
+            const groupLpDeseada = document.getElementById('group-lp-deseada');
+            const avisoDecay = document.getElementById('maestro-decay-aviso');
 
             let precioTotal = 0;
+            let tramoLpSelect = document.getElementById('lp-ganancia').value;
+            let lpPromedioVictoria = tramoLpSelect === "17_19" ? 18 : (tramoLpSelect === "25_30" ? 28 : 22);
 
-            if (diffLP > 0) {
-                const totalPartidasEstimadas = Math.ceil(diffLP / lpPromedioVictoria);
-                const precioPorJuego = obtenerPrecioPorVictoria(lAct, tramoLpSelect);
-                precioTotal = totalPartidasEstimadas * precioPorJuego;
+            // --- LÓGICA SI RANGO ACTUAL ES MAESTRO ---
+            if (lAct === "Maestro") {
+                groupDivActual.style.display = 'none';
+                groupLpActual.querySelector('label').textContent = "LP Actuales";
+                const inputLpAct = document.getElementById('lp-actual');
+                inputLpAct.max = "9999";
+                inputLpAct.placeholder = "0";
+
+                document.getElementById('img-actual').src = rangosEmblemas["Maestro"];
+                document.getElementById('txt-actual').textContent = `Maestro (${inputLpAct.value || 0} LP)`;
+            } else {
+                groupDivActual.style.display = 'block';
+                groupLpActual.querySelector('label').textContent = "LP (opc.)";
+                document.getElementById('lp-actual').max = "100";
             }
 
-            let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
+            // --- LÓGICA SI RANGO DESEADO ES MAESTRO (INTERFAZ DE 150 EN 150 LP) ---
+            if (lDes === "Maestro") {
+                groupDivDeseada.style.display = 'none';
+                groupLpDeseada.style.display = 'block';
+                groupLpDeseada.querySelector('label').textContent = "LP a Sumar";
+                avisoDecay.style.display = 'block';
+
+                // Transformar el input de LP deseado en un <select> de 150 en 150 LP si no existe ya
+                let inputDeseadoEl = document.getElementById('lp-deseado');
+                if (inputDeseadoEl.tagName !== 'SELECT') {
+                    const selectLp = document.createElement('select');
+                    selectLp.id = 'lp-deseado';
+                    selectLp.innerHTML = `
+                        <option value="50">+50 LP</option>
+                        <option value="100" selected>+100 LP</option>
+                        <option value="150">+150 LP</option>
+                        <option value="200">+200 LP</option>
+                        <option value="250">+250 LP</option>
+                        <option value="300">+300 LP</option>
+                        <option value="350">+350 LP</option>
+                        <option value="400">+400 LP</option>
+                        <option value="450">+450 LP</option>
+                        <option value="500">+500 LP</option>
+                        <option value="600">+600 LP</option>
+                        <option value="750">+750 LP</option>
+                    `;
+                    inputDeseadoEl.parentNode.replaceChild(selectLp, inputDeseadoEl);
+                    selectLp.addEventListener('change', actualizarBoost);
+                }
+
+                const lpASumar = parseInt(document.getElementById('lp-deseado').value) || 100;
+                const lpActVal = lAct === "Maestro" ? (parseInt(document.getElementById('lp-actual').value) || 0) : 0;
+                const lpFinalTotal = lpActVal + lpASumar;
+
+                document.getElementById('img-deseado').src = rangosEmblemas["Maestro"];
+                document.getElementById('txt-deseado').textContent = `Maestro (${lpFinalTotal} LP)`;
+
+                // Cálculo de precio para Maestro según tramos de 150 LP y ganancia de LP
+                let tramoMaestroKey = "0_150";
+                if (lpFinalTotal > 750) tramoMaestroKey = "750_840";
+                else if (lpFinalTotal > 600) tramoMaestroKey = "600_750";
+                else if (lpFinalTotal > 450) tramoMaestroKey = "450_600";
+                else if (lpFinalTotal > 300) tramoMaestroKey = "300_450";
+                else if (lpFinalTotal > 150) tramoMaestroKey = "150_300";
+
+                const fullKeyMaestro = `${tramoMaestroKey}_${tramoLpSelect}`;
+                const precioBloque = obtenerPrecioBloqueMaestro(fullKeyMaestro);
+                const bloquesNecesarios = lpASumar / 50; // Cada tramo de 50 LP equivale a ~1 bloque o parte proporcional
+                precioTotal = precioBloque * (lpASumar / 100); // Proporcional a los LP seleccionados
+
+            } else {
+                avisoDecay.style.display = 'none';
+                groupDivDeseada.style.display = 'block';
+
+                let selectDeseadoEl = document.getElementById('lp-deseado');
+                if (selectDeseadoEl.tagName === 'SELECT') {
+                    const inputLp = document.createElement('input');
+                    inputLp.type = 'number';
+                    inputLp.id = 'lp-deseado';
+                    inputLp.min = '0';
+                    inputLp.max = '100';
+                    inputLp.value = '0';
+                    selectDeseadoEl.parentNode.replaceChild(inputLp, selectDeseadoEl);
+                    inputLp.addEventListener('input', actualizarBoost);
+                }
+
+                const divActualSelect = document.getElementById('division-actual');
+                const divDeseadaSelect = document.getElementById('division-deseada');
+                
+                if (lAct === "Maestro") {
+                    divActualSelect.value = "1";
+                    divActualSelect.disabled = true;
+                } else {
+                    divActualSelect.disabled = false;
+                }
+
+                if (lDes === "Maestro") {
+                    divDeseadaSelect.value = "1";
+                    divDeseadaSelect.disabled = true;
+                } else {
+                    divDeseadaSelect.disabled = false;
+                }
+
+                const dAct = divActualSelect.value;
+                const dDes = divDeseadaSelect.value;
+
+                if (lAct !== "Maestro") {
+                    document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
+                    document.getElementById('txt-actual').textContent = `${lAct} Div. ${dAct}`;
+                }
+                document.getElementById('img-deseado').src = rangosEmblemas[lDes] || "Hierro.png";
+                document.getElementById('txt-deseado').textContent = `${lDes} Div. ${dDes}`;
+
+                const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
+                const lpDeseadoInput = parseInt(document.getElementById('lp-deseado').value) || 0;
+
+                const getScoreTotalLP = (liga, division, lp) => {
+                    const idxLiga = ligasOrden.indexOf(liga);
+                    const divNum = parseInt(division);
+                    return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
+                };
+
+                const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
+                const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
+                const diffLP = scoreDeseado - scoreActual;
+
+                if (diffLP > 0) {
+                    const totalPartidasEstimadas = Math.ceil(diffLP / lpPromedioVictoria);
+                    const precioPorJuego = obtenerPrecioPorVictoria(lAct, tramoLpSelect);
+                    precioTotal = totalPartidasEstimadas * precioPorJuego;
+                }
+            }
+
+            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual')?.value === "4" && document.getElementById('division-deseada')?.value === "1" && lAct !== "Maestro" && lDes !== "Maestro");
             const promoBanner = document.getElementById('promo-banner');
             const btnContratar = document.getElementById('btn-contratar-boost');
             const btnIgnorar = document.getElementById('btn-ignorar-oferta');
@@ -1567,6 +1663,13 @@
                 const idxSiguiente = ligasOrden.indexOf(lAct) + 1;
                 const siguienteLiga = ligasOrden[idxSiguiente] || "la siguiente liga";
 
+                const getScoreTotalLP = (liga, division, lp) => {
+                    const idxLiga = ligasOrden.indexOf(liga);
+                    const divNum = parseInt(division);
+                    return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
+                };
+
+                const scoreActual = getScoreTotalLP(lAct, "4", parseInt(document.getElementById('lp-actual').value) || 0);
                 const scoreSiguienteLiga = getScoreTotalLP(siguienteLiga, "4", 0);
                 const diffLPSiguiente = scoreSiguienteLiga - scoreActual;
                 
@@ -1628,10 +1731,14 @@
         }
 
         ['liga-actual', 'division-actual', 'liga-deseada', 'division-deseada'].forEach(id => {
-            document.getElementById(id).addEventListener('change', () => {
+            const el = document.getElementById(id);
+            if(el) el.addEventListener('change', () => {
                 ignorarOfertaLiga = false;
             });
         });
+
+        document.getElementById('liga-deseada').addEventListener('change', actualizarBoost);
+        document.getElementById('liga-actual').addEventListener('change', actualizarBoost);
 
         function actualizarPosicionamiento() {
             const cant = parseInt(document.getElementById('pos-cantidad').value) || 1;
@@ -1663,9 +1770,12 @@
             return total;
         }
 
-        ['liga-actual', 'division-actual', 'lp-actual', 'lp-ganancia', 'liga-deseada', 'division-deseada', 'lp-deseado', 'chk-streaming', 'chk-offline'].forEach(id => {
-            document.getElementById(id).addEventListener('change', actualizarBoost);
-            document.getElementById(id).addEventListener('input', actualizarBoost);
+        ['liga-actual', 'division-actual', 'lp-actual', 'lp-ganancia', 'division-deseada', 'lp-deseado', 'chk-streaming', 'chk-offline'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('change', actualizarBoost);
+                el.addEventListener('input', actualizarBoost);
+            }
         });
 
         ['pos-cantidad', 'pos-rango'].forEach(id => {
@@ -1762,13 +1872,13 @@
             const lAct = document.getElementById('liga-actual').value;
             const lDes = document.getElementById('liga-deseada').value;
             
-            const origenTexto = lAct === "Maestro" ? "Maestro" : `${lAct} ${numARomano(document.getElementById('division-actual').value)}`;
-            const destinoTexto = lDes === "Maestro" ? "Maestro" : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
+            const origenTexto = lAct === "Maestro" ? `Maestro (${document.getElementById('lp-actual').value || 0} LP)` : `${lAct} ${numARomano(document.getElementById('division-actual').value)}`;
+            const destinoTexto = lDes === "Maestro" ? `Maestro (+${document.getElementById('lp-deseado').value} LP)` : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
             const siguienteLigaNombre = ligasOrden[ligasOrden.indexOf(lAct) + 1] || "la siguiente liga";
 
-            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual').value === "4" && document.getElementById('division-deseada').value === "1" && lAct !== "Maestro" && !ignorarOfertaLiga);
+            let esLigaCompleta = (lAct === lDes && lAct !== "Maestro" && lDes !== "Maestro" && document.getElementById('division-actual').value === "4" && document.getElementById('division-deseada').value === "1" && !ignorarOfertaLiga);
 
-            let textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`;
+            let textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} a ${destinoTexto}`;
             
             if (esLigaCompleta) {
                 textoTituloServicio = `Boost (${modoTexto}) Liga Completa con Oferta a ${siguienteLigaNombre} Div. IV`;
@@ -1904,7 +2014,6 @@
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
-                let mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
                 await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
