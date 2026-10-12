@@ -1126,7 +1126,7 @@
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-posicionamiento">
                             <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Partidas de Posicionamiento</h3>
-                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">Asegura tus primeras partidas de la temporada con un profesional para obtener el melhor rango inicial posible.</p>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
                             
                             <div class="form-group">
                                 <label>¿Cuántas partidas de posicionamiento quieres?</label>
@@ -1568,7 +1568,13 @@
                 document.getElementById('lp-actual').max = "100";
             }
 
-            // --- LÓGICA SI RANGO DESEADO ES MAESTRO (INTERFAZ DE 150 EN 150 LP) ---
+            const getScoreTotalLP = (liga, division, lp) => {
+                const idxLiga = ligasOrden.indexOf(liga);
+                const divNum = parseInt(division);
+                return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
+            };
+
+            // --- LÓGICA SI RANGO DESEADO ES MAESTRO ---
             if (lDes === "Maestro") {
                 groupDivDeseada.style.display = 'none';
                 groupLpDeseada.style.display = 'block';
@@ -1604,7 +1610,32 @@
                 document.getElementById('img-deseado').src = rangosEmblemas["Maestro"];
                 document.getElementById('txt-deseado').textContent = `Maestro (${lpFinalTotal} LP)`;
 
-                // Cálculo por tramos de 150 LP acumulando según las tarifas de admin
+                // 1. Si la liga actual NO es Maestro, calcular la subida división por división hasta llegar a Maestro (0 LP)
+                if (lAct !== "Maestro") {
+                    const dAct = document.getElementById('division-actual').value;
+                    const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
+                    
+                    const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
+                    const scoreMaestro0 = getScoreTotalLP("Maestro", "4", 0); // Posición base de Maestro
+                    let diffLPHastaMaestro = scoreMaestro0 - scoreActual;
+
+                    if (diffLPHastaMaestro > 0) {
+                        let scoreIterador = scoreActual;
+                        while (scoreIterador < scoreMaestro0) {
+                            let idxLigaActual = Math.floor(scoreIterador / 400);
+                            if (idxLigaActual >= ligasOrden.length) idxLigaActual = ligasOrden.length - 1;
+                            let ligaIterada = ligasOrden[idxLigaActual];
+
+                            let lpRestanteEnPaso = Math.min(100, scoreMaestro0 - scoreIterador);
+                            let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * 5;
+
+                            precioTotal += (lpRestanteEnPaso / 100) * precioPorDivision;
+                            scoreIterador += lpRestanteEnPaso;
+                        }
+                    }
+                }
+
+                // 2. Sumar los LP extras en Maestro
                 let lpActualIt = lpActVal;
                 let lpRestanteIt = lpASumar;
 
@@ -1622,7 +1653,6 @@
                     let lpEnEsteTramo = Math.min(lpRestanteIt, tranche.max - lpActualIt);
                     
                     let precioJuego = obtenerPrecioJuegoMaestro(tranche.name, tramoLpSelect);
-                    // Cada 50 LP equivale a 5 partidas (precioJuego * 5 por bloque de 50 LP)
                     precioTotal += (lpEnEsteTramo / 10) * precioJuego;
 
                     lpActualIt += lpEnEsteTramo;
@@ -1675,12 +1705,6 @@
                 const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
                 const lpDeseadoInput = parseInt(document.getElementById('lp-deseado').value) || 0;
 
-                const getScoreTotalLP = (liga, division, lp) => {
-                    const idxLiga = ligasOrden.indexOf(liga);
-                    const divNum = parseInt(division);
-                    return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
-                };
-
                 const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
                 const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
                 let diffLP = scoreDeseado - scoreActual;
@@ -1713,15 +1737,8 @@
                 const idxSiguiente = ligasOrden.indexOf(lAct) + 1;
                 const siguienteLiga = ligasOrden[idxSiguiente] || "la siguiente liga";
 
-                const getScoreTotalLP = (liga, division, lp) => {
-                    const idxLiga = ligasOrden.indexOf(liga);
-                    const divNum = parseInt(division);
-                    return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
-                };
-
                 const scoreActual = getScoreTotalLP(lAct, "4", parseInt(document.getElementById('lp-actual').value) || 0);
                 const scoreSiguienteLiga = getScoreTotalLP(siguienteLiga, "4", 0);
-                const diffLPSiguiente = scoreSiguienteLiga - scoreActual;
                 
                 // Cálculo iterativo para la oferta hasta la siguiente liga
                 let precioOfertaBase = 0;
