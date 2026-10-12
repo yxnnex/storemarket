@@ -1089,7 +1089,7 @@
                                 </div>
                             </div>
                             <div id="maestro-decay-aviso" style="display: none; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); border-radius: 8px; padding: 12px; margin-top: 15px; font-size: 0.85rem; color: #e9d5ff; text-align: center; font-family: 'Segoe UI', sans-serif;">
-                                💡 ¿Quieres evitar el decay o mantenerte en Maestro?<br>Te recomendamos contratar <b>ANTIDECAY</b> para sumar días de reserva.
+                                💡 ¿Quieres evitar el decay o mantenerte en Maestro?<br>Te recomendamos contratar <a href="#" id="link-antidecay" style="color: #38bdf8; text-decoration: underline; font-weight: bold;">ANTIDECAY</a> para sumar días de reserva.
                             </div>
                         </div>
 
@@ -1580,6 +1580,17 @@
                 groupLpDeseada.style.display = 'block';
                 groupLpDeseada.querySelector('label').textContent = "LP a Sumar";
                 avisoDecay.style.display = 'block';
+                avisoDecay.innerHTML = `💡 ¿Quieres evitar el decay o mantenerte en Maestro?<br>Te recomendamos contratar <a href="#" id="link-antidecay" style="color: #38bdf8; text-decoration: underline; font-weight: bold;">ANTIDECAY</a> para sumar días de reserva.`;
+                
+                setTimeout(() => {
+                    const linkDecay = document.getElementById('link-antidecay');
+                    if (linkDecay) {
+                        linkDecay.onclick = (e) => {
+                            e.preventDefault();
+                            document.querySelector('[data-boost="netas"]').click();
+                        };
+                    }
+                }, 100);
 
                 let inputDeseadoEl = document.getElementById('lp-deseado');
                 if (inputDeseadoEl.tagName !== 'SELECT') {
