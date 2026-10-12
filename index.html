@@ -1126,7 +1126,7 @@
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-posicionamiento">
                             <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Partidas de Posicionamiento</h3>
-                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">Asegura tus primeras partidas de la temporada con un profesional para obtener el mejor rango inicial posible.</p>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">Asegura tus primeras partidas de la temporada con un profesional para obtener el melhor rango inicial posible.</p>
                             
                             <div class="form-group">
                                 <label>¿Cuántas partidas de posicionamiento quieres?</label>
@@ -1683,13 +1683,22 @@
 
                 const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
                 const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
-                const diffLP = scoreDeseado - scoreActual;
+                let diffLP = scoreDeseado - scoreActual;
 
-                // CÁLCULO EXACTO POR DIVISIONES (5 partidas x precioPorJuego)
+                // CÁLCULO ITERATIVO CORRECTO: SUMA DIVISIÓN POR DIVISIÓN SEGÚN LA LIGA CORRESPONDIENTE
                 if (diffLP > 0) {
-                    const precioPorDivision = obtenerPrecioPorVictoria(lAct, tramoLpSelect) * 5;
-                    const cantidadDivisiones = diffLP / 100;
-                    precioTotal = cantidadDivisiones * precioPorDivision;
+                    let scoreIterador = scoreActual;
+                    while (scoreIterador < scoreDeseado) {
+                        let idxLigaActual = Math.floor(scoreIterador / 400);
+                        if (idxLigaActual >= ligasOrden.length) idxLigaActual = ligasOrden.length - 1;
+                        let ligaIterada = ligasOrden[idxLigaActual];
+
+                        let lpRestanteEnPaso = Math.min(100, scoreDeseado - scoreIterador);
+                        let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * 5;
+
+                        precioTotal += (lpRestanteEnPaso / 100) * precioPorDivision;
+                        scoreIterador += lpRestanteEnPaso;
+                    }
                 }
             }
 
@@ -1714,9 +1723,20 @@
                 const scoreSiguienteLiga = getScoreTotalLP(siguienteLiga, "4", 0);
                 const diffLPSiguiente = scoreSiguienteLiga - scoreActual;
                 
-                const precioPorDivisionSiguiente = obtenerPrecioPorVictoria(lAct, tramoLpSelect) * 5;
-                const cantidadDivsSiguiente = diffLPSiguiente / 100;
-                let precioOfertaBase = cantidadDivsSiguiente * precioPorDivisionSiguiente;
+                // Cálculo iterativo para la oferta hasta la siguiente liga
+                let precioOfertaBase = 0;
+                let scoreIteradorOferta = scoreActual;
+                while (scoreIteradorOferta < scoreSiguienteLiga) {
+                    let idxLigaActual = Math.floor(scoreIteradorOferta / 400);
+                    if (idxLigaActual >= ligasOrden.length) idxLigaActual = ligasOrden.length - 1;
+                    let ligaIterada = ligasOrden[idxLigaActual];
+
+                    let lpRestanteEnPaso = Math.min(100, scoreSiguienteLiga - scoreIteradorOferta);
+                    let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * 5;
+
+                    precioOfertaBase += (lpRestanteEnPaso / 100) * precioPorDivision;
+                    scoreIteradorOferta += lpRestanteEnPaso;
+                }
 
                 if (modoSeleccionado === 'duo') {
                     precioOfertaBase *= 1.3;
