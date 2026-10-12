@@ -1607,14 +1607,13 @@
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
-                mensaje = `Hola! Quiero comprar la cuenta: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
                 await addDoc(collection(db, "compras"), { tipo: "Cuenta", correoCliente: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
             document.getElementById('modal-pago').classList.remove('active');
         });
 
-        /* --- CARGA DE CUENTAS BLINDADA E INDEPENDIENTE --- */
+        /* --- CARGA DE CUENTAS CORREGIDA --- */
         async function cargarCatalogo() {
             const grid = document.getElementById('grid-cuentas');
             if (!grid) return;
@@ -1678,11 +1677,8 @@
             abrirModalPago();
         });
 
-        // Inicialización separada y segura para evitar bloqueos
         cargarTarifasTienda();
-        setTimeout(() => {
-            cargarCatalogo();
-        }, 150);
+        cargarCatalogo();
     </script>
 </body>
 </html>
