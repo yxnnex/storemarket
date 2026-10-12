@@ -44,12 +44,13 @@
             padding: 20px;
             position: relative;
             z-index: 1;
-            flex: 1;
+            flex: 1; /* Hace que el contenedor principal ocupe el espacio y empuje el footer al fondo */
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
         }
 
+        /* --- ENCABEZADO TRANSPARENTE CON LOGO A LA IZQUIERDA Y NOMBRE CENTRADO --- */
         header {
             width: 100%;
             display: flex;
@@ -104,6 +105,7 @@
             border: none;
         }
 
+        /* BOTONES DEL MENÚ ESTILO IDÉNTICO A LA CAPTURA */
         .tab-btn {
             background: transparent;
             border: none;
@@ -142,7 +144,7 @@
             display: block;
         }
 
-        /* --- ESTILOS FAQ --- */
+        /* --- ESTILOS PARA EL FAQ --- */
         .faq-container {
             max-width: 900px;
             margin: 0 auto;
@@ -258,6 +260,14 @@
             box-shadow: 0 0 16px rgba(168, 85, 247, 0.6);
         }
 
+        .boost-type-btn.active:hover {
+            background-color: #facc15;
+            color: #0b0e14;
+            border-color: #facc15;
+            box-shadow: 0 0 16px rgba(250, 204, 21, 0.7);
+        }
+
+        /* --- CONTENEDOR Y ANIMACIÓN DE TARJETAS APILADAS --- */
         .boost-cards-stack {
             position: relative;
             width: 100%;
@@ -317,6 +327,7 @@
             max-width: 500px;
         }
 
+        /* --- TARJETAS PRINCIPALES ESTILO GLASS --- */
         .boost-card {
             background: rgba(12, 10, 18, 0.55);
             backdrop-filter: blur(20px);
@@ -329,25 +340,56 @@
             width: 100%;
         }
 
+        /* --- ESTILOS PERSONALIZADOS POR SERVICIO --- */
         .card-posicionamiento {
             border: 1px solid rgba(34, 197, 94, 0.4) !important;
             box-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.18) !important;
         }
-        .card-posicionamiento h3 { color: #22c55e !important; }
-        .card-posicionamiento .boost-total { color: #22c55e !important; text-shadow: 0 0 10px rgba(34, 197, 94, 0.35) !important; }
-        .card-posicionamiento .btn-contratar { background-color: #22c55e !important; color: #0b0e14 !important; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35) !important; }
+        .card-posicionamiento h3 {
+            color: #22c55e !important;
+        }
+        .card-posicionamiento .boost-total {
+            color: #22c55e !important;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.35) !important;
+        }
+        .card-posicionamiento .btn-contratar {
+            background-color: #22c55e !important;
+            color: #0b0e14 !important;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35) !important;
+        }
+        .card-posicionamiento .btn-contratar:hover {
+            background-color: #facc15 !important;
+            box-shadow: 0 4px 20px rgba(250, 204, 21, 0.6) !important;
+        }
 
         .card-netas {
             border: 1px solid rgba(0, 191, 255, 0.4) !important;
             box-shadow: 0 8px 32px 0 rgba(0, 191, 255, 0.18) !important;
         }
-        .card-netas h3 { color: #00bfff !important; }
-        .card-netas .boost-total { color: #00bfff !important; text-shadow: 0 0 10px rgba(0, 191, 255, 0.35) !important; }
-        .card-netas .btn-contratar { background-color: #00bfff !important; color: #0b0e14 !important; box-shadow: 0 4px 15px rgba(0, 191, 255, 0.35) !important; }
+        .card-netas h3 {
+            color: #00bfff !important;
+        }
+        .card-netas .boost-total {
+            color: #00bfff !important;
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.35) !important;
+        }
+        .card-netas .btn-contratar {
+            background-color: #00bfff !important;
+            color: #0b0e14 !important;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.35) !important;
+        }
+        .card-netas .btn-contratar:hover {
+            background-color: #facc15 !important;
+            box-shadow: 0 4px 20px rgba(250, 204, 21, 0.6) !important;
+        }
 
         @media (max-width: 1024px) {
-            .boost-layout { grid-template-columns: 1fr; }
-            .boost-cards-stack { min-height: 1100px; }
+            .boost-layout {
+                grid-template-columns: 1fr;
+            }
+            .boost-cards-stack {
+                min-height: 1100px;
+            }
         }
 
         .rank-header {
@@ -392,10 +434,14 @@
         }
 
         @media (max-width: 600px) {
-            .form-row { grid-template-columns: 1fr; }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .form-group { margin-bottom: 20px; }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
         label {
             display: block;
@@ -494,6 +540,13 @@
             box-shadow: 0 0 14px rgba(168, 85, 247, 0.5);
         }
 
+        .mode-btn.active:hover {
+            background-color: #facc15;
+            color: #0b0e14;
+            border-color: #facc15;
+            box-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
+        }
+
         .toggle-option {
             display: flex;
             justify-content: space-between;
@@ -563,17 +616,16 @@
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
         }
 
-        .master-banner {
-            background: rgba(168, 85, 247, 0.15);
-            border: 1px solid rgba(168, 85, 247, 0.4);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            color: #e9d5ff;
-            text-align: center;
-            margin-top: 15px;
-            line-height: 1.4;
-            display: none;
+        .btn-contratar.promo-active {
+            background: linear-gradient(135deg, #a855f7, #7e22ce);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.6);
+        }
+
+        .btn-contratar.promo-active:hover {
+            background: #facc15;
+            color: #0b0e14;
+            box-shadow: 0 4px 20px rgba(250, 204, 21, 0.8);
         }
 
         .grid-cuentas {
@@ -747,13 +799,16 @@
             background-color: #0070ba; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s;
         }
-        .btn-pagar-paypal:hover { background-color: #005ea6; }
-
+        .btn-pagar-paypal:hover {
+            background-color: #005ea6;
+        }
         .btn-pagar-alias {
             background-color: #22c55e; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s;
         }
-        .btn-pagar-alias:hover { background-color: #16a34a; }
+        .btn-pagar-alias:hover {
+            background-color: #16a34a;
+        }
 
         .terminos-box {
             background: rgba(0, 0, 0, 0.5);
@@ -770,12 +825,18 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
-        .terminos-box::-webkit-scrollbar { width: 6px; }
-        .terminos-box::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.4); border-radius: 3px; }
+        .terminos-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .terminos-box::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.4);
+            border-radius: 3px;
+        }
 
         .terminos-check-container {
             display: flex;
             align-items: flex-start;
+            justify-content: flex-start;
             gap: 12px;
             margin: 15px 0 25px 0;
             font-size: 0.9rem;
@@ -787,7 +848,12 @@
         }
 
         .terminos-check-container input {
-            min-width: 18px; width: 18px; height: 18px; margin-top: 2px; accent-color: #a855f7; cursor: pointer;
+            min-width: 18px;
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #a855f7;
+            cursor: pointer;
         }
 
         .custom-alert-overlay {
@@ -798,8 +864,9 @@
             display: flex; justify-content: center; align-items: center;
             z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
-        .custom-alert-overlay.active { opacity: 1; pointer-events: auto; }
-
+        .custom-alert-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
         .custom-alert-box {
             background: rgba(14, 12, 22, 0.95);
             backdrop-filter: blur(24px);
@@ -809,9 +876,12 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.85);
             box-sizing: border-box;
         }
-        .custom-alert-box h4 { color: #c084fc; font-size: 1.3rem; margin-top: 0; margin-bottom: 12px; letter-spacing: 1px; }
-        .custom-alert-box p { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; font-family: 'Segoe UI', sans-serif; }
-
+        .custom-alert-box h4 {
+            color: #c084fc; font-size: 1.3rem; margin-top: 0; margin-bottom: 12px; letter-spacing: 1px;
+        }
+        .custom-alert-box p {
+            color: #cbd5e1; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;
+        }
         .btn-alert-ok {
             background: #a855f7; color: #ffffff; border: none;
             padding: 12px 25px; font-weight: bold; border-radius: 8px;
@@ -819,8 +889,12 @@
             font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s, color 0.2s;
         }
-        .btn-alert-ok:hover { background: #facc15; color: #0b0e14; }
+        .btn-alert-ok:hover {
+            background: #facc15;
+            color: #0b0e14;
+        }
 
+        /* --- FOOTER SIEMPRE FIJO AL FONDO --- */
         .site-footer {
             width: 100%;
             max-width: 1250px;
@@ -831,15 +905,27 @@
             font-family: 'Segoe UI', sans-serif;
             box-sizing: border-box;
         }
-        .site-footer p { font-size: 0.8rem; color: #8a99ad; line-height: 1.6; margin: 0; }
-        .confianza-footer { margin-bottom: 14px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; }
+        .site-footer p {
+            font-size: 0.8rem;
+            color: #8a99ad;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .confianza-footer {
+            margin-bottom: 14px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
 
+    <!-- CANVAS PARA PARTÍCULAS BLANCAS PEQUEÑAS SOBRE FONDO VEXOR -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
+        <!-- HEADER EN Malla Grid: LOGO ESQUINA IZQUIERDA Y NOMBRE CENTRADO ARRIBA -->
         <header>
             <div class="header-top-grid">
                 <div class="logo-area-left">
@@ -857,7 +943,7 @@
             </nav>
         </header>
 
-        <!-- SECCIÓN 1: CUENTAS -->
+        <!-- SECCIÓN 1: CATÁLOGO DE CUENTAS -->
         <div id="seccion-cuentas" class="tab-content active">
             <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">CUENTAS DISPONIBLES</h2>
             <div id="grid-cuentas" class="grid-cuentas">
@@ -865,18 +951,19 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 2: BOOST -->
+        <!-- SECCIÓN 2: BOOST PRO -->
         <div id="seccion-boost" class="tab-content">
             <div class="boost-types-nav">
                 <button class="boost-type-btn active" data-boost="rango">Impulso de rango</button>
                 <button class="boost-type-btn" data-boost="posicionamiento">Partidas de posicionamiento</button>
-                <button class="boost-type-btn" data-boost="netas">ANTIDECAY</button>
+                <button class="boost-type-btn" data-boost="netas">Victorias netas</button>
             </div>
 
+            <!-- CONTENEDOR DE TARJETAS APILADAS CON ANIMACIÓN -->
             <div class="boost-cards-stack">
+                <!-- CONTENEDOR 1: IMPULSO DE RANGO -->
                 <div id="panel-boost-rango" class="boost-subpanel active">
                     <div class="boost-layout">
-                        <!-- RANGO ACTUAL -->
                         <div class="boost-card">
                             <div class="rank-header">
                                 <img id="img-actual" class="rank-emblem" src="Hierro.png" alt="Rango Actual">
@@ -899,7 +986,7 @@
                                         <option value="Maestro">Maestro</option>
                                     </select>
                                 </div>
-                                <div class="form-group" id="grupo-division-actual">
+                                <div class="form-group">
                                     <label>División</label>
                                     <select id="division-actual">
                                         <option value="4">Div. IV</option>
@@ -909,12 +996,12 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>LP Actuales</label>
-                                    <input type="number" id="lp-actual" placeholder="0-840" min="0" max="840" value="0">
+                                    <label>LP (opc.)</label>
+                                    <input type="number" id="lp-actual" placeholder="0-100" min="0" max="100" value="0">
                                 </div>
                             </div>
 
-                            <div class="lp-gain-container" id="grupo-lp-ganancia">
+                            <div class="lp-gain-container">
                                 <label for="lp-ganancia">¿Cuántos LP obtienes x victoria?</label>
                                 <select id="lp-ganancia">
                                     <option value="17_19">17 a 19 LP</option>
@@ -924,7 +1011,6 @@
                             </div>
                         </div>
 
-                        <!-- RANGO DESEADO -->
                         <div class="boost-card">
                             <div class="rank-header">
                                 <img id="img-deseado" class="rank-emblem" src="Oro.png" alt="Rango Deseado">
@@ -947,7 +1033,7 @@
                                         <option value="Maestro">Maestro</option>
                                     </select>
                                 </div>
-                                <div class="form-group" id="grupo-division-deseada">
+                                <div class="form-group">
                                     <label>División</label>
                                     <select id="division-deseada">
                                         <option value="4">Div. IV</option>
@@ -956,28 +1042,13 @@
                                         <option value="1" selected>Div. I</option>
                                     </select>
                                 </div>
-                                <div class="form-group" id="grupo-lp-deseado-normal">
+                                <div class="form-group">
                                     <label>LP (opc.)</label>
                                     <input type="number" id="lp-deseado" placeholder="0-100" min="0" max="100" value="0">
                                 </div>
-                                <div class="form-group" id="grupo-lp-deseado-maestro" style="display: none;">
-                                    <label>LP a Sumar</label>
-                                    <select id="select-lp-maestro">
-                                        <option value="50">+50 LP</option>
-                                        <option value="100" selected>+100 LP</option>
-                                        <option value="150">+150 LP</option>
-                                        <option value="200">+200 LP</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div id="master-banner" class="master-banner">
-                                💡 <b>¿Quieres evitar el decay o mantenerte en Maestro?</b><br>
-                                Te recomendamos contratar <a href="#" id="link-ir-netas" style="color: #facc15; font-weight: bold; text-decoration: underline;">ANTIDECAY</a> para sumar días de reserva.
                             </div>
                         </div>
 
-                        <!-- RESUMEN / PERSONALIZAR -->
                         <div class="boost-card">
                             <h3 style="font-size: 1rem; margin-bottom: 15px; color: #f8fafc; text-transform: uppercase; letter-spacing: 1px;">Personalizar Pedido</h3>
                             
@@ -988,10 +1059,12 @@
 
                             <div class="options-group">
                                 <label class="toggle-option">
-                                    <span>Transmisión en vivo</span> <input type="checkbox" id="chk-streaming">
+                                    <span>Transmisión en vivo</span> 
+                                    <input type="checkbox" id="chk-streaming">
                                 </label>
                                 <label class="toggle-option">
-                                    <span>Modo Offline</span> <input type="checkbox" id="chk-offline">
+                                    <span>Modo Offline</span> 
+                                    <input type="checkbox" id="chk-offline">
                                 </label>
                             </div>
 
@@ -1003,7 +1076,7 @@
                     </div>
                 </div>
 
-                <!-- POSICIONAMIENTO -->
+                <!-- CONTENEDOR 2: PARTIDAS DE POSICIONAMIENTO -->
                 <div id="panel-boost-posicionamiento" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-posicionamiento">
@@ -1013,18 +1086,30 @@
                             <div class="form-group">
                                 <label>¿Cuántas partidas de posicionamiento quieres?</label>
                                 <select id="pos-cantidad">
-                                    <option value="1">1 Partida</option><option value="2">2 Partidas</option><option value="3">3 Partidas</option>
-                                    <option value="4">4 Partidas</option><option value="5" selected>5 Partidas</option><option value="6">6 Partidas</option>
-                                    <option value="7">7 Partidas</option><option value="8">8 Partidas</option><option value="9">9 Partidas</option><option value="10">10 Partidas</option>
+                                    <option value="1">1 Partida</option>
+                                    <option value="2">2 Partidas</option>
+                                    <option value="3">3 Partidas</option>
+                                    <option value="4">4 Partidas</option>
+                                    <option value="5" selected>5 Partidas</option>
+                                    <option value="6">6 Partidas</option>
+                                    <option value="7">7 Partidas</option>
+                                    <option value="8">8 Partidas</option>
+                                    <option value="9">9 Partidas</option>
+                                    <option value="10">10 Partidas</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label>¿Cuál fue el último rango de tu cuenta?</label>
                                 <select id="pos-rango">
-                                    <option value="Hierro">Hierro</option><option value="Bronce">Bronce</option><option value="Plata">Plata</option>
-                                    <option value="Oro" selected>Oro</option><option value="Platino">Platino</option><option value="Esmeralda">Esmeralda</option>
-                                    <option value="Diamante">Diamante</option><option value="Maestro">Maestro o superior</option>
+                                    <option value="Hierro">Hierro</option>
+                                    <option value="Bronce">Bronce</option>
+                                    <option value="Plata">Plata</option>
+                                    <option value="Oro" selected>Oro</option>
+                                    <option value="Platino">Platino</option>
+                                    <option value="Esmeralda">Esmeralda</option>
+                                    <option value="Diamante">Diamante</option>
+                                    <option value="Maestro">Maestro o superior</option>
                                 </select>
                             </div>
 
@@ -1037,41 +1122,35 @@
                     </div>
                 </div>
 
-                <!-- ANTIDECAY / DÍAS DE RESERVA -->
+                <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
                 <div id="panel-boost-netas" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-netas">
-                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Dias de reserva</h3>
-                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 15px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">
-                                Evita el decay y mantente en la cima.<br>Cada partida jugada te otorga 1 día de protección.
-                            </p>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Victorias Netas</h3>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6; font-family: 'Segoe UI', sans-serif;">¿Estás en cola de descenso y quieres mantenerte? Compra victorias netas, suma días o evita el decay. Ideal para rangos de Diamante, Maestro + .</p>
                             
                             <div class="form-group">
-                                <label>Liga Actual</label>
+                                <label>Selecciona tu Liga Actual</label>
                                 <select id="netas-liga">
-                                    <option value="Diamante">Diamante</option><option value="Maestro" selected>Maestro</option>
-                                    <option value="Gran Maestro">Gran Maestro</option><option value="Challenger">Challenger</option>
+                                    <option value="Diamante" selected>Diamante</option>
+                                    <option value="Maestro">Maestro</option>
+                                    <option value="Gran Maestro">Gran Maestro</option>
+                                    <option value="Challenger">Challenger</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label>Cantidad de partidas</label>
-                                <select id="netas-cantidad" onchange="actualizarInfoDiasReserva()">
-                                    <option value="1">1 partida</option><option value="2">2 partidas</option><option value="3">3 partidas</option>
-                                    <option value="4">4 partidas</option><option value="5">5 partidas</option><option value="6">6 partidas</option>
-                                    <option value="7" selected>7 partidas</option><option value="8">8 partidas</option><option value="9">9 partidas</option>
-                                    <option value="10">10 partidas</option><option value="11">11 partidas</option><option value="12">12 partidas</option>
-                                    <option value="13">13 partidas</option><option value="14">14 partidas</option>
+                                <label>Cantidad de Victorias Netas / Días a cubrir</label>
+                                <select id="netas-cantidad">
+                                    <option value="1" selected>1 Victoria</option>
+                                    <option value="2">2 Victorias</option>
+                                    <option value="3">3 Victorias</option>
+                                    <option value="4">4 Victorias</option>
+                                    <option value="5">5 Victorias</option>
                                 </select>
                             </div>
 
-                            <div style="background: rgba(0, 191, 255, 0.12); border: 1px solid rgba(0, 191, 255, 0.3); padding: 10px 14px; border-radius: 8px; text-align: center; margin-bottom: 15px;">
-                                <span id="txt-resultado-reserva" style="font-size: 0.85rem; color: #e0f2fe; font-weight: 600;">
-                                    🛡️ Resultado: Tu cuenta ganará 7 días de protección total antes de que comience el decay
-                                </span>
-                            </div>
-
-                            <div style="border-top: 1px solid rgba(255,255,255,0.07); padding-top: 15px;">
+                            <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
                                 <label style="text-align: center; font-size: 0.8rem; text-transform: uppercase; color: #8a99ad; margin-bottom: 5px; letter-spacing: 1px;">Resumen del Pedido</label>
                                 <div class="boost-total" style="margin: 5px 0 15px 0;">USD <span id="precio-netas">0.00</span></div>
                                 <button class="btn-contratar" id="btn-contratar-netas">Contratar servicio</button>
@@ -1082,7 +1161,7 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 3: FAQ -->
+        <!-- SECCIÓN 3: PREGUNTAS FRECUENTES (FAQ) -->
         <div id="seccion-faq" class="tab-content">
             <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">PREGUNTAS FRECUENTES</h2>
             
@@ -1115,19 +1194,20 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Cómo se desarrollan las partidas si contrato el modo Duo?</div>
                     <div class="faq-answer">
-                        En la modalidad Duo, el booster te contactará para agregarte e invitarte a las partidas desde su cuenta correspondiente. El profesional podrá alternar entre distintas cuentas de apoyo según las necesidades de emparejamiento (matchmaking). Al terminar cada sesión diaria, el equipo revisará que los objetivos solicitados se cumplan bajo los estándares de calidad de VeXor.
+                        En la modalidad Duo, el booster teto contactará para agregarte e invitarte a las partidas desde su cuenta correspondiente. El profesional podrá alternar entre distintas cuentas de apoyo según las necesidades de emparejamiento (matchmaking). Al terminar cada sesión diaria, el equipo revisará que los objetivos solicitados se cumplan bajo los estándares de calidad de VeXor.
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
                     <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta: ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y organicidad total ante los sistemas de revisión automatizados.
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta: ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- FOOTER ANCLADO AL FONDO -->
         <footer class="site-footer">
             <div class="confianza-footer">
                 <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
@@ -1214,11 +1294,15 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        /* --- ANIMACIÓN DE PARTÍCULAS BLANCAS PEQUEÑAS SOBRE FONDO VEXOR --- */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
 
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
@@ -1232,25 +1316,36 @@
                 this.opacity = Math.random() * 0.6 + 0.2;
             }
             update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
             }
             draw() {
                 ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
         }
 
         function initParticles() {
             particlesArray = [];
-            for (let i = 0; i < Math.floor((canvas.width * canvas.height) / 12000); i++) particlesArray.push(new Particle());
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 12000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
         }
         initParticles();
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach(p => { p.update(); p.draw(); });
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
             requestAnimationFrame(animateParticles);
         }
         animateParticles();
@@ -1267,64 +1362,83 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        window.mostrarAlerta = (msg) => { document.getElementById('customAlertMessage').innerText = msg; document.getElementById('customAlert').classList.add('active'); };
-        window.cerrarAlertaCustom = () => { document.getElementById('customAlert').classList.remove('active'); };
+        window.mostrarAlerta = function(mensaje) {
+            document.getElementById('customAlertMessage').innerText = mensaje;
+            document.getElementById('customAlert').classList.add('active');
+        }
 
-        document.querySelectorAll('.tab-btn').forEach(btn => {
+        window.cerrarAlertaCustom = function() {
+            document.getElementById('customAlert').classList.remove('active');
+        }
+
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
                 document.getElementById(btn.getAttribute('data-target')).classList.add('active');
             });
         });
 
+        // ACORDEÓN DE FAQ
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
             const question = item.querySelector('.faq-question');
             question.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
                 faqItems.forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
+                if (!isActive) {
+                    item.classList.add('active');
+                }
             });
         });
 
         const boostTypeBtns = document.querySelectorAll('.boost-type-btn');
         const subpanels = document.querySelectorAll('.boost-subpanel');
 
-        function cambiarPestanaSubpanel(tipo) {
-            let targetId = 'panel-boost-rango';
-            if (tipo === 'posicionamiento') targetId = 'panel-boost-posicionamiento';
-            if (tipo === 'netas') targetId = 'panel-boost-netas';
-
-            boostTypeBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-boost') === tipo));
-            subpanels.forEach(p => {
-                p.classList.toggle('active', p.id === targetId);
-                p.classList.toggle('behind', p.id !== targetId);
-            });
-
-            if (tipo === 'rango') actualizarBoost();
-            else if (tipo === 'posicionamiento') actualizarPosicionamiento();
-            else if (tipo === 'netas') actualizarNetas();
-        }
-
-        boostTypeBtns.forEach(btn => btn.addEventListener('click', () => cambiarPestanaSubpanel(btn.getAttribute('data-boost'))));
-        const linkIrNetas = document.getElementById('link-ir-netas');
-        if (linkIrNetas) {
-            linkIrNetas.addEventListener('click', (e) => { e.preventDefault(); cambiarPestanaSubpanel('netas'); });
-        }
-
-        let modoSeleccionado = 'solo';
-        document.querySelectorAll('.mode-btn').forEach(btn => {
+        boostTypeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                boostTypeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const tipo = btn.getAttribute('data-boost');
+                let targetId = 'panel-boost-rango';
+                if (tipo === 'posicionamiento') targetId = 'panel-boost-posicionamiento';
+                if (tipo === 'netas') targetId = 'panel-boost-netas';
+
+                subpanels.forEach(p => {
+                    if (p.id === targetId) {
+                        p.classList.add('active');
+                        p.classList.remove('behind');
+                    } else {
+                        p.classList.remove('active');
+                        p.classList.add('behind');
+                    }
+                });
+
+                if (tipo === 'rango') actualizarBoost();
+                else if (tipo === 'posicionamiento') actualizarPosicionamiento();
+                else if (tipo === 'netas') actualizarNetas();
+            });
+        });
+
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        let modoSeleccionado = 'solo';
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 modoSeleccionado = btn.getAttribute('data-mode');
                 actualizarBoost();
             });
         });
 
-        const rangosEmblemas = { Hierro: "Hierro.png", Bronce: "Bronce.png", Plata: "Plata.png", Oro: "Oro.png", Platino: "Platino.png", Esmeralda: "Esmeralda.png", Diamante: "Diamante.png", Maestro: "Maestro.png" };
+        const rangosEmblemas = {
+            Hierro: "Hierro.png", Bronce: "Bronce.png", Plata: "Plata.png", Oro: "Oro.png",
+            Platino: "Platino.png", Esmeralda: "Esmeralda.png", Diamante: "Diamante.png", Maestro: "Maestro.png"
+        };
         const ligasOrden = ["Hierro", "Bronce", "Plata", "Oro", "Platino", "Esmeralda", "Diamante", "Maestro"];
 
         let tarifasFirebase = {};
@@ -1332,254 +1446,374 @@
 
         async function cargarTarifasTienda() {
             try {
-                const snap = await getDoc(doc(db, "configuracion", "tarifasBoost"));
-                if (snap.exists()) tarifasFirebase = snap.data();
-                const snapVit = await getDoc(doc(db, "configuracion", "tarifasVictorias"));
-                if (snapVit.exists()) tarifasVictoriasFirebase = snapVit.data();
+                const docSnap = await getDoc(doc(db, "configuracion", "tarifasBoost"));
+                if (docSnap.exists()) {
+                    tarifasFirebase = docSnap.data();
+                }
+                const docSnapVit = await getDoc(doc(db, "configuracion", "tarifasVictorias"));
+                if (docSnapVit.exists()) {
+                    tarifasVictoriasFirebase = docSnapVit.data();
+                }
             } catch (err) { console.error(err); }
-            actualizarBoost(); actualizarPosicionamiento(); actualizarNetas();
+            actualizarBoost();
+            actualizarPosicionamiento();
+            actualizarNetas();
         }
 
-        function obtenerPrecioPorVictoriaEspecifico(liga, division, tramoLp) {
-            const keyEspecifica = `${liga.toLowerCase()}_${division}_${tramoLp}`;
-            const keyGeneral = `${liga.toLowerCase()}_${tramoLp}`;
-            if (tarifasFirebase[keyEspecifica] !== undefined) return parseFloat(tarifasFirebase[keyEspecifica]);
-            if (tarifasFirebase[keyGeneral] !== undefined) return parseFloat(tarifasFirebase[keyGeneral]);
-            if (liga === "Diamante") return division === 2 || division === 1 ? 4.0 : 3.5;
-            if (liga === "Platino") return 2.25;
-            return 1.5;
-        }
-
-        function obtenerPrecioMaestroPorLpYGanancia(lpActual, tramoLp) {
-            let tramoStr = "0_150";
-            if (lpActual >= 750) tramoStr = "750_840";
-            else if (lpActual >= 600) tramoStr = "600_750";
-            else if (lpActual >= 450) tramoStr = "450_600";
-            else if (lpActual >= 300) tramoStr = "300_450";
-            else if (lpActual >= 150) tramoStr = "150_300";
-
-            const key = `maestro_${tramoStr}_${tramoLp}`;
-            if (tarifasFirebase[key] !== undefined) return parseFloat(tarifasFirebase[key]);
-            return 5.0;
+        function obtenerPrecioPorVictoria(liga, tramoLp) {
+            const key = `${liga.toLowerCase()}_${tramoLp}`;
+            if (tarifasFirebase[key] !== undefined) {
+                return parseFloat(tarifasFirebase[key]);
+            }
+            if (liga === "Hierro" || liga === "Bronce") return 1.5;
+            if (liga === "Plata" || liga === "Oro") return 2.0;
+            if (liga === "Platino") return 2.5;
+            if (liga === "Esmeralda") return 3.0;
+            return 3.5;
         }
 
         function actualizarBoost() {
             const lAct = document.getElementById('liga-actual').value;
+            const divActualSelect = document.getElementById('division-actual');
             const lDes = document.getElementById('liga-deseada').value;
-            const grupoDivActual = document.getElementById('grupo-division-actual');
-            const grupoDivDeseada = document.getElementById('grupo-division-deseada');
-            const grupoLpNormal = document.getElementById('grupo-lp-deseado-normal');
-            const grupoLpMaestro = document.getElementById('grupo-lp-deseado-maestro');
-            const masterBanner = document.getElementById('master-banner');
-            const grupoLpGanancia = document.getElementById('grupo-lp-ganancia');
-
-            let esModoMaestro = (lAct === "Maestro" && lDes === "Maestro");
-
-            if (esModoMaestro) {
-                grupoDivActual.style.display = "none";
-                grupoDivDeseada.style.display = "none";
-                grupoLpNormal.style.display = "none";
-                grupoLpGanancia.style.display = "block";
-                grupoLpMaestro.style.display = "block";
-                masterBanner.style.display = "block";
-
-                const lpActual = parseInt(document.getElementById('lp-actual').value) || 0;
-                const lpASumar = parseInt(document.getElementById('select-lp-maestro').value) || 100;
-                const tramoLpSelect = document.getElementById('lp-ganancia').value;
-
-                document.getElementById('img-actual').src = rangosEmblemas["Maestro"];
-                document.getElementById('txt-actual').textContent = `Maestro (${lpActual} LP)`;
-                document.getElementById('img-deseado').src = rangosEmblemas["Maestro"];
-                document.getElementById('txt-deseado').textContent = `Maestro (${lpActual + lpASumar} LP)`;
-
-                const precioPorJuego = obtenerPrecioMaestroPorLpYGanancia(lpActual, tramoLpSelect);
-                const victoriasEstimadas = Math.ceil(lpASumar / 20);
-                let precioTotal = victoriasEstimadas * precioPorJuego;
-
-                if (modoSeleccionado === 'duo') precioTotal *= 1.3;
-                if (document.getElementById('chk-streaming').checked) precioTotal += 5;
-                if (document.getElementById('chk-offline').checked) precioTotal += 3;
-
-                document.getElementById('precio-boost').textContent = precioTotal.toFixed(2);
-                return precioTotal;
-
+            const divDeseadaSelect = document.getElementById('division-deseada');
+            
+            if (lAct === "Maestro") {
+                divActualSelect.value = "1";
+                divActualSelect.disabled = true;
             } else {
-                grupoDivActual.style.display = "block";
-                grupoDivDeseada.style.display = "block";
-                grupoLpNormal.style.display = "block";
-                grupoLpGanancia.style.display = "block";
-                grupoLpMaestro.style.display = "none";
-                masterBanner.style.display = "none";
-
-                const divActualSelect = document.getElementById('division-actual');
-                const divDeseadaSelect = document.getElementById('division-deseada');
-
-                divActualSelect.disabled = (lAct === "Maestro");
-                divDeseadaSelect.disabled = (lDes === "Maestro");
-                if(lAct === "Maestro") divActualSelect.value = "1";
-                if(lDes === "Maestro") divDeseadaSelect.value = "1";
-
-                const dAct = divActualSelect.value;
-                const dDes = divDeseadaSelect.value;
-                const tramoLpSelect = document.getElementById('lp-ganancia').value;
-
-                document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
-                document.getElementById('txt-actual').textContent = lAct === "Maestro" ? "Maestro" : `${lAct} Div. ${dAct}`;
-                document.getElementById('img-deseado').src = rangosEmblemas[lDes] || "Hierro.png";
-                document.getElementById('txt-deseado').textContent = lDes === "Maestro" ? "Maestro" : `${lDes} Div. ${dDes}`;
-
-                const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
-                const lpDeseadoInput = parseInt(document.getElementById('lp-deseado').value) || 0;
-
-                const getScoreTotalLP = (liga, division, lp) => {
-                    if (liga === "Maestro") return 8 * 400 + lp;
-                    const idxLiga = ligasOrden.indexOf(liga);
-                    return (idxLiga * 400) + ((4 - parseInt(division)) * 100) + lp;
-                };
-
-                const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
-                const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
-                const diffLP = scoreDeseado - scoreActual;
-
-                let precioTotal = 0;
-
-                if (diffLP > 0) {
-                    let lpRestante = diffLP;
-                    let ligaActualIter = lAct;
-                    let divActualIter = parseInt(dAct);
-
-                    while (lpRestante > 0 && ligaActualIter !== "Challenger") {
-                        let lpSalto = Math.min(lpRestante, 100);
-                        let precioPartidaTramo = obtenerPrecioPorVictoriaEspecifico(ligaActualIter, divActualIter, tramoLpSelect);
-                        precioTotal += (lpSalto / 100) * (precioPartidaTramo * 5);
-
-                        lpRestante -= lpSalto;
-                        divActualIter--;
-
-                        if (divActualIter < 1) {
-                            const idxLiga = ligasOrden.indexOf(ligaActualIter);
-                            if (idxLiga < ligasOrden.length - 1) {
-                                ligaActualIter = ligasOrden[idxLiga + 1];
-                                divActualIter = 4;
-                            } else break;
-                        }
-                    }
-                }
-
-                if (modoSeleccionado === 'duo') precioTotal *= 1.3;
-                if (document.getElementById('chk-streaming').checked) precioTotal += 5;
-                if (document.getElementById('chk-offline').checked) precioTotal += 3;
-
-                document.getElementById('precio-boost').textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
-                return precioTotal > 0 ? precioTotal : 0;
+                divActualSelect.disabled = false;
             }
+
+            if (lDes === "Maestro") {
+                divDeseadaSelect.value = "1";
+                divDeseadaSelect.disabled = true;
+            } else {
+                divDeseadaSelect.disabled = false;
+            }
+
+            const dAct = divActualSelect.value;
+            const dDes = divDeseadaSelect.value;
+            const tramoLpSelect = document.getElementById('lp-ganancia').value; 
+            
+            let lpPromedioVictoria = 27; 
+            if (tramoLpSelect === "17_19") {
+                lpPromedioVictoria = 18; 
+            } else if (tramoLpSelect === "20_24") {
+                lpPromedioVictoria = 22; 
+            }
+
+            document.getElementById('img-actual').src = rangosEmblemas[lAct] || "Hierro.png";
+            document.getElementById('txt-actual').textContent = lAct === "Maestro" ? "Maestro" : `${lAct} Div. ${dAct}`;
+            document.getElementById('img-deseado').src = rangosEmblemas[lDes] || "Hierro.png";
+            document.getElementById('txt-deseado').textContent = lDes === "Maestro" ? "Maestro" : `${lDes} Div. ${dDes}`;
+
+            const lpActualInput = parseInt(document.getElementById('lp-actual').value) || 0;
+            const lpDeseadoInput = parseInt(document.getElementById('lp-deseado').value) || 0;
+
+            const getScoreTotalLP = (liga, division, lp) => {
+                if (liga === "Maestro") return 8 * 400 + lp;
+                const idxLiga = ligasOrden.indexOf(liga);
+                const divNum = parseInt(division);
+                return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
+            };
+
+            const scoreActual = getScoreTotalLP(lAct, dAct, lpActualInput);
+            const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
+            const diffLP = scoreDeseado - scoreActual;
+
+            let precioTotal = 0;
+
+            if (diffLP > 0) {
+                const totalPartidasEstimadas = Math.ceil(diffLP / lpPromedioVictoria);
+                const precioPorJuego = obtenerPrecioPorVictoria(lAct, tramoLpSelect);
+                precioTotal = totalPartidasEstimadas * precioPorJuego;
+            }
+
+            if (modoSeleccionado === 'duo') {
+                precioTotal *= 1.3;
+            }
+
+            let esLigaCompleta = (lAct === lDes && dAct === "4" && dDes === "1" && lAct !== "Maestro");
+            const promoBanner = document.getElementById('promo-banner');
+            const btnContratar = document.getElementById('btn-contratar-boost');
+
+            let htmlPrecioDisplay = "";
+
+            if (esLigaCompleta) {
+                let precioOriginal = precioTotal;
+                let desc = precioTotal * 0.10;
+                precioTotal -= desc;
+                let siguienteLiga = ligasOrden[ligasOrden.indexOf(lAct) + 1] || "la siguiente liga";
+                
+                promoBanner.innerHTML = `🚀 <b>¡NO TE PIERDAS ESTA OFERTA!</b><br>Estás contratando un impulso en la misma liga, estás a un paso de <b>${siguienteLiga}</b>, aprovecha un descuento especial para avanzar al siguiente nivel!.`;
+                promoBanner.style.display = "block";
+                btnContratar.classList.add('promo-active');
+                btnContratar.textContent = `¡Aprovechar Oferta!`;
+
+                htmlPrecioDisplay = `<span style="text-decoration: line-through; color: #94a3b8; font-size: 1.1rem; margin-right: 10px;">USD $${precioOriginal.toFixed(2)}</span> <span style="color: #22c55e;">USD $${precioTotal.toFixed(2)}</span> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 5px;">¡10% OFF!</span>`;
+            } else {
+                promoBanner.style.display = "none";
+                btnContratar.classList.remove('promo-active');
+                btnContratar.textContent = "Contratar servicio";
+                htmlPrecioDisplay = `USD $${precioTotal.toFixed(2)}`;
+            }
+
+            if (document.getElementById('chk-streaming').checked) precioTotal += 5;
+            if (document.getElementById('chk-offline').checked) precioTotal += 3;
+
+            const spanPrecio = document.getElementById('precio-boost');
+            if (esLigaCompleta) {
+                spanPrecio.innerHTML = htmlPrecioDisplay;
+            } else {
+                spanPrecio.textContent = precioTotal > 0 ? precioTotal.toFixed(2) : "0.00";
+            }
+
+            return precioTotal > 0 ? precioTotal : 0;
         }
-
-        ['liga-actual', 'division-actual', 'lp-actual', 'lp-ganancia', 'liga-deseada', 'division-deseada', 'lp-deseado', 'chk-streaming', 'chk-offline', 'select-lp-maestro'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) {
-                el.addEventListener('change', actualizarBoost);
-                el.addEventListener('input', actualizarBoost);
-            }
-        });
 
         function actualizarPosicionamiento() {
             const cant = parseInt(document.getElementById('pos-cantidad').value) || 1;
             const rango = document.getElementById('pos-rango').value;
-            let keyCat = "hierro", defVal = 2.5;
+            
+            let keyCat = "hierro";
+            let defVal = 2.5;
             if (rango === "Platino" || rango === "Esmeralda") { keyCat = "platino"; defVal = 3.2; }
             else if (rango === "Diamante") { keyCat = "diamante"; defVal = 3.5; }
             else if (rango === "Maestro") { keyCat = "maestro_plus"; defVal = 4.5; }
 
-            const precio = cant * (tarifasVictoriasFirebase[keyCat] !== undefined ? tarifasVictoriasFirebase[keyCat] : defVal);
-            document.getElementById('precio-pos').textContent = precio.toFixed(2);
-            return precio;
+            const precioUnitario = tarifasVictoriasFirebase[keyCat] !== undefined ? tarifasVictoriasFirebase[keyCat] : defVal;
+            const total = cant * precioUnitario;
+            document.getElementById('precio-pos').textContent = total.toFixed(2);
+            return total;
         }
 
         function actualizarNetas() {
             const cant = parseInt(document.getElementById('netas-cantidad').value) || 1;
             const liga = document.getElementById('netas-liga').value;
-            let keyCat = "diamante", defVal = 3.5;
+            
+            let keyCat = "diamante";
+            let defVal = 3.5;
             if (liga === "Maestro" || liga === "Gran Maestro" || liga === "Challenger") { keyCat = "maestro_plus"; defVal = 4.5; }
 
-            const precio = cant * (tarifasVictoriasFirebase[keyCat] !== undefined ? tarifasVictoriasFirebase[keyCat] : defVal);
-            document.getElementById('precio-netas').textContent = precio.toFixed(2);
-            return precio;
+            const precioUnitario = tarifasVictoriasFirebase[keyCat] !== undefined ? tarifasVictoriasFirebase[keyCat] : defVal;
+            const total = cant * precioUnitario;
+            document.getElementById('precio-netas').textContent = total.toFixed(2);
+            return total;
         }
 
-        window.actualizarInfoDiasReserva = function() {
-            const cant = document.getElementById('netas-cantidad').value;
-            const txtResumen = document.getElementById('txt-resultado-reserva');
-            if (txtResumen) {
-                txtResumen.innerHTML = `🛡️ Resultado: Tu cuenta ganará ${cant} ${cant === '1' ? 'día' : 'días'} de protección total antes de que comience el decay`;
+        ['liga-actual', 'division-actual', 'lp-actual', 'lp-ganancia', 'liga-deseada', 'division-deseada', 'lp-deseado', 'chk-streaming', 'chk-offline'].forEach(id => {
+            document.getElementById(id).addEventListener('change', actualizarBoost);
+            document.getElementById(id).addEventListener('input', actualizarBoost);
+        });
+
+        ['pos-cantidad', 'pos-rango'].forEach(id => {
+            document.getElementById(id).addEventListener('change', actualizarPosicionamiento);
+        });
+
+        ['netas-liga', 'netas-cantidad'].forEach(id => {
+            document.getElementById(id).addEventListener('change', actualizarNetas);
+        });
+
+        const modalDetalles = document.getElementById('modal-detalles');
+        const modalPago = document.getElementById('modal-pago');
+        let itemSeleccionado = null, tipoItemActual = '';
+        let descuentoAplicadoPorcentaje = 0;
+
+        function calcularPrecioFinalConCupon(precioBaseNum) {
+            if (descuentoAplicadoPorcentaje > 0) {
+                const rebaja = precioBaseNum * (descuentoAplicadoPorcentaje / 100);
+                return (precioBaseNum - rebaja).toFixed(2);
             }
-            actualizarNetas();
+            return precioBaseNum.toFixed(2);
         }
 
-        ['pos-cantidad', 'pos-rango'].forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('change', actualizarPosicionamiento); });
-        ['netas-liga', 'netas-cantidad'].forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('change', actualizarInfoDiasReserva); });
+        document.getElementById('chk-tiene-codigo').addEventListener('change', (e) => {
+            const contenedor = document.getElementById('contenedor-input-codigo');
+            contenedor.style.display = e.target.checked ? 'flex' : 'none';
+            if (!e.target.checked) {
+                descuentoAplicadoPorcentaje = 0;
+                document.getElementById('input-codigo-promo').value = '';
+                document.getElementById('mensaje-codigo-estado').textContent = '';
+                refrescarTextoModalPago();
+            }
+        });
 
-        let itemSeleccionado = null, tipoItemActual = '', descuentoAplicadoPorcentaje = 0;
+        document.getElementById('btn-aplicar-codigo').addEventListener('click', async () => {
+            const codigoIngresado = document.getElementById('input-codigo-promo').value.trim().toUpperCase();
+            const msgEstado = document.getElementById('mensaje-codigo-estado');
+            if (!codigoIngresado) {
+                msgEstado.style.color = '#ef4444';
+                msgEstado.textContent = "Por favor ingresa un código.";
+                return;
+            }
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "codigosPromo"));
+                let encontrado = false;
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.codigo === codigoIngresado && data.activo) {
+                        encontrado = true;
+                        descuentoAplicadoPorcentaje = data.descuento;
+                    }
+                });
+
+                if (encontrado) {
+                    msgEstado.style.color = '#22c55e';
+                    msgEstado.textContent = `¡Código aplicado con éxito! Descuento del ${descuentoAplicadoPorcentaje}%`;
+                    refrescarTextoModalPago();
+                } else {
+                    descuentoAplicadoPorcentaje = 0;
+                    msgEstado.style.color = '#ef4444';
+                    msgEstado.textContent = "No es un código válido.";
+                    refrescarTextoModalPago();
+                }
+            } catch (err) {
+                msgEstado.style.color = '#ef4444';
+                msgEstado.textContent = "Error al verificar el código.";
+            }
+        });
+
+        function refrescarTextoModalPago() {
+            if (!itemSeleccionado) return;
+            const precioBaseNum = parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio);
+            const precioFinalStr = calcularPrecioFinalConCupon(precioBaseNum);
+
+            let textoHtmlModal = `Servicio: <b>${itemSeleccionado.titulo}</b><br>`;
+            if (descuentoAplicadoPorcentaje > 0) {
+                textoHtmlModal += `Total: <span style="text-decoration: line-through; color: #94a3b8;">USD $${precioBaseNum.toFixed(2)}</span> <b style="color: #22c55e;">USD $${precioFinalStr}</b> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px;">¡${descuentoAplicadoPorcentaje}% OFF Cupón!</span>`;
+            } else if (itemSeleccionado.esOferta) {
+                textoHtmlModal += `Total: <span style="text-decoration: line-through; color: #94a3b8;">USD $${itemSeleccionado.precioOriginal}</span> <b style="color: #22c55e;">USD $${precioFinalStr}</b> <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 2px 6px; border-radius: 4px;">¡Oferta Aplicada!</span>`;
+            } else {
+                textoHtmlModal += `Total: <b style="color: #c084fc;">USD $${precioFinalStr}</b>`;
+            }
+            document.getElementById('modal-texto').innerHTML = textoHtmlModal;
+        }
 
         document.getElementById('btn-contratar-boost').addEventListener('click', () => {
             const precio = actualizarBoost();
-            if (precio <= 0) { mostrarAlerta("Configura un rango o LP válido."); return; }
+            if (precio <= 0) { mostrarAlerta("El rango deseado debe ser mayor al actual."); return; }
             tipoItemActual = 'boost';
 
+            const numARomano = (num) => ({ "4": "IV", "3": "III", "2": "II", "1": "I" })[num] || num;
+            const modoTexto = modoSeleccionado === 'solo' ? 'SOLOQ' : 'DUO';
             const lAct = document.getElementById('liga-actual').value;
             const lDes = document.getElementById('liga-deseada').value;
-            let titulo = lAct === "Maestro" && lDes === "Maestro" 
-                ? `Boost Maestro (${document.getElementById('lp-actual').value} LP) +${document.getElementById('select-lp-maestro').value} LP`
-                : `Boost de ${lAct} a ${lDes}`;
+            
+            const origenTexto = lAct === "Maestro" ? "Maestro" : `${lAct} ${numARomano(document.getElementById('division-actual').value)}`;
+            const destinoTexto = lDes === "Maestro" ? "Maestro" : `${lDes} ${numARomano(document.getElementById('division-deseada').value)}`;
+            const siguienteLigaNombre = ligasOrden[ligasOrden.indexOf(lAct) + 1] || "la siguiente liga";
 
-            itemSeleccionado = { titulo, precio: precio.toFixed(2), precioOriginalBase: precio.toFixed(2) };
-            abrirModalPago();
+            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual').value === "4" && document.getElementById('division-deseada').value === "1" && lAct !== "Maestro");
+
+            let textoTituloServicio = `Boost (${modoTexto}) de ${origenTexto} [LP: ${document.getElementById('lp-actual').value}] a ${destinoTexto} [LP: ${document.getElementById('lp-deseado').value}]`;
+            
+            if (esLigaCompleta) {
+                textoTituloServicio = `Boost (${modoTexto}) Liga Completa de ${origenTexto} hasta ${siguienteLigaNombre}`;
+            }
+
+            itemSeleccionado = {
+                titulo: textoTituloServicio,
+                precio: precio.toFixed(2),
+                precioOriginalBase: precio.toFixed(2),
+                esOferta: esLigaCompleta,
+                precioOriginal: esLigaCompleta ? (precio / 0.9).toFixed(2) : null
+            };
+
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            document.getElementById('grupo-email').style.display = 'none';
+            document.getElementById('grupo-boost-campos').style.display = 'block';
+
+            refrescarTextoModalPago();
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
         });
 
         document.getElementById('btn-contratar-pos').addEventListener('click', () => {
             const precio = actualizarPosicionamiento();
             tipoItemActual = 'boost';
-            itemSeleccionado = { titulo: `Posicionamiento (${document.getElementById('pos-cantidad').value} partidas)`, precio: precio.toFixed(2), precioOriginalBase: precio.toFixed(2) };
-            abrirModalPago();
+            const cant = document.getElementById('pos-cantidad').value;
+            const rango = document.getElementById('pos-rango').value;
+
+            itemSeleccionado = {
+                titulo: `Partidas de Posicionamiento (${cant} partidas) - Último Rango: ${rango}`,
+                precio: precio.toFixed(2),
+                precioOriginalBase: precio.toFixed(2),
+                esOferta: false
+            };
+
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            document.getElementById('grupo-email').style.display = 'none';
+            document.getElementById('grupo-boost-campos').style.display = 'block';
+
+            refrescarTextoModalPago();
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
         });
 
         document.getElementById('btn-contratar-netas').addEventListener('click', () => {
             const precio = actualizarNetas();
             tipoItemActual = 'boost';
-            const cant = document.getElementById('netas-cantidad').value;
             const liga = document.getElementById('netas-liga').value;
-            itemSeleccionado = { titulo: `Antidecay / Días de reserva (${cant} ${cant === '1' ? 'partida' : 'partidas'}) - ${liga}`, precio: precio.toFixed(2), precioOriginalBase: precio.toFixed(2) };
-            abrirModalPago();
-        });
+            const cant = document.getElementById('netas-cantidad').value;
 
-        function abrirModalPago() {
+            itemSeleccionado = {
+                titulo: `Victorias Netas / Antidecay (${cant} victorias) - Liga: ${liga}`,
+                precio: precio.toFixed(2),
+                precioOriginalBase: precio.toFixed(2),
+                esOferta: false
+            };
+
             descuentoAplicadoPorcentaje = 0;
-            const chkCodigo = document.getElementById('chk-tiene-codigo');
-            if(chkCodigo) chkCodigo.checked = false;
-            const contInput = document.getElementById('contenedor-input-codigo');
-            if(contInput) contInput.style.display = 'none';
-            document.getElementById('grupo-email').style.display = tipoItemActual === 'cuenta' ? 'block' : 'none';
-            document.getElementById('grupo-boost-campos').style.display = tipoItemActual === 'boost' ? 'block' : 'none';
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            document.getElementById('grupo-email').style.display = 'none';
+            document.getElementById('grupo-boost-campos').style.display = 'block';
+
             refrescarTextoModalPago();
             document.getElementById('chk-terminos').checked = false;
-            document.getElementById('modal-pago').classList.add('active');
-        }
+            modalPago.classList.add('active');
+        });
 
-        function refrescarTextoModalPago() {
-            if (!itemSeleccionado) return;
-            const base = parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio);
-            const final = descuentoAplicadoPorcentaje > 0 ? (base * (1 - descuentoAplicadoPorcentaje/100)).toFixed(2) : base.toFixed(2);
-            document.getElementById('modal-texto').innerHTML = `Servicio: <b>${itemSeleccionado.titulo}</b><br>Total: <b style="color: #c084fc;">USD $${final}</b>`;
-        }
+        document.getElementById('modal-cerrar').addEventListener('click', () => modalPago.classList.remove('active'));
+        document.getElementById('modal-detalles-cerrar').addEventListener('click', () => modalDetalles.classList.remove('active'));
 
-        document.getElementById('modal-cerrar').addEventListener('click', () => document.getElementById('modal-pago').classList.remove('active'));
-        document.getElementById('modal-detalles-cerrar').addEventListener('click', () => document.getElementById('modal-detalles').classList.remove('active'));
+        document.getElementById('btn-ir-a-pago').addEventListener('click', () => {
+            modalDetalles.classList.remove('active');
+            document.getElementById('grupo-email').style.display = 'block';
+            document.getElementById('grupo-boost-campos').style.display = 'none';
+
+            itemSeleccionado.precioOriginalBase = itemSeleccionado.precio;
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            refrescarTextoModalPago();
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
+        });
 
         document.getElementById('btn-pagar-alias').addEventListener('click', async () => {
             if(!document.getElementById('chk-terminos').checked) { mostrarAlerta("Debes aceptar los Términos y Condiciones."); return; }
             const wpp = "59899806108";
             let mensaje = "";
-            const precioFinalEnvio = descuentoAplicadoPorcentaje > 0 ? (itemSeleccionado.precioOriginalBase * (1 - descuentoAplicadoPorcentaje/100)).toFixed(2) : itemSeleccionado.precio;
+            const precioFinalEnvio = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
 
             if (tipoItemActual === 'boost') {
                 const lid = document.getElementById('input-lol-id').value, disc = document.getElementById('input-discord-user').value;
@@ -1589,16 +1823,16 @@
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
-                mensaje = `Hola! Quiero comprar la cuenta: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
-                await addDoc(collection(db, "compras"), { tipo: "Cuenta", correoCliente: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
+                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
+                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://wa.me/${wpp}?text=${encodeURIComponent(mensaje)}`, '_blank');
-            document.getElementById('modal-pago').classList.remove('active');
+            modalPago.classList.remove('active');
         });
 
         document.getElementById('btn-pagar-paypal').addEventListener('click', async () => {
             if(!document.getElementById('chk-terminos').checked) { mostrarAlerta("Debes aceptar los Términos y Condiciones."); return; }
-            const precioFinalEnvio = descuentoAplicadoPorcentaje > 0 ? (itemSeleccionado.precioOriginalBase * (1 - descuentoAplicadoPorcentaje/100)).toFixed(2) : itemSeleccionado.precio;
+            const precioFinalEnvio = calcularPrecioFinalConCupon(parseFloat(itemSeleccionado.precioOriginalBase || itemSeleccionado.precio));
 
             if (tipoItemActual === 'boost') {
                 const lid = document.getElementById('input-lol-id').value, disc = document.getElementById('input-discord-user').value;
@@ -1607,13 +1841,13 @@
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
-                await addDoc(collection(db, "compras"), { tipo: "Cuenta", correoCliente: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
+                let mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
+                await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
-            document.getElementById('modal-pago').classList.remove('active');
+            modalPago.classList.remove('active');
         });
 
-        /* --- CARGA DE CUENTAS CORREGIDA --- */
         async function cargarCatalogo() {
             const grid = document.getElementById('grid-cuentas');
             if (!grid) return;
@@ -1622,14 +1856,13 @@
                 const snapshot = await getDocs(collection(db, "skin"));
                 grid.innerHTML = "";
                 
-                if (!snapshot || snapshot.empty) { 
-                    grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas disponibles en la base de datos.</p>"; 
+                if (snapshot.empty) { 
+                    grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas disponibles.</p>"; 
                     return; 
                 }
                 
                 snapshot.forEach(docSnap => {
                     const c = docSnap.data();
-                    if (!c) return;
                     const card = document.createElement('div');
                     card.className = 'cuenta-card';
                     card.innerHTML = `
@@ -1637,7 +1870,7 @@
                         <div class="cuenta-body">
                             <div>
                                 <span class="cuenta-server">${c.server || 'DESCONOCIDO'}</span>
-                                <h3 class="cuenta-titulo">${c.title || 'Cuenta sin título'}</h3>
+                                <h3 class="cuenta-titulo">${c.title || 'Sin título'}</h3>
                                 <div class="cuenta-detalles-info">
                                     <span>⚔️ Campeones: ${c.championCount || 0}</span>
                                     <span>🏆 Rango: ${c.currentRank || 'N/A'}</span>
@@ -1662,7 +1895,7 @@
                             📜 <b>Descripción:</b><br>${(c.descripcionLarga || '').replace(/\n/g, '<br>')}<br><br>
                             Precio: <b style="color: #c084fc;">USD $${c.price}</b>
                         `;
-                        document.getElementById('modal-detalles').classList.add('active');
+                        modalDetalles.classList.add('active');
                     });
                     grid.appendChild(card);
                 });
@@ -1671,11 +1904,6 @@
                 grid.innerHTML = `<p style='color: #ef4444;'>Error al cargar cuentas: ${e.message}</p>`;
             }
         }
-
-        document.getElementById('btn-ir-a-pago').addEventListener('click', () => {
-            document.getElementById('modal-detalles').classList.remove('active');
-            abrirModalPago();
-        });
 
         cargarTarifasTienda();
         cargarCatalogo();
