@@ -142,24 +142,12 @@
             display: block;
         }
 
-        /* --- ESTILOS FAQ --- */
         .faq-container {
             max-width: 900px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
             gap: 15px;
-        }
-
-        .faq-category-title {
-            font-size: 1.2rem;
-            color: #c084fc;
-            margin: 20px 0 10px 5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-left: 3px solid #a855f7;
-            padding-left: 10px;
-            font-weight: 700;
         }
 
         .faq-item {
@@ -937,6 +925,7 @@
 
                             <div class="boost-total">USD <span id="precio-boost">0.00</span></div>
                             <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
+                            <button type="button" id="btn-ignorar-oferta" style="display:none;">Mantener liga actual</button>
                         </div>
                     </div>
                 </div>
@@ -977,8 +966,8 @@
                 <div id="panel-boost-netas" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-netas">
-                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase;">Antidecay</h3>
-                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px;">Evita el decay y mantente en la cima. Cada partida jugada te otorga 1 día de protección.</p>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase;">Victorias Netas</h3>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px;">Evita el decay y mantente en la cima.</p>
                             
                             <div class="form-group">
                                 <label>Liga Actual</label>
@@ -989,9 +978,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Cantidad de Partidas</label>
+                                <label>Cantidad de Victorias</label>
                                 <select id="netas-cantidad">
-                                    <option value="1" selected>1 Partida</option><option value="2">2 Partidas</option><option value="3">3 Partidas</option><option value="5">5 Partidas</option>
+                                    <option value="1" selected>1 Victoria</option><option value="2">2 Victorias</option><option value="3">3 Victorias</option><option value="5">5 Victorias</option>
                                 </select>
                             </div>
 
@@ -1005,62 +994,24 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 3: PREGUNTAS FRECUENTES (FAQ COMPLETA RECUPERADA) -->
+        <!-- FAQ -->
         <div id="seccion-faq" class="tab-content">
-            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px; letter-spacing: 2px;">PREGUNTAS FRECUENTES</h2>
-            
+            <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #f8fafc; border-left: 4px solid #a855f7; padding-left: 10px;">PREGUNTAS FRECUENTES</h2>
             <div class="faq-container">
-                <div class="faq-category-title">📂 Cuentas</div>
-                
                 <div class="faq-item">
-                    <div class="faq-question">¿Cómo funciona el proceso de compra de una cuenta?</div>
-                    <div class="faq-answer">
-                        Una vez que elijas la cuenta que se ajuste a tus necesidades (revisando campeones, esencia azul, skins, elo, nivel, etc.) y completes el proceso de pago, recibiremos tu solicitud de forma inmediata. Al corroborar la transacción, te llegará automáticamente al correo electrónico adjunto el usuario, la contraseña y los datos de acceso. Si la cuenta lo permite, podrás cambiar el correo por el tuyo para que sea 100% tu propiedad. <em>Nota: Recuerda leer nuestros términos y condiciones antes de adquirir cualquier producto digital.</em>
-                    </div>
-                </div>
-
-                <div class="faq-category-title">⚡ Boost</div>
-
-                <div class="faq-item">
-                    <div class="faq-question">¿Cuántos días tardan en completar un pedido de boost?</div>
-                    <div class="faq-answer">
-                        Los tiempos varían según el tamaño del servicio y las ligas a escalar. Priorizamos un trabajo rápido pero con absoluta discreción, camuflándonos bajo las normativas y políticas de seguridad de Riot Games. En algunos casos, recomendamos realizarlo de forma paulina para evitar alertas del sistema. Los plazos también dependen de la disponibilidad horaria que nos brindes para operar en la cuenta.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">¿Cómo es el acceso a mi cuenta durante el servicio de Solo Q?</div>
-                    <div class="faq-answer">
-                        Al contratar el servicio, el booster asignado se pondrá en contacto contigo para coordinar los detalles. Podrás cambiar tu contraseña temporalmente mientras dure el proceso. Acordaremos los días y horarios en los que el profesional podrá ingresar. Recibirás una notificación cada vez que el booster se conecte y al finalizar su sesión de juego. Una vez concluido el trabajo por completo, se te dará aviso para que recuperes el control total y vuelvas a cambiar tu contraseña.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">¿Cómo se desarrollan las partidas si contrato el modo Duo?</div>
-                    <div class="faq-answer">
-                        En la modalidad Duo, el booster te contactará para agregarte e invitarte a las partidas desde su cuenta correspondiente. El profesional podrá alternar entre distintas cuentas de apoyo según las necesidades de emparejamiento (matchmaking). Al terminar cada sesión diaria, el equipo revisará que los objetivos solicitados se cumplan bajo los estándares de calidad de VeXor.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
-                    <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta: ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
-                    </div>
+                    <div class="faq-question">¿Cómo funciona la compra de cuentas y el boost?</div>
+                    <div class="faq-answer">Las entregas son automáticas al verificar el pago y los boosts se realizan con absoluta discreción por profesionales de alta elo.</div>
                 </div>
             </div>
         </div>
 
-        <!-- FOOTER ANCLADO AL FONDO -->
         <footer class="site-footer">
-            <div class="confianza-footer">
-                <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
-            </div>
-            <p><strong>Aviso Legal:</strong> Los servicios de boosting y la compraventa de cuentas de League of Legends infringen las Condiciones de Uso de Riot Games. Al contratar o adquirir cualquiera de estos servicios, el usuario acepta bajo su absoluta responsabilidad los riesgos derivados, incluyendo suspensiones o baneos de cuentas. Nuestra plataforma no se hace responsable por sanciones aplicadas por el sistema de juego ni por el mal uso que se le dé a las cuentas tras su entrega.</p>
+            <div class="confianza-footer"><p><strong>¿Por qué confiar en nosotros?</strong> Años de experiencia, discreción y seguridad garantizada.</p></div>
+            <p><strong>Aviso Legal:</strong> Los servicios infringen las Condiciones de Uso de Riot Games bajo absoluta responsabilidad del usuario.</p>
         </footer>
     </div>
 
-    <!-- MODAL DE DETALLES DE CUENTA -->
+    <!-- MODAL DETALLES -->
     <div id="modal-detalles" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-detalles-cerrar" class="modal-close">&times;</button>
@@ -1070,7 +1021,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE PAGO -->
+    <!-- MODAL PAGO -->
     <div id="modal-pago" class="modal-overlay">
         <div class="modal-box">
             <button id="modal-cerrar" class="modal-close">&times;</button>
@@ -1191,13 +1142,10 @@
             });
         });
 
-        // ACORDEÓN FAQ (SECCIÓN DE PREGUNTAS DESPLEGABLES)
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            question.addEventListener('click', () => {
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
-                faqItems.forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
                 if (!isActive) item.classList.add('active');
             });
         });
