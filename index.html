@@ -1229,7 +1229,7 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
                     <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y organicamente invisible ante los sistemas de revisión automatizados.
                     </div>
                 </div>
             </div>
@@ -1501,12 +1501,12 @@
             return 3.5;
         }
 
-        function obtenerPrecioBloqueMaestro(tramoKey) {
-            const key = `maestro_${tramoKey}`;
+        function obtenerPrecioJuegoMaestro(tramoStr, tramoLpSelect) {
+            const key = `maestro_${tramoStr}_${tramoLpSelect}`;
             if (tarifasFirebase[key] !== undefined) {
                 return parseFloat(tarifasFirebase[key]);
             }
-            return 5.0; // Valor por defecto por bloque de ~5 partidas en Maestro
+            return 5.0;
         }
 
         function actualizarBoost() {
@@ -1546,7 +1546,6 @@
                 groupLpDeseada.querySelector('label').textContent = "LP a Sumar";
                 avisoDecay.style.display = 'block';
 
-                // Transformar el input de LP deseado en un <select> de 150 en 150 LP si no existe ya
                 let inputDeseadoEl = document.getElementById('lp-deseado');
                 if (inputDeseadoEl.tagName !== 'SELECT') {
                     const selectLp = document.createElement('select');
@@ -1576,18 +1575,30 @@
                 document.getElementById('img-deseado').src = rangosEmblemas["Maestro"];
                 document.getElementById('txt-deseado').textContent = `Maestro (${lpFinalTotal} LP)`;
 
-                // Cálculo de precio para Maestro según tramos de 150 LP y ganancia de LP
-                let tramoMaestroKey = "0_150";
-                if (lpFinalTotal > 750) tramoMaestroKey = "750_840";
-                else if (lpFinalTotal > 600) tramoMaestroKey = "600_750";
-                else if (lpFinalTotal > 450) tramoMaestroKey = "450_600";
-                else if (lpFinalTotal > 300) tramoMaestroKey = "300_450";
-                else if (lpFinalTotal > 150) tramoMaestroKey = "150_300";
+                // Cálculo por tramos de 150 LP acumulando según las tarifas de admin
+                let lpActualIt = lpActVal;
+                let lpRestanteIt = lpASumar;
 
-                const fullKeyMaestro = `${tramoMaestroKey}_${tramoLpSelect}`;
-                const precioBloque = obtenerPrecioBloqueMaestro(fullKeyMaestro);
-                const bloquesNecesarios = lpASumar / 50; // Cada tramo de 50 LP equivale a ~1 bloque o parte proporcional
-                precioTotal = precioBloque * (lpASumar / 100); // Proporcional a los LP seleccionados
+                const tranchesMaestro = [
+                    { min: 0, max: 150, name: "0_150" },
+                    { min: 150, max: 300, name: "150_300" },
+                    { min: 300, max: 450, name: "300_450" },
+                    { min: 450, max: 600, name: "450_600" },
+                    { min: 600, max: 750, name: "600_750" },
+                    { min: 750, max: 9999, name: "750_840" }
+                ];
+
+                while (lpRestanteIt > 0) {
+                    let tranche = tranchesMaestro.find(t => lpActualIt >= t.min && lpActualIt < t.max) || tranchesMaestro[tranchesMaestro.length - 1];
+                    let lpEnEsteTramo = Math.min(lpRestanteIt, tranche.max - lpActualIt);
+                    
+                    let precioJuego = obtenerPrecioJuegoMaestro(tranche.name, tramoLpSelect);
+                    // Cada 50 LP equivale a 5 partidas (precioJuego * 5 por bloque de 50 LP)
+                    precioTotal += (lpEnEsteTramo / 10) * precioJuego;
+
+                    lpActualIt += lpEnEsteTramo;
+                    lpRestanteIt -= lpEnEsteTramo;
+                }
 
             } else {
                 avisoDecay.style.display = 'none';
@@ -1652,7 +1663,7 @@
                 }
             }
 
-            let esLigaCompleta = (lAct === lDes && document.getElementById('division-actual')?.value === "4" && document.getElementById('division-deseada')?.value === "1" && lAct !== "Maestro" && lDes !== "Maestro");
+            let esLigaCompleta = (lAct === lDes && lAct !== "Maestro" && lDes !== "Maestro" && document.getElementById('division-actual')?.value === "4" && document.getElementById('division-deseada')?.value === "1" && !ignorarOfertaLiga);
             const promoBanner = document.getElementById('promo-banner');
             const btnContratar = document.getElementById('btn-contratar-boost');
             const btnIgnorar = document.getElementById('btn-ignorar-oferta');
