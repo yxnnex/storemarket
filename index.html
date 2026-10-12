@@ -1586,8 +1586,9 @@
                     const selectLp = document.createElement('select');
                     selectLp.id = 'lp-deseado';
                     selectLp.innerHTML = `
+                        <option value="0" selected>+0 LP (Solo tocar Maestro)</option>
                         <option value="50">+50 LP</option>
-                        <option value="100" selected>+100 LP</option>
+                        <option value="100">+100 LP</option>
                         <option value="150">+150 LP</option>
                         <option value="200">+200 LP</option>
                         <option value="250">+250 LP</option>
@@ -1603,7 +1604,7 @@
                     selectLp.addEventListener('change', actualizarBoost);
                 }
 
-                const lpASumar = parseInt(document.getElementById('lp-deseado').value) || 100;
+                const lpASumar = parseInt(document.getElementById('lp-deseado').value) || 0;
                 const lpActVal = lAct === "Maestro" ? (parseInt(document.getElementById('lp-actual').value) || 0) : 0;
                 const lpFinalTotal = lpActVal + lpASumar;
 
@@ -1625,7 +1626,9 @@
                             if (idxLigaActual >= ligasOrden.length) idxLigaActual = ligasOrden.length - 1;
                             let ligaIterada = ligasOrden[idxLigaActual];
 
-                            let lpRestanteEnPaso = Math.min(100, scoreMaestro0 - scoreIterador);
+                            let lpRestanteEnPaso = Math.min(100 - (scoreIterador % 100), scoreMaestro0 - scoreIterador);
+                            if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreMaestro0 - scoreIterador);
+
                             let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * 5;
 
                             precioTotal += (lpRestanteEnPaso / 100) * precioPorDivision;
@@ -2099,7 +2102,6 @@
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
-                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
                 await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
