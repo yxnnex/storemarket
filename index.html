@@ -383,6 +383,23 @@
             box-shadow: 0 4px 20px rgba(250, 204, 21, 0.6) !important;
         }
 
+        .antidecay-result-box {
+            background: rgba(0, 191, 255, 0.1);
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #e0f2fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
         @media (max-width: 1024px) {
             .boost-layout {
                 grid-template-columns: 1fr;
@@ -980,7 +997,7 @@
             <div class="boost-types-nav">
                 <button class="boost-type-btn active" data-boost="rango">Impulso de rango</button>
                 <button class="boost-type-btn" data-boost="posicionamiento">Partidas de posicionamiento</button>
-                <button class="boost-type-btn" data-boost="netas">Victorias netas</button>
+                <button class="boost-type-btn" data-boost="netas">ANTIDECAY</button>
             </div>
 
             <!-- CONTENEDOR DE TARJETAS APILADAS CON ANIMACIÓN -->
@@ -1150,15 +1167,15 @@
                     </div>
                 </div>
 
-                <!-- CONTENEDOR 3: VICTORIAS NETAS / DECAY -->
+                <!-- CONTENEDOR 3: ANTIDECAY / DIAS DE RESERVA -->
                 <div id="panel-boost-netas" class="boost-subpanel">
                     <div class="boost-layout-centered">
                         <div class="boost-card-compact card-netas">
-                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Antidecay</h3>
-                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.6; font-family: 'Segoe UI', sans-serif;">Evita el decay y mantente en la cima.</p>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; color: #00bfff;">DIAS DE RESERVA</h3>
+                            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif;">Evita el decay y mantente en la cima.<br>Cada partida jugada te otorga 1 día de protección.</p>
                             
                             <div class="form-group">
-                                <label>Selecciona tu Liga Actual</label>
+                                <label>Liga Actual</label>
                                 <select id="netas-liga">
                                     <option value="Diamante" selected>Diamante</option>
                                     <option value="Maestro">Maestro</option>
@@ -1170,12 +1187,25 @@
                             <div class="form-group">
                                 <label>Cantidad de partidas</label>
                                 <select id="netas-cantidad">
-                                    <option value="1" selected>1 partida</option>
+                                    <option value="1">1 partida</option>
                                     <option value="2">2 partidas</option>
                                     <option value="3">3 partidas</option>
                                     <option value="4">4 partidas</option>
                                     <option value="5">5 partidas</option>
+                                    <option value="6">6 partidas</option>
+                                    <option value="7" selected>7 partidas</option>
+                                    <option value="8">8 partidas</option>
+                                    <option value="9">9 partidas</option>
+                                    <option value="10">10 partidas</option>
+                                    <option value="11">11 partidas</option>
+                                    <option value="12">12 partidas</option>
+                                    <option value="13">13 partidas</option>
+                                    <option value="14">14 partidas</option>
                                 </select>
+                            </div>
+
+                            <div class="antidecay-result-box">
+                                🛡️ <span>Resultado: Tu cuenta ganará <b id="antidecay-dias-txt" style="color: #38bdf8;">7 días</b> de protección total antes de que comience el decay</span>
                             </div>
 
                             <div style="border-top: 1px solid rgba(255,255,255,0.07); margin-top: 20px; padding-top: 15px;">
@@ -1229,7 +1259,7 @@
                 <div class="faq-item">
                     <div class="faq-question">¿Qué precauciones debo tomar para evitar suspensiones por parte de Riot Games?</div>
                     <div class="faq-answer">
-                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y organicamente invisible ante los sistemas de revisión automatizados.
+                        Recomendamos encarecidamente utilizar servicios progresivos (por ejemplo, programar sesiones de 2 a 3 días a la semana o intercalar partidas por tu cuenta:ARAM, Normales, Flex) para que el historial de rendimiento mantenga un flujo natural y orgánico, totalmente invisible ante los sistemas de revisión automatizados.
                     </div>
                 </div>
             </div>
@@ -1777,6 +1807,12 @@
 
             const precioUnitario = tarifasVictoriasFirebase[keyCat] !== undefined ? tarifasVictoriasFirebase[keyCat] : defVal;
             const total = cant * precioUnitario;
+            
+            const txtDiasEl = document.getElementById('antidecay-dias-txt');
+            if (txtDiasEl) {
+                txtDiasEl.textContent = `${cant} ${cant === 1 ? 'día' : 'días'}`;
+            }
+
             document.getElementById('precio-netas').textContent = total.toFixed(2);
             return total;
         }
@@ -1945,7 +1981,7 @@
             modalPago.classList.add('active');
         });
 
-        // Contratar Victorias Netas / Decay
+        // Contratar Antidecay / Días de reserva
         document.getElementById('btn-contratar-netas').addEventListener('click', () => {
             const precio = actualizarNetas();
             tipoItemActual = 'boost';
@@ -1953,7 +1989,7 @@
             const cant = document.getElementById('netas-cantidad').value;
 
             itemSeleccionado = {
-                titulo: `Victorias Netas / Antidecay (${cant} victorias) - Liga: ${liga}`,
+                titulo: `Antidecay / Días de Reserva (${cant} partidas = ${cant} días) - Liga: ${liga}`,
                 precio: precio.toFixed(2),
                 precioOriginalBase: precio.toFixed(2),
                 esOferta: false
