@@ -1613,20 +1613,22 @@
             document.getElementById('modal-pago').classList.remove('active');
         });
 
-        /* --- CARGA DE CUENTAS FIRESTORE --- */
+        /* --- CARGA DE CUENTAS FIRESTORE BLINDADA --- */
         async function cargarCatalogo() {
             const grid = document.getElementById('grid-cuentas');
             if (!grid) return;
+            
             try {
                 const snapshot = await getDocs(collection(db, "skin"));
                 grid.innerHTML = "";
-                if(snapshot.empty) { 
+                
+                if (snapshot.empty) { 
                     grid.innerHTML = "<p style='color: #94a3b8;'>No hay cuentas disponibles.</p>"; 
                     return; 
                 }
                 
                 snapshot.forEach(docSnap => {
-                    const c = docSnap.data();
+                    const c = docSnap.data() || {};
                     const card = document.createElement('div');
                     card.className = 'cuenta-card';
                     card.innerHTML = `
@@ -1650,14 +1652,14 @@
                     card.addEventListener('click', () => {
                         tipoItemActual = 'cuenta';
                         itemSeleccionado = { titulo: c.title, precio: c.price, precioOriginalBase: c.price };
-                        document.getElementById('modal-detalles-titulo').textContent = c.title;
+                        document.getElementById('modal-detalles-titulo').textContent = c.title || 'Detalles';
                         document.getElementById('modal-detalles-texto').innerHTML = `
-                            🌐 <b>Servidor:</b> ${c.server}<br>
-                            ⚔️ <b>Campeones:</b> ${c.championCount}<br>
-                            🏆 <b>Rango actual:</b> ${c.currentRank}<br>
-                            💎 <b>EA:</b> ${c.riotPoints}<br><br>
+                            🌐 <b>Servidor:</b> ${c.server || 'N/A'}<br>
+                            ⚔️ <b>Campeones:</b> ${c.championCount || 0}<br>
+                            🏆 <b>Rango actual:</b> ${c.currentRank || 'N/A'}<br>
+                            💎 <b>EA:</b> ${c.riotPoints || 0}<br><br>
                             📜 <b>Descripción:</b><br>${(c.descripcionLarga || '').replace(/\n/g, '<br>')}<br><br>
-                            Precio: <b style="color: #c084fc;">USD $${c.price}</b>
+                            Precio: <b style="color: #c084fc;">USD $${c.price || 0}</b>
                         `;
                         document.getElementById('modal-detalles').classList.add('active');
                     });
