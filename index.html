@@ -2025,3 +2025,31 @@
             document.getElementById('mensaje-codigo-estado').textContent = '';
 
             document.getElementById('grupo-email').style.display = 'none';
+            document.getElementById('grupo-boost-campos').style.display = 'block';
+
+            refrescarTextoModalPago();
+            document.getElementById('chk-terminos').checked = false;
+            modalPago.classList.add('active');
+        });
+
+        // Contratar Posicionamiento
+        document.getElementById('btn-contratar-pos').addEventListener('click', () => {
+            const precio = actualizarPosicionamiento();
+            tipoItemActual = 'boost';
+            const cant = document.getElementById('pos-cantidad').value;
+            const rango = document.getElementById('pos-rango').value;
+
+            itemSeleccionado = {
+                titulo: `Partidas de Posicionamiento (${cant} partidas) - Último Rango: ${rango}`,
+                precio: precio.toFixed(2),
+                precioOriginalBase: precio.toFixed(2),
+                esOferta: false
+            };
+
+            descuentoAplicadoPorcentaje = 0;
+            document.getElementById('chk-tiene-codigo').checked = false;
+            document.getElementById('contenedor-input-codigo').style.display = 'none';
+            document.getElementById('input-codigo-promo').value = '';
+            document.getElementById('mensaje-codigo-estado').textContent = '';
+
+            document.getElementById('grupo-email').style.display = 'none
