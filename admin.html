@@ -56,7 +56,6 @@
         .btn-activo { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
         .btn-inactivo { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        /* ESTILOS DE DESPLEGABLES PARA LIGAS */
         details.liga-tarjeta {
             background: rgba(18, 20, 28, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -82,9 +81,7 @@
             list-style: none;
         }
 
-        summary.liga-header-admin::-webkit-details-marker {
-            display: none;
-        }
+        summary.liga-header-admin::-webkit-details-marker { display: none; }
 
         .liga-titulo-admin {
             color: #fbbf24;
@@ -204,15 +201,82 @@
         }
 
         @media (max-width: 900px) {
-            .codigos-layout {
-                grid-template-columns: 1fr;
-            }
+            .codigos-layout { grid-template-columns: 1fr; }
         }
 
-        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: rgba(18, 20, 28, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px 20px; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 8px 24px rgba(0,0,0,0.5); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 10px; }
+        /* --- TOASTS ARRIBA A LA DERECHA CON GLASSMORPHISM --- */
+        .toast-container { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 2000; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+        }
+        .toast { 
+            background: rgba(18, 20, 28, 0.92); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            color: #ffffff; 
+            padding: 14px 22px; 
+            border-radius: 12px; 
+            font-size: 0.88rem; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            backdrop-filter: blur(16px); 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
         .toast.exito { border-left: 4px solid #22c55e; }
         .toast.error { border-left: 4px solid #ef4444; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* --- MODAL DE CONFIRMACIÓN ESTÉTICO --- */
+        .confirm-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+        }
+        .confirm-overlay.active { opacity: 1; pointer-events: auto; }
+        .confirm-box {
+            background: rgba(18, 20, 28, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 28px; width: 100%; max-width: 400px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+            box-sizing: border-box;
+        }
+        .confirm-box h4 {
+            color: #ef4444; font-size: 1.25rem; margin-top: 0; margin-bottom: 12px; letter-spacing: 0.5px;
+        }
+        .confirm-box p {
+            color: #cbd5e1; font-size: 0.92rem; margin-bottom: 24px; line-height: 1.5;
+        }
+        .confirm-actions {
+            display: flex; gap: 12px; justify-content: center;
+        }
+        .btn-confirm-cancel {
+            background: rgba(255, 255, 255, 0.08); color: #94a3b8; border: none;
+            padding: 10px 20px; font-weight: bold; border-radius: 8px;
+            cursor: pointer; font-size: 0.9rem; flex: 1; transition: all 0.2s;
+        }
+        .btn-confirm-cancel:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
+        .btn-confirm-ok {
+            background: #ef4444; color: #ffffff; border: none;
+            padding: 10px 20px; font-weight: bold; border-radius: 8px;
+            cursor: pointer; font-size: 0.9rem; flex: 1; transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+        .btn-confirm-ok:hover { background: #dc2626; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6); }
     </style>
 </head>
 <body>
@@ -359,7 +423,20 @@
         </div>
     </div>
 
+    <!-- CONTENEDOR DE NOTIFICACIONES TOAST EN LA ESQUINA SUPERIOR DERECHA -->
     <div class="toast-container" id="toast-container"></div>
+
+    <!-- MODAL DE CONFIRMACIÓN PERSONALIZADO -->
+    <div id="customConfirmModal" class="confirm-overlay">
+        <div class="confirm-box">
+            <h4>¿Eliminar registro?</h4>
+            <p id="confirmMessageText">Esta acción no se puede deshacer.</p>
+            <div class="confirm-actions">
+                <button class="btn-confirm-cancel" id="btnConfirmCancel">Cancelar</button>
+                <button class="btn-confirm-ok" id="btnConfirmOk">Eliminar</button>
+            </div>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -421,7 +498,32 @@
             toast.className = `toast ${tipo}`;
             toast.innerHTML = `<span>${tipo === 'exito' ? '✅' : '❌'}</span> ${mensaje}`;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            setTimeout(() => toast.remove(), 3200);
+        }
+
+        /* --- FUNCIÓN PARA REEMPLAZAR EL CONFIRM DEL NAVEGADOR CON ESTILO PROPIO --- */
+        function mostrarConfirmacion(mensaje) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('customConfirmModal');
+                const textEl = document.getElementById('confirmMessageText');
+                const btnOk = document.getElementById('btnConfirmOk');
+                const btnCancel = document.getElementById('btnConfirmCancel');
+
+                if (mensaje) textEl.textContent = mensaje;
+                modal.classList.add('active');
+
+                const cleanup = () => {
+                    modal.classList.remove('active');
+                    btnOk.removeEventListener('click', onOk);
+                    btnCancel.removeEventListener('click', onCancel);
+                };
+
+                const onOk = () => { cleanup(); resolve(true); };
+                const onCancel = () => { cleanup(); resolve(false); };
+
+                btnOk.addEventListener('click', onOk);
+                btnCancel.addEventListener('click', onCancel);
+            });
         }
 
         document.getElementById('form-subir-cuenta').addEventListener('submit', async (e) => {
@@ -468,7 +570,6 @@
             { div: "Diamante II a I", sub: [ {id: "ii_i_17_19", label: "17 a 19 LP", vit: 6}, {id: "ii_i_20_24", label: "20 a 24 LP", vit: 5}, {id: "ii_i_25_30", label: "25 a 30 LP", vit: 4} ] }
         ];
 
-        // TRAMOS DE MAESTRO CADA 150 LP
         const tramosMaestroLP = [
             { rango: "0 a 150 LP", sub: [ {id: "0_150_17_19", label: "17 a 19 LP", def: 5.5}, {id: "0_150_20_24", label: "20 a 24 LP", def: 5.0}, {id: "0_150_25_30", label: "25 a 30 LP", def: 4.5} ] },
             { rango: "150 a 300 LP", sub: [ {id: "150_300_17_19", label: "17 a 19 LP", def: 6.5}, {id: "150_300_20_24", label: "20 a 24 LP", def: 6.0}, {id: "150_300_25_30", label: "25 a 30 LP", def: 5.5} ] },
@@ -759,13 +860,19 @@
             } catch(e) {}
         }
 
+        /* --- ACCIÓN DE ELIMINAR AHORA UTILIZANDO EL MODAL PERSONALIZADO --- */
         window.eliminarItem = async function(col, id) {
-            if(confirm("¿Seguro que deseas eliminar este registro?")) {
-                await deleteDoc(doc(db, col, id));
-                mostrarToast("Registro eliminado", "exito");
-                cargarCuentasAdmin();
-                cargarServiciosContratados();
-                if(col === 'codigosPromo') cargarCodigosAdmin();
+            const confirmado = await mostrarConfirmacion("¿Seguro que deseas eliminar este registro de la base de datos?");
+            if (confirmado) {
+                try {
+                    await deleteDoc(doc(db, col, id));
+                    mostrarToast("Registro eliminado con éxito", "exito");
+                    cargarCuentasAdmin();
+                    cargarServiciosContratados();
+                    if(col === 'codigosPromo') cargarCodigosAdmin();
+                } catch(e) {
+                    mostrarToast("Error al eliminar el registro", "error");
+                }
             }
         }
     </script>
