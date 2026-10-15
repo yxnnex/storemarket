@@ -840,6 +840,7 @@
             word-break: break-word;
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.95rem;
+            white-space: pre-line; /* SECCIÓN DE SEGURIDAD XSS: Respeta saltos de línea de forma segura */
         }
 
         .modal-box .form-group {
@@ -2133,6 +2134,7 @@
             } else {
                 const mail = document.getElementById('email-cliente').value;
                 if(!mail) { mostrarAlerta("Ingresa tu correo."); return; }
+                mensaje = `Hola! Quiero comprar: ${itemSeleccionado.titulo} por $${precioFinalEnvio}. Correo: ${mail}`;
                 await addDoc(collection(db, "compras"), { tipo: "Cuenta", clienteDiscord: mail, detalle: itemSeleccionado.titulo, monto: `USD $${precioFinalEnvio}`, fecha: new Date().toISOString() }).catch(()=>{});
             }
             window.open(`https://paypal.me/agustinportii/${precioFinalEnvio}USD`, '_blank');
@@ -2172,14 +2174,26 @@
                         tipoItemActual = 'cuenta';
                         itemSeleccionado = { titulo: c.title, precio: c.price, precioOriginalBase: c.price };
                         document.getElementById('modal-detalles-titulo').textContent = c.title;
-                        document.getElementById('modal-detalles-texto').innerHTML = `
+                        
+                        // SECCIÓN DE SEGURIDAD XSS: Inyección segura con textContent para prevenir scripts maliciosos
+                        const contenedorTexto = document.getElementById('modal-detalles-texto');
+                        contenedorTexto.innerHTML = `
                             🌐 <b>Servidor:</b> ${c.server}<br>
                             ⚔️ <b>Campeones:</b> ${c.championCount}<br>
                             🏆 <b>Rango actual:</b> ${c.currentRank}<br>
                             💎 <b>EA:</b> ${c.riotPoints}<br><br>
-                            📜 <b>Descripción:</b><br>${(c.descripcionLarga || '').replace(/\n/g, '<br>')}<br><br>
-                            Precio: <b style="color: #c084fc;">USD $${c.price}</b>
+                            📜 <b>Descripción:</b><br>
                         `;
+                        
+                        const spanDesc = document.createElement('div');
+                        spanDesc.textContent = c.descripcionLarga || '';
+                        contenedorTexto.appendChild(spanDesc);
+
+                        const divPrecio = document.createElement('div');
+                        divPrecio.style.marginTop = "15px";
+                        divPrecio.innerHTML = `Precio: <b style="color: #c084fc;">USD $${c.price}</b>`;
+                        contenedorTexto.appendChild(divPrecio);
+
                         modalDetalles.classList.add('active');
                     });
                     grid.appendChild(card);
