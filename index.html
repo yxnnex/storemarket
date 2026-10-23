@@ -118,7 +118,6 @@
             border: none;
         }
 
-        /* BOTONES DEL MENÚ ESTILO IDÉNTICO A LA CAPTURA (USAN FUENTE MARVIN) */
         .tab-btn {
             background: transparent;
             border: none;
@@ -287,7 +286,6 @@
             box-shadow: 0 0 16px rgba(250, 204, 21, 0.7);
         }
 
-        /* --- CONTENEDOR Y ANIMACIÓN DE TARJETAS APILADAS --- */
         .boost-cards-stack {
             position: relative;
             width: 100%;
@@ -347,7 +345,6 @@
             max-width: 500px;
         }
 
-        /* --- TARJETAS PRINCIPALES ESTILO GLASS --- */
         .boost-card {
             background: rgba(12, 10, 18, 0.55);
             backdrop-filter: blur(20px);
@@ -360,7 +357,6 @@
             width: 100%;
         }
 
-        /* --- ESTILOS PERSONALIZADOS POR SERVICIO --- */
         .card-posicionamiento {
             border: 1px solid rgba(34, 197, 94, 0.4) !important;
             box-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.18) !important;
@@ -421,12 +417,8 @@
         }
 
         @media (max-width: 1024px) {
-            .boost-layout {
-                grid-template-columns: 1fr;
-            }
-            .boost-cards-stack {
-                min-height: 1100px;
-            }
+            .boost-layout { grid-template-columns: 1fr; }
+            .boost-cards-stack { min-height: 1100px; }
         }
 
         .rank-header {
@@ -471,14 +463,10 @@
         }
 
         @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            .form-row { grid-template-columns: 1fr; }
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
@@ -540,6 +528,7 @@
             flex-direction: column;
             gap: 10px;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
 
         .mode-selector {
@@ -840,7 +829,7 @@
             word-break: break-word;
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.95rem;
-            white-space: pre-line; /* SECCIÓN DE SEGURIDAD XSS: Respeta saltos de línea de forma segura */
+            white-space: pre-line;
         }
 
         .modal-box .form-group {
@@ -861,16 +850,12 @@
             background-color: #0070ba; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s;
         }
-        .btn-pagar-paypal:hover {
-            background-color: #005ea6;
-        }
+        .btn-pagar-paypal:hover { background-color: #005ea6; }
         .btn-pagar-alias {
             background-color: #22c55e; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;
             transition: background-color 0.2s;
         }
-        .btn-pagar-alias:hover {
-            background-color: #16a34a;
-        }
+        .btn-pagar-alias:hover { background-color: #16a34a; }
 
         .terminos-box {
             background: rgba(0, 0, 0, 0.5);
@@ -887,9 +872,7 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
-        .terminos-box::-webkit-scrollbar {
-            width: 6px;
-        }
+        .terminos-box::-webkit-scrollbar { width: 6px; }
         .terminos-box::-webkit-scrollbar-thumb {
             background: rgba(168, 85, 247, 0.4);
             border-radius: 3px;
@@ -926,9 +909,7 @@
             display: flex; justify-content: center; align-items: center;
             z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
         }
-        .custom-alert-overlay.active {
-            opacity: 1; pointer-events: auto;
-        }
+        .custom-alert-overlay.active { opacity: 1; pointer-events: auto; }
         .custom-alert-box {
             background: rgba(14, 12, 22, 0.95);
             backdrop-filter: blur(24px);
@@ -956,7 +937,6 @@
             color: #0b0e14;
         }
 
-        /* --- FOOTER SIEMPRE FIJO AL FONDO --- */
         .site-footer {
             width: 100%;
             max-width: 1250px;
@@ -983,11 +963,9 @@
 </head>
 <body>
 
-    <!-- CANVAS PARA PARTÍCULAS BLANCAS PEQUEÑAS SOBRE FONDO VEXOR -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
-        <!-- HEADER EN Malla Grid: LOGO ESQUINA IZQUIERDA Y NOMBRE CENTRADO ARRIBA -->
         <header>
             <div class="header-top-grid">
                 <div class="logo-area-left">
@@ -1021,7 +999,6 @@
                 <button class="boost-type-btn" data-boost="netas">ANTIDECAY</button>
             </div>
 
-            <!-- CONTENEDOR DE TARJETAS APILADAS CON ANIMACIÓN -->
             <div class="boost-cards-stack">
                 <!-- CONTENEDOR 1: IMPULSO DE RANGO -->
                 <div id="panel-boost-rango" class="boost-subpanel active">
@@ -1122,7 +1099,8 @@
                                 <div class="mode-btn" data-mode="duo">Duo</div>
                             </div>
 
-                            <div class="options-group">
+                            <!-- CONTENEDOR DE OPCIONES ADICIONALES (SE OCULTA EN MODO DUO) -->
+                            <div class="options-group" id="options-group-extras">
                                 <label class="toggle-option">
                                     <span>Transmisión en vivo</span> 
                                     <input type="checkbox" id="chk-streaming">
@@ -1286,7 +1264,6 @@
             </div>
         </div>
 
-        <!-- FOOTER ANCLADO AL FONDO -->
         <footer class="site-footer">
             <div class="confianza-footer">
                 <p><strong>¿Por qué confiar en nosotros?</strong> Contamos con años de experiencia en el sector, entregas 100% garantizadas, métodos de pago seguros y un equipo profesional que prioriza la absoluta discreción y el cuidado de cada cuenta durante todo el proceso.</p>
@@ -1373,7 +1350,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        /* --- ANIMACIÓN DE PARTÍCULAS BLANCAS PEQUEÑAS SOBRE FONDO VEXOR --- */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particlesArray = [];
@@ -1461,7 +1437,6 @@
             });
         });
 
-        // ACORDEÓN DE FAQ
         const faqItems = document.querySelectorAll('.faq-item');
         faqItems.forEach(item => {
             const question = item.querySelector('.faq-question');
@@ -1503,6 +1478,7 @@
             });
         });
 
+        /* --- CONTROL DE MODO SOLO Q / DUO CON OCULTAMIENTO DINÁMICO DE OPCIONES EXTRA --- */
         const modeBtns = document.querySelectorAll('.mode-btn');
         let modoSeleccionado = 'solo';
         modeBtns.forEach(btn => {
@@ -1510,6 +1486,21 @@
                 modeBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 modoSeleccionado = btn.getAttribute('data-mode');
+                
+                const optionsGroupExtras = document.getElementById('options-group-extras');
+                const chkStreaming = document.getElementById('chk-streaming');
+                const chkOffline = document.getElementById('chk-offline');
+
+                if (modoSeleccionado === 'duo') {
+                    // Ocultamos las opciones adicionales y desmarcamos para no cobrar extras
+                    optionsGroupExtras.style.display = 'none';
+                    if (chkStreaming) chkStreaming.checked = false;
+                    if (chkOffline) chkOffline.checked = false;
+                } else {
+                    // Volvemos a mostrar las opciones adicionales en Solo Q
+                    optionsGroupExtras.style.display = 'flex';
+                }
+
                 actualizarBoost();
             });
         });
@@ -1573,7 +1564,6 @@
             let precioTotal = 0;
             let tramoLpSelect = document.getElementById('lp-ganancia').value;
 
-            // --- LÓGICA SI RANGO ACTUAL ES MAESTRO ---
             if (lAct === "Maestro") {
                 groupDivActual.style.display = 'none';
                 groupLpActual.querySelector('label').textContent = "LP Actuales";
@@ -1595,7 +1585,6 @@
                 return (idxLiga * 400) + ((4 - divNum) * 100) + lp;
             };
 
-            // --- LÓGICA SI RANGO DESEADO ES MAESTRO ---
             if (lDes === "Maestro") {
                 groupDivDeseada.style.display = 'none';
                 groupLpDeseada.style.display = 'block';
@@ -1742,7 +1731,6 @@
                 const scoreDeseado = getScoreTotalLP(lDes, dDes, lpDeseadoInput);
                 let diffLP = scoreDeseado - scoreActual;
 
-                // CÁLCULO ITERATIVO EXACTO POR CADA 100 LP (DIVISIÓN)
                 if (diffLP > 0) {
                     let scoreIterador = scoreActual;
                     while (scoreIterador < scoreDeseado) {
@@ -1798,8 +1786,10 @@
                 const porcentajeDescuento = 0.10;
                 let precioFinalOferta = precioOfertaBase * (1 - porcentajeDescuento);
 
-                if (document.getElementById('chk-streaming').checked) precioFinalOferta += 5;
-                if (document.getElementById('chk-offline').checked) precioFinalOferta += 3;
+                if (modoSeleccionado === 'solo') {
+                    if (document.getElementById('chk-streaming').checked) precioFinalOferta += 5;
+                    if (document.getElementById('chk-offline').checked) precioFinalOferta += 3;
+                }
 
                 promoBanner.innerHTML = `🚀 <b>¡NO TE PIERDAS ESTA OFERTA!</b><br>Estás contratando un impulso en la misma liga, estás a un paso de <b>${siguienteLiga}</b>, ¡aprovecha un descuento especial para avanzar al siguiente nivel!`;
                 promoBanner.style.display = "block";
@@ -1820,10 +1810,10 @@
             } else {
                 if (modoSeleccionado === 'duo') {
                     precioTotal *= 1.3;
+                } else {
+                    if (document.getElementById('chk-streaming').checked) precioTotal += 5;
+                    if (document.getElementById('chk-offline').checked) precioTotal += 3;
                 }
-
-                if (document.getElementById('chk-streaming').checked) precioTotal += 5;
-                if (document.getElementById('chk-offline').checked) precioTotal += 3;
 
                 promoBanner.style.display = "none";
                 btnContratar.classList.remove('promo-active');
@@ -2026,7 +2016,6 @@
             modalPago.classList.add('active');
         });
 
-        // Contratar Posicionamiento
         document.getElementById('btn-contratar-pos').addEventListener('click', () => {
             const precio = actualizarPosicionamiento();
             tipoItemActual = 'boost';
@@ -2054,7 +2043,6 @@
             modalPago.classList.add('active');
         });
 
-        // Contratar Antidecay / Días de reserva
         document.getElementById('btn-contratar-netas').addEventListener('click', () => {
             const precio = actualizarNetas();
             tipoItemActual = 'boost';
@@ -2175,7 +2163,6 @@
                         itemSeleccionado = { titulo: c.title, precio: c.price, precioOriginalBase: c.price };
                         document.getElementById('modal-detalles-titulo').textContent = c.title;
                         
-                        // SECCIÓN DE SEGURIDAD XSS: Inyección segura con textContent para prevenir scripts maliciosos
                         const contenedorTexto = document.getElementById('modal-detalles-texto');
                         contenedorTexto.innerHTML = `
                             🌐 <b>Servidor:</b> ${c.server}<br>
