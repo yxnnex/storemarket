@@ -1492,12 +1492,10 @@
                 const chkOffline = document.getElementById('chk-offline');
 
                 if (modoSeleccionado === 'duo') {
-                    // Ocultamos las opciones adicionales y desmarcamos para no cobrar extras
                     optionsGroupExtras.style.display = 'none';
                     if (chkStreaming) chkStreaming.checked = false;
                     if (chkOffline) chkOffline.checked = false;
                 } else {
-                    // Volvemos a mostrar las opciones adicionales en Solo Q
                     optionsGroupExtras.style.display = 'flex';
                 }
 
@@ -1549,6 +1547,14 @@
                 return parseFloat(tarifasFirebase[key]);
             }
             return 5.0;
+        }
+
+        // FUNCIÓN AUXILIAR PARA OBTENER LAS VICTORIAS REALES SEGÚN EL TRAMO DE LP
+        function obtenerVictoriasPorTramo(tramoLp) {
+            if (tramoLp === "17_19") return 6;
+            if (tramoLp === "20_24") return 5;
+            if (tramoLp === "25_30") return 4;
+            return 5;
         }
 
         function actualizarBoost() {
@@ -1650,7 +1656,8 @@
                             let lpRestanteEnPaso = Math.min(100 - (scoreIterador % 100), scoreMaestro0 - scoreIterador);
                             if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreMaestro0 - scoreIterador);
 
-                            let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * 5;
+                            let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
+                            let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * victoriasReq;
 
                             precioTotal += (lpRestanteEnPaso / 100) * precioPorDivision;
                             scoreIterador += lpRestanteEnPaso;
@@ -1741,7 +1748,8 @@
                         let lpRestanteEnPaso = Math.min(100 - (scoreIterador % 100), scoreDeseado - scoreIterador);
                         if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreDeseado - scoreIterador);
                         
-                        let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * 5;
+                        let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
+                        let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * victoriasReq;
 
                         precioTotal += (lpRestanteEnPaso / 100) * precioPorDivision;
                         scoreIterador += lpRestanteEnPaso;
@@ -1773,7 +1781,8 @@
                     let lpRestanteEnPaso = Math.min(100 - (scoreIteradorOferta % 100), scoreSiguienteLiga - scoreIteradorOferta);
                     if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreSiguienteLiga - scoreIteradorOferta);
 
-                    let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * 5;
+                    let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
+                    let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * victoriasReq;
 
                     precioOfertaBase += (lpRestanteEnPaso / 100) * precioPorDivision;
                     scoreIteradorOferta += lpRestanteEnPaso;
