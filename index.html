@@ -1656,13 +1656,14 @@
                             let lpRestanteEnPaso = Math.min(100 - (scoreIterador % 100), scoreMaestro0 - scoreIterador);
                             if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreMaestro0 - scoreIterador);
 
-                            let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
                             let precioPorJuegoUnitario = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect);
-                            
                             let costoPaso;
-                            if (diffLPHastaMaestro <= 25 && lpRestanteEnPaso >= diffLPHastaMaestro) {
+                            
+                            // Corrección: Si estamos en el último tramo y faltan pocos LP, cobra exactamente el valor de 1 win configurada en Firebase
+                            if (diffLPHastaMaestro <= 25) {
                                 costoPaso = precioPorJuegoUnitario;
                             } else {
+                                let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
                                 let precioPorDivision = precioPorJuegoUnitario * victoriasReq;
                                 costoPaso = (lpRestanteEnPaso / 100) * precioPorDivision;
                             }
@@ -1756,13 +1757,14 @@
                         let lpRestanteEnPaso = Math.min(100 - (scoreIterador % 100), scoreDeseado - scoreIterador);
                         if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreDeseado - scoreIterador);
                         
-                        let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
                         let precioPorJuegoUnitario = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect);
-                        
                         let costoPaso;
-                        if (diffLP <= 25) { 
-                            costoPaso = precioPorJuegoUnitario; 
+
+                        // Si la diferencia es menor o igual a 25 LP, cobra exactamente el valor de 1 win configurada en Firebase
+                        if (diffLP <= 25) {
+                            costoPaso = precioPorJuegoUnitario;
                         } else {
+                            let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
                             let precioPorDivision = precioPorJuegoUnitario * victoriasReq;
                             costoPaso = (lpRestanteEnPaso / 100) * precioPorDivision;
                         }
@@ -2202,7 +2204,7 @@
                         spanDesc.textContent = c.descripcionLarga || '';
                         contenedorTexto.appendChild(spanDesc);
 
-                        const divPrecio = document.createElement('div');
+        const divPrecio = document.createElement('div');
                         divPrecio.style.marginTop = "15px";
                         divPrecio.innerHTML = `Precio: <b style="color: #c084fc;">USD $${c.price}</b>`;
                         contenedorTexto.appendChild(divPrecio);
