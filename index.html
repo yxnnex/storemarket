@@ -1657,9 +1657,17 @@
                             if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreMaestro0 - scoreIterador);
 
                             let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
-                            let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * victoriasReq;
+                            let precioPorJuegoUnitario = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect);
+                            
+                            let costoPaso;
+                            if (diffLPHastaMaestro <= 25 && lpRestanteEnPaso >= diffLPHastaMaestro) {
+                                costoPaso = precioPorJuegoUnitario;
+                            } else {
+                                let precioPorDivision = precioPorJuegoUnitario * victoriasReq;
+                                costoPaso = (lpRestanteEnPaso / 100) * precioPorDivision;
+                            }
 
-                            precioTotal += (lpRestanteEnPaso / 100) * precioPorDivision;
+                            precioTotal += costoPaso;
                             scoreIterador += lpRestanteEnPaso;
                         }
                     }
@@ -1749,9 +1757,17 @@
                         if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreDeseado - scoreIterador);
                         
                         let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
-                        let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * victoriasReq;
+                        let precioPorJuegoUnitario = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect);
+                        
+                        let costoPaso;
+                        if (diffLP <= 25) { 
+                            costoPaso = precioPorJuegoUnitario; 
+                        } else {
+                            let precioPorDivision = precioPorJuegoUnitario * victoriasReq;
+                            costoPaso = (lpRestanteEnPaso / 100) * precioPorDivision;
+                        }
 
-                        precioTotal += (lpRestanteEnPaso / 100) * precioPorDivision;
+                        precioTotal += costoPaso;
                         scoreIterador += lpRestanteEnPaso;
                     }
                 }
@@ -1782,7 +1798,8 @@
                     if (lpRestanteEnPaso <= 0) lpRestanteEnPaso = Math.min(100, scoreSiguienteLiga - scoreIteradorOferta);
 
                     let victoriasReq = obtenerVictoriasPorTramo(tramoLpSelect);
-                    let precioPorDivision = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect) * victoriasReq;
+                    let precioPorJuegoUnitario = obtenerPrecioPorVictoria(ligaIterada, tramoLpSelect);
+                    let precioPorDivision = precioPorJuegoUnitario * victoriasReq;
 
                     precioOfertaBase += (lpRestanteEnPaso / 100) * precioPorDivision;
                     scoreIteradorOferta += lpRestanteEnPaso;
