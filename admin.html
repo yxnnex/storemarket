@@ -302,6 +302,120 @@
             .side-footer { flex-direction: row; border-top: none; padding-top: 0; }
             .side-footer > * { flex: 1; }
         }
+    
+        /* ===== ESTILO CRISTAL (iOS) + FONDO DINÁMICO ===== */
+        body { background: #070a12; }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(124, 58, 237, 0.50), transparent 45%),
+                radial-gradient(circle at 85% 15%, rgba(251, 191, 36, 0.30), transparent 40%),
+                radial-gradient(circle at 75% 85%, rgba(34, 197, 94, 0.28), transparent 45%),
+                radial-gradient(circle at 20% 85%, rgba(56, 189, 248, 0.28), transparent 42%),
+                linear-gradient(135deg, #070a12, #101827);
+            background-size: 170% 170%;
+            animation: fondoMovil 24s ease-in-out infinite alternate;
+        }
+        @keyframes fondoMovil {
+            0%   { background-position: 0% 0%; }
+            50%  { background-position: 100% 40%; }
+            100% { background-position: 30% 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) { body::before { animation: none; } }
+
+        /* Paneles y menú: cristal translúcido con sombra */
+        .admin-box, .admin-box-full, .admin-tabs-nav, .login-box, .confirm-box {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 16px 44px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
+        .admin-box, .admin-box-full { border-radius: 22px; }
+        .admin-tabs-nav { border-radius: 24px; }
+
+        /* Elementos dentro de los paneles: cristal más ligero (sin blur extra) */
+        details.liga-tarjeta, .fila-tarifa-admin, .fila-victoria-admin {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Campos */
+        select, input, textarea, .input-precio-juego {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 12px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: rgba(251, 191, 36, 0.75);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.18);
+        }
+        option { background: #111827; color: #ffffff; }
+
+        /* Botones */
+        .tab-btn { border-radius: 14px; }
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.09); }
+        .tab-btn.activo { box-shadow: 0 6px 22px rgba(251, 191, 36, 0.40); }
+        .btn-subir, .btn-login { border-radius: 12px; box-shadow: 0 8px 22px rgba(34, 197, 94, 0.35); }
+        .btn-volver, .btn-logout {
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Login: deja ver el fondo animado */
+        #login-overlay { background: rgba(7, 10, 18, 0.55); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+
+        /* ===== AVISOS EN EL CENTRO, GRANDES Y CON COLOR ===== */
+        .toast-container {
+            top: 50%;
+            left: 50%;
+            right: auto;
+            transform: translate(-50%, -50%);
+            align-items: center;
+            pointer-events: none;
+            z-index: 5000;
+        }
+        .toast {
+            min-width: 340px;
+            max-width: 88vw;
+            justify-content: center;
+            text-align: center;
+            padding: 24px 40px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            border-radius: 22px;
+            color: #ffffff;
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            animation: toastVida 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .toast > span:first-child { font-size: 2rem; line-height: 1; }
+        .toast.exito {
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.60), rgba(21, 128, 61, 0.40));
+            border: 1px solid rgba(134, 239, 172, 0.75);
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+        .toast.error {
+            background: linear-gradient(145deg, rgba(239, 68, 68, 0.60), rgba(153, 27, 27, 0.40));
+            border: 1px solid rgba(252, 165, 165, 0.75);
+            box-shadow: 0 20px 60px rgba(239, 68, 68, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+        @keyframes toastVida {
+            0%   { opacity: 0; transform: scale(0.8); }
+            8%   { opacity: 1; transform: scale(1.05); }
+            14%  { transform: scale(1); }
+            82%  { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.96); }
+        }
     </style>
 </head>
 <body>
