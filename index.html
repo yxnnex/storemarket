@@ -959,6 +959,120 @@
             color: #cbd5e1;
             line-height: 1.5;
         }
+    
+        /* ===== AJUSTES DE UBICACIÓN (solo CSS, sin tocar la lógica) ===== */
+
+        /* Navegación principal más grande que la secundaria */
+        .header-bottom-nav { gap: 60px; }
+        .tab-btn { font-size: 1.5rem; padding: 8px 18px; }
+        .boost-type-btn { font-size: 0.85rem; padding: 7px 18px; }
+
+        /* Emblemas de rango más grandes */
+        .rank-emblem { width: 72px; height: 72px; }
+        .rank-header { gap: 18px; }
+        .rank-info h3 { font-size: 1.5rem; }
+
+        /* Rango actual -> rango deseado: conector con flecha */
+        .boost-layout > .boost-card:nth-child(2) { position: relative; }
+        .boost-layout > .boost-card:nth-child(2)::before {
+            content: "";
+            position: absolute;
+            left: -27px;
+            top: 38px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #a855f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / 18px no-repeat;
+            box-shadow: 0 0 16px rgba(168, 85, 247, 0.7);
+            z-index: 2;
+        }
+
+        /* Panel de pedido: precio grande y tarjeta fija al hacer scroll (escritorio) */
+        .boost-layout > .boost-card:nth-child(1),
+        .boost-layout > .boost-card:nth-child(2) { align-self: stretch; }
+        .boost-layout > .boost-card:nth-child(3) { align-self: start; }
+        @media (min-width: 1025px) {
+            .boost-layout > .boost-card:nth-child(3) { position: sticky; top: 20px; }
+        }
+        .boost-layout .boost-total { font-size: 2.3rem; margin: 8px 0 14px; }
+
+        /* Franja de confianza junto al botón */
+        .trust-strip {
+            list-style: none;
+            margin: 16px 0 0;
+            padding: 14px 0 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        .trust-strip li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .trust-strip svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            fill: none;
+            stroke: #c084fc;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* En pantallas chicas las tarjetas se apilan: la flecha apunta hacia abajo */
+        @media (max-width: 1024px) {
+            .boost-layout > .boost-card:nth-child(2)::before {
+                left: calc(50% - 17px);
+                top: -27px;
+                transform: rotate(90deg);
+            }
+        }
+    
+        /* ===== AJUSTES V2 ===== */
+
+        /* Las dos tarjetas de rango terminan donde acaba su contenido (no se estiran con el pedido) */
+        @media (min-width: 1025px) {
+            .boost-layout { grid-template-rows: max-content 1fr; }
+            .boost-layout > .boost-card:nth-child(3) { grid-column: 3; grid-row: 1 / span 2; }
+        }
+
+        /* Precio en amarillo */
+        .boost-layout .boost-total {
+            color: #facc15;
+            text-shadow: 0 0 14px rgba(250, 204, 21, 0.45);
+        }
+
+        /* Con oferta: precio tachado arriba y precio final abajo */
+        .boost-layout .boost-total:has(#precio-boost > span) .usd-label { display: none; }
+        .boost-layout .boost-total #precio-boost:has(> span) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            line-height: 1.15;
+        }
+        #precio-boost > span:first-child {
+            font-size: 1.15rem !important;
+            margin: 0 !important;
+            color: #a9b6c8 !important;
+        }
+        #precio-boost > span:first-child::before { content: "USD "; }
+        #precio-boost > span:nth-child(2) {
+            color: #facc15 !important;
+            font-size: 2.4rem;
+        }
+        #precio-boost > span:nth-child(3) {
+            margin: 8px 0 0 !important;
+            background: rgba(250, 204, 21, 0.18) !important;
+            color: #fde047 !important;
+            text-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -1111,11 +1225,18 @@
                                 </label>
                             </div>
 
+                            <div class="boost-total"><span class="usd-label">USD</span> <span id="precio-boost">0.00</span></div>
+
                             <div id="promo-banner" class="promo-banner"></div>
 
-                            <div class="boost-total">USD <span id="precio-boost">0.00</span></div>
                             <button class="btn-contratar" id="btn-contratar-boost">Contratar servicio</button>
                             <button type="button" id="btn-ignorar-oferta">Mantener liga actual</button>
+
+                            <ul class="trust-strip">
+                                <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>Pago seguro</li>
+                                <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></svg>Entrega garantizada</li>
+                                <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"/></svg>Contacto por WhatsApp</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
