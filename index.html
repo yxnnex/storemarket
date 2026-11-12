@@ -2356,5 +2356,60 @@
         cargarTarifasTienda();
         cargarCatalogo();
     </script>
+
+    <!-- Ajuste de altura del contenedor Boost + sonido de navegación (no modifica la lógica existente) -->
+    <script>
+    (function () {
+        // 1) El contenedor toma la altura del panel activo: la tarjeta de pedido ya no tapa el pie de página
+        var stack = document.querySelector('.boost-cards-stack');
+        if (stack) {
+            var ajustar = function () {
+                var act = stack.querySelector('.boost-subpanel.active');
+                if (act && act.offsetHeight > 0) stack.style.minHeight = act.offsetHeight + 'px';
+            };
+            var ro = new ResizeObserver(ajustar);
+            stack.querySelectorAll('.boost-subpanel').forEach(function (p) {
+                ro.observe(p);
+                new MutationObserver(ajustar).observe(p, { attributes: true, attributeFilter: ['class'] });
+            });
+            window.addEventListener('load', ajustar);
+            ajustar();
+        }
+
+        // 2) Sonidos: clic en Cuentas / Boost / FAQ y aviso de error (archivos .wav junto a index.html)
+        var sClick = new Audio('mixkit-fast-double-click-on-mouse-275.wav');
+        var sError = new Audio('mixkit-click-error-1110.wav');
+        sClick.preload = 'auto';
+        sError.preload = 'auto';
+        sClick.volume = 0.5;   // volumen del clic (0 a 1)
+        sError.volume = 0.5;   // volumen del error (0 a 1)
+        function reproducir(audio) {
+            try {
+                audio.currentTime = 0;
+                var p = audio.play();
+                if (p && p.catch) p.catch(function () {});
+            } catch (e) {}
+        }
+        document.querySelectorAll('.header-bottom-nav .tab-btn').forEach(function (b) {
+            b.addEventListener('click', function () { reproducir(sClick); });
+        });
+        // Sonido de tecla al contratar servicio / aprovechar oferta
+        var sContratar = new Audio('mixkit-hard-single-key-press-in-a-laptop-2542.wav');
+        sContratar.preload = 'auto';
+        sContratar.volume = 0.5;   // volumen (0 a 1)
+        ['btn-contratar-boost', 'btn-contratar-pos', 'btn-contratar-netas'].forEach(function (id) {
+            var btn = document.getElementById(id);
+            if (btn) btn.addEventListener('click', function () { reproducir(sContratar); });
+        });
+
+        // Suena cuando aparece la alerta de error (datos faltantes, términos sin aceptar, etc.)
+        var alerta = document.getElementById('customAlert');
+        if (alerta) {
+            new MutationObserver(function () {
+                if (alerta.classList.contains('active')) reproducir(sError);
+            }).observe(alerta, { attributes: true, attributeFilter: ['class'] });
+        }
+    })();
+    </script>
 </body>
 </html>
