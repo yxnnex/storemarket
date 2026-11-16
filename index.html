@@ -1080,9 +1080,199 @@
         .cuenta-reservada .btn-comprar,
         .cuenta-reservada:hover .btn-comprar { background: #475569 !important; color: #cbd5e1 !important; box-shadow: none !important; cursor: not-allowed; }
         .badge-reservada { position: absolute; top: 12px; right: 12px; z-index: 3; background: rgba(250, 204, 21, 0.95); color: #1a1200; font-weight: 800; font-size: 0.8rem; padding: 5px 12px; border-radius: 999px; }
+    
+        /* ===== MENÚ EN RUEDA (lateral) ===== */
+        @property --rot { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+
+        @media (min-width: 1100px) {
+            @supports (transform: translateY(calc(sin(30deg) * 1px))) {
+                .container { max-width: 1500px; }
+                .tab-content { margin-left: 240px; }
+
+                .header-bottom-nav {
+                    position: fixed;
+                    left: max(24px, calc((100vw - 1500px) / 2 + 24px));
+                    top: 50%;
+                    width: 210px;
+                    height: 320px;
+                    margin-top: -160px;
+                    display: block;
+                    z-index: 20;
+                    --R: 110px;
+                    transition: --rot 0.85s cubic-bezier(0.22, 0.9, 0.25, 1), --sub 0.85s cubic-bezier(0.22, 0.9, 0.25, 1);
+                }
+                /* riel de la rueda y marcador de la opción activa */
+                .header-bottom-nav::before {
+                    content: "";
+                    position: absolute;
+                    left: -17px; top: 4%; bottom: 4%;
+                    width: 3px;
+                    border-radius: 3px;
+                    background: linear-gradient(to bottom, transparent, #facc15 30%, #facc15 70%, transparent);
+                    box-shadow: 0 0 12px rgba(250, 204, 21, 0.55);
+                }
+                .header-bottom-nav::after {
+                    content: "";
+                    position: absolute;
+                    left: -22px; top: 50%;
+                    width: 12px; height: 12px; margin-top: -6px;
+                    border-radius: 50%;
+                    background: #facc15;
+                    box-shadow: 0 0 14px #facc15, 0 0 30px rgba(250, 204, 21, 0.75);
+                }
+                .header-bottom-nav .tab-btn {
+                    --a: calc(var(--i, 0) * var(--step, 120deg) - var(--rot));
+                    --t: calc((cos(var(--a)) + 1) / 2);
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    width: 100%;
+                    text-align: left;
+                    padding: 8px 6px 8px 14px;
+                    font-size: 2.1rem;
+                    letter-spacing: 4px;
+                    white-space: nowrap;
+                    border-bottom: none;
+                    transform-origin: left center;
+                    transform: translateY(calc(-50% + sin(var(--a)) * var(--R) + max(sin(var(--a)), 0) * var(--sub, 0px))) scale(calc(0.6 + 0.4 * var(--t)));
+                    opacity: calc(0.38 + 0.62 * var(--t));
+                    filter: blur(calc((1 - var(--t)) * 1.8px));
+                    will-change: transform, opacity;
+                }
+            }
+        }
+        @media (prefers-reduced-motion: reduce) { .header-bottom-nav { transition: none !important; } }
+    
+        /* ===== ANIMACIÓN AL CAMBIAR DE SECCIÓN ===== */
+        @keyframes seccionEntra {
+            from {
+                opacity: 0;
+                transform: perspective(1200px) rotateY(-14deg) translateX(-40px) scale(0.97);
+                filter: blur(6px);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(1200px) rotateY(0deg) translateX(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        .tab-content.active {
+            animation: seccionEntra 0.6s cubic-bezier(0.22, 0.9, 0.25, 1) backwards;
+        }
+        @media (prefers-reduced-motion: reduce) { .tab-content.active { animation: none; } }
+    
+        /* ===== COLORES DEL MENÚ: activa en amarillo, las del fondo en celeste ===== */
+        .header-bottom-nav .tab-btn { color: #7dd3fc; text-shadow: 0 0 10px rgba(125, 211, 252, 0.45); }
+        .header-bottom-nav .tab-btn:hover { color: #bae6fd; text-shadow: 0 0 14px rgba(125, 211, 252, 0.9); }
+        .header-bottom-nav .tab-btn.active {
+            color: #facc15;
+            text-shadow: 0 0 14px rgba(250, 204, 21, 0.9), 0 0 28px rgba(234, 179, 8, 0.6);
+        }
+
+        /* ===== FONDO: mesh violeta oscuro y negro + partículas blancas ===== */
+        body { background: #04020a; }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -25%;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 18% 22%, rgba(88, 28, 135, 0.45), transparent 45%),
+                radial-gradient(circle at 82% 18%, rgba(59, 7, 100, 0.40), transparent 42%),
+                radial-gradient(circle at 70% 82%, rgba(109, 40, 217, 0.26), transparent 46%),
+                radial-gradient(circle at 15% 85%, rgba(46, 16, 101, 0.38), transparent 44%),
+                linear-gradient(160deg, #04020a, #0b0517 50%, #04020a);
+            animation: meshMove 30s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+        @keyframes meshMove {
+            0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50%  { transform: translate(3%, -2%) scale(1.1) rotate(4deg); }
+            100% { transform: translate(-3%, 3%) scale(1.18) rotate(-4deg); }
+        }
+        #particulas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        @media (prefers-reduced-motion: reduce) { body::before { animation: none; } }
+    
+        /* ===== ALINEACIÓN: título, pestañas de Boost y tarjetas sobre el mismo eje central ===== */
+        @media (min-width: 1100px) {
+            @supports (transform: translateY(calc(sin(30deg) * 1px))) {
+                .title-area-center { transform: translateX(120px); }
+            }
+        }
+    
+        /* ===== SEGUNDO NIVEL DE LA RUEDA (pestañas de Boost) ===== */
+        @property --sub { syntax: '<length>'; inherits: true; initial-value: 0px; }
+        .rueda-sub { display: none; }
+
+        @media (min-width: 1100px) {
+            @supports (transform: translateY(calc(sin(30deg) * 1px))) {
+                .boost-types-nav { display: none; }   /* la barra de arriba se reemplaza por la rueda */
+                .header-bottom-nav.sub-abierto { --sub: 120px; }
+                .header-bottom-nav::before { transition: bottom 0.85s cubic-bezier(0.22, 0.9, 0.25, 1); }
+                .header-bottom-nav.sub-abierto::before { bottom: -70px; }
+
+                .rueda-sub {
+                    position: absolute;
+                    left: 14px;
+                    top: calc(50% + 40px);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                    pointer-events: none;
+                }
+                .header-bottom-nav.sub-abierto .rueda-sub { pointer-events: auto; }
+
+                .rueda-sub-item {
+                    position: relative;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    text-align: left;
+                    font-family: 'Rajdhani', sans-serif;
+                    font-weight: 700;
+                    font-size: 0.92rem;
+                    letter-spacing: 1.5px;
+                    white-space: nowrap;
+                    text-transform: uppercase;
+                    color: #7dd3fc;
+                    text-shadow: 0 0 10px rgba(125, 211, 252, 0.4);
+                    padding: 6px 12px 6px 18px;
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    transition: opacity 0.35s ease, transform 0.35s ease, color 0.2s ease, text-shadow 0.2s ease;
+                }
+                .header-bottom-nav.sub-abierto .rueda-sub-item { opacity: 1; transform: none; }
+                .header-bottom-nav.sub-abierto .rueda-sub-item:nth-child(1) { transition-delay: 0.25s, 0.25s, 0s, 0s; }
+                .header-bottom-nav.sub-abierto .rueda-sub-item:nth-child(2) { transition-delay: 0.33s, 0.33s, 0s, 0s; }
+                .header-bottom-nav.sub-abierto .rueda-sub-item:nth-child(3) { transition-delay: 0.41s, 0.41s, 0s, 0s; }
+
+                .rueda-sub-item:hover { color: #bae6fd; text-shadow: 0 0 14px rgba(125, 211, 252, 0.9); }
+                .rueda-sub-item.activo { color: #facc15; text-shadow: 0 0 12px rgba(250, 204, 21, 0.8); }
+                .rueda-sub-item::before {
+                    content: "";
+                    position: absolute;
+                    left: 4px; top: 50%;
+                    width: 6px; height: 6px; margin-top: -3px;
+                    border-radius: 50%;
+                    background: #facc15;
+                    box-shadow: 0 0 8px #facc15;
+                    transform: scale(0);
+                    transition: transform 0.25s ease;
+                }
+                .rueda-sub-item.activo::before { transform: scale(1); }
+            }
+        }
+    
+        /* ===== MENÚ EN CELULAR Y TABLET: tamaños que caben sin salirse de la pantalla ===== */
+        @media (max-width: 1099px) {
+            .header-bottom-nav { gap: clamp(6px, 3vw, 28px); flex-wrap: wrap; justify-content: center; }
+            .tab-btn { font-size: clamp(0.95rem, 4.4vw, 1.35rem); padding: 6px clamp(6px, 2.4vw, 16px); letter-spacing: 2px; }
+        }
     </style>
 </head>
 <body>
+    <canvas id="particulas" aria-hidden="true"></canvas>
 
     <canvas id="bg-canvas"></canvas>
 
@@ -1476,6 +1666,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const canvas = document.getElementById('bg-canvas');
@@ -1543,6 +1734,16 @@
         };
 
         const app = initializeApp(firebaseConfig);
+
+        // App Check (Fraud Defense / reCAPTCHA Enterprise): verifica que las peticiones vienen de esta página
+        // Solo para pruebas locales: genera un token de depuración que se registra en Firebase
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+        }
+        initializeAppCheck(app, {
+            provider: new ReCaptchaEnterpriseProvider('6LfUlSIuAAAAAMvGMa19EnvlXEjGLN3NQyPLn41c'),
+            isTokenAutoRefreshEnabled: true
+        });
         const db = getFirestore(app);
 
         window.mostrarAlerta = function(mensaje) {
@@ -2465,6 +2666,133 @@
                 if (alerta.classList.contains('active')) reproducir(sError);
             }).observe(alerta, { attributes: true, attributeFilter: ['class'] });
         }
+    })();
+    </script>
+
+    <!-- Menú en rueda: gira según la pestaña activa y muestra el segundo nivel de Boost (no modifica la lógica de las pestañas) -->
+    <script>
+    (function () {
+        var nav = document.querySelector('.header-bottom-nav');
+        if (!nav) return;
+        var btns = Array.prototype.slice.call(nav.querySelectorAll('.tab-btn'));
+        var N = btns.length;
+        if (!N) return;
+        var paso = 360 / N;
+        var rot = 0;
+        var actual = 0;
+        btns.forEach(function (b, i) {
+            b.style.setProperty('--i', i);
+            if (b.classList.contains('active')) actual = i;
+        });
+        nav.style.setProperty('--step', paso + 'deg');
+        rot = actual * paso;
+        nav.style.setProperty('--rot', rot + 'deg');
+
+        // Segundo nivel: las pestañas de Boost dentro de la rueda (usan los botones originales)
+        var subOrig = Array.prototype.slice.call(document.querySelectorAll('.boost-type-btn'));
+        var etiquetas = { rango: 'Impulso de rango', posicionamiento: 'Posicionamiento', netas: 'Antidecay' };
+        var lista = document.createElement('div');
+        lista.className = 'rueda-sub';
+        var items = subOrig.map(function (orig) {
+            var it = document.createElement('button');
+            it.type = 'button';
+            it.className = 'rueda-sub-item';
+            it.textContent = etiquetas[orig.getAttribute('data-boost')] || orig.textContent.trim();
+            it.addEventListener('click', function () { orig.click(); });
+            lista.appendChild(it);
+            return it;
+        });
+        nav.appendChild(lista);
+        function sincSub() {
+            subOrig.forEach(function (o, i) { items[i].classList.toggle('activo', o.classList.contains('active')); });
+        }
+        subOrig.forEach(function (o) {
+            new MutationObserver(sincSub).observe(o, { attributes: true, attributeFilter: ['class'] });
+        });
+        sincSub();
+        function abrirSub() {
+            nav.classList.toggle('sub-abierto', btns[actual].getAttribute('data-target') === 'seccion-boost');
+        }
+        abrirSub();
+
+        function sincronizar() {
+            var nuevo = -1;
+            btns.forEach(function (b, i) { if (b.classList.contains('active')) nuevo = i; });
+            if (nuevo < 0 || nuevo === actual) return;
+            var diff = (nuevo - actual + N) % N;
+            var giro = diff > N / 2 ? diff - N : diff;   // camino más corto
+            rot += giro * paso;
+            actual = nuevo;
+            nav.style.setProperty('--rot', rot + 'deg');
+            abrirSub();
+        }
+        btns.forEach(function (b) {
+            new MutationObserver(sincronizar).observe(b, { attributes: true, attributeFilter: ['class'] });
+        });
+
+        // Girar con la rueda del ratón sobre el menú
+        var bloqueo = false;
+        nav.addEventListener('wheel', function (e) {
+            if (window.innerWidth < 1100) return;
+            e.preventDefault();
+            if (bloqueo || Math.abs(e.deltaY) < 4) return;
+            bloqueo = true;
+            setTimeout(function () { bloqueo = false; }, 650);
+            btns[(actual + (e.deltaY > 0 ? 1 : -1) + N) % N].click();
+        }, { passive: false });
+    })();
+    </script>
+
+    <!-- Partículas blancas del fondo -->
+    <script>
+    (function () {
+        var c = document.getElementById('particulas');
+        if (!c) return;
+        var ctx = c.getContext('2d');
+        var reducir = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var W, H, P = [];
+        function iniciar() {
+            var dpr = Math.min(window.devicePixelRatio || 1, 2);
+            W = window.innerWidth; H = window.innerHeight;
+            c.width = W * dpr; c.height = H * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            var n = Math.round(Math.min(110, (W * H) / 16000));
+            P = [];
+            for (var i = 0; i < n; i++) {
+                P.push({
+                    x: Math.random() * W, y: Math.random() * H,
+                    r: Math.random() * 1.4 + 0.3,
+                    vx: (Math.random() - 0.5) * 0.12,
+                    vy: -(Math.random() * 0.18 + 0.04),
+                    a: Math.random() * 0.7 + 0.2,
+                    t: Math.random() * 6.28, s: Math.random() * 0.02 + 0.005
+                });
+            }
+        }
+        function dibujar(mover) {
+            ctx.clearRect(0, 0, W, H);
+            for (var i = 0; i < P.length; i++) {
+                var p = P[i];
+                if (mover) {
+                    p.x += p.vx; p.y += p.vy; p.t += p.s;
+                    if (p.y < -5) { p.y = H + 5; p.x = Math.random() * W; }
+                    if (p.x < -5) p.x = W + 5; else if (p.x > W + 5) p.x = -5;
+                }
+                ctx.globalAlpha = p.a * (0.55 + 0.45 * Math.sin(p.t));
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+                ctx.fill();
+            }
+        }
+        function bucle() { dibujar(true); requestAnimationFrame(bucle); }
+        iniciar();
+        if (reducir) dibujar(false); else bucle();
+        var tmr;
+        window.addEventListener('resize', function () {
+            clearTimeout(tmr);
+            tmr = setTimeout(function () { iniciar(); if (reducir) dibujar(false); }, 200);
+        });
     })();
     </script>
 </body>
