@@ -995,14 +995,35 @@
         }
         function idSeguro(v) { return String(v).replace(/[^A-Za-z0-9_-]/g, ''); }
 
+        // Estado de reserva y botones de las compras de cuentas
+        function infoCuentaAdmin(d, dt, reservas) {
+            const cid = idSeguro(dt.cuentaId || '');
+            if (!cid) return { info: '', botones: '' };
+            if (dt.estado === 'vendida') return { info: '<br><small style="color:#22c55e">✅ Vendida</small>', botones: '' };
+            const h = reservas[cid];
+            const activa = h && h > Date.now();
+            const hora = activa ? new Date(h).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+            const info = activa ? `<br><small style="color:#facc15">⏳ Reservada hasta ${hora}</small>`
+                                : `<br><small style="color:#8a99ad">${h ? 'Reserva vencida' : 'Sin reserva'}</small>`;
+            const botones = `<button class="btn-estado" style="background:#22c55e;color:#fff;margin-right:6px" onclick="marcarVendida('${idSeguro(d.id)}', '${cid}')">Vendida</button>`
+                          + `<button class="btn-estado" style="background:#3b82f6;color:#fff;margin-right:6px" onclick="liberarReserva('${cid}')">Liberar</button>`;
+            return { info, botones };
+        }
+
         async function cargarServiciosContratados() {
             const tabla = document.getElementById('tabla-servicios');
             let html = "";
             try {
+                const reservasAdm = {};
+                try {
+                    const rs = await getDocs(collection(db, "reservas"));
+                    rs.forEach(r => { const h = r.data().hasta; reservasAdm[r.id] = h ? h.toMillis() : 0; });
+                } catch (e) {}
                 const s1 = await getDocs(collection(db, "compras")).catch(()=>({empty:true}));
                 s1.forEach(d => {
                     const dt = d.data();
-                    html += `<tr><td><span class="badge badge-cuenta">Cuenta</span></td><td>${esc(dt.clienteDiscord||dt.email)}</td><td>${esc(dt.detalle)}</td><td>${esc(dt.monto)}</td><td><button class="btn-eliminar" onclick="eliminarItem('compras', '${idSeguro(d.id)}')">Eliminar</button></td></tr>`;
+                    const ic = infoCuentaAdmin(d, dt, reservasAdm);
+                    html += `<tr><td><span class="badge badge-cuenta">Cuenta</span></td><td>${esc(dt.clienteDiscord||dt.email)}</td><td>${esc(dt.detalle)}${ic.info}</td><td>${esc(dt.monto)}</td><td>${ic.botones}<button class="btn-eliminar" onclick="eliminarItem('compras', '${idSeguro(d.id)}')">Eliminar</button></td></tr>`;
                 });
                 const s2 = await getDocs(collection(db, "pedidosBoost")).catch(()=>({empty:true}));
                 s2.forEach(d => {
@@ -1014,6 +1035,27 @@
         }
 
         /* --- ACCIÓN DE ELIMINAR AHORA UTILIZANDO EL MODAL PERSONALIZADO --- */
+        window.marcarVendida = async function(compraId, cuentaId) {
+            const ok = await mostrarConfirmacion("¿Marcar esta cuenta como vendida? Se quitará de la tienda.");
+            if (!ok) return;
+            try {
+                await deleteDoc(doc(db, "skin", cuentaId));
+                await deleteDoc(doc(db, "reservas", cuentaId)).catch(() => {});
+                await updateDoc(doc(db, "compras", compraId), { estado: "vendida" });
+                mostrarToast("Cuenta vendida y quitada de la tienda", "exito");
+                cargarCuentasAdmin();
+                cargarServiciosContratados();
+            } catch (e) { mostrarToast("Error al marcar la cuenta como vendida", "error"); }
+        };
+
+        window.liberarReserva = async function(cuentaId) {
+            try {
+                await deleteDoc(doc(db, "reservas", cuentaId));
+                mostrarToast("Reserva liberada", "exito");
+                cargarServiciosContratados();
+            } catch (e) { mostrarToast("Error al liberar la reserva", "error"); }
+        };
+
         window.eliminarItem = async function(col, id) {
             const confirmado = await mostrarConfirmacion("¿Seguro que deseas eliminar este registro de la base de datos?");
             if (confirmado) {
