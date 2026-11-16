@@ -987,6 +987,14 @@
             } catch(e) {}
         }
 
+        // Seguridad: los pedidos los escribe cualquier visitante, así que se escapan antes de mostrarlos
+        function esc(v) {
+            return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function idSeguro(v) { return String(v).replace(/[^A-Za-z0-9_-]/g, ''); }
+
         async function cargarServiciosContratados() {
             const tabla = document.getElementById('tabla-servicios');
             let html = "";
@@ -994,12 +1002,12 @@
                 const s1 = await getDocs(collection(db, "compras")).catch(()=>({empty:true}));
                 s1.forEach(d => {
                     const dt = d.data();
-                    html += `<tr><td><span class="badge badge-cuenta">Cuenta</span></td><td>${dt.clienteDiscord||dt.email}</td><td>${dt.detalle}</td><td>${dt.monto}</td><td><button class="btn-eliminar" onclick="eliminarItem('compras', '${d.id}')">Eliminar</button></td></tr>`;
+                    html += `<tr><td><span class="badge badge-cuenta">Cuenta</span></td><td>${esc(dt.clienteDiscord||dt.email)}</td><td>${esc(dt.detalle)}</td><td>${esc(dt.monto)}</td><td><button class="btn-eliminar" onclick="eliminarItem('compras', '${idSeguro(d.id)}')">Eliminar</button></td></tr>`;
                 });
                 const s2 = await getDocs(collection(db, "pedidosBoost")).catch(()=>({empty:true}));
                 s2.forEach(d => {
                     const dt = d.data();
-                    html += `<tr><td><span class="badge badge-boost">Boost</span></td><td>${dt.clienteDiscord}</td><td>${dt.detalle}</td><td>${dt.monto}</td><td><button class="btn-eliminar" onclick="eliminarItem('pedidosBoost', '${d.id}')">Eliminar</button></td></tr>`;
+                    html += `<tr><td><span class="badge badge-boost">Boost</span></td><td>${esc(dt.clienteDiscord)}</td><td>${esc(dt.detalle)}</td><td>${esc(dt.monto)}</td><td><button class="btn-eliminar" onclick="eliminarItem('pedidosBoost', '${idSeguro(d.id)}')">Eliminar</button></td></tr>`;
                 });
                 tabla.innerHTML = html || `<tr><td colspan="5" style="text-align: center; color: #8a99ad;">No hay registros.</td></tr>`;
             } catch(e) {}
