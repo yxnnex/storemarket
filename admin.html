@@ -585,6 +585,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-check.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, doc, setDoc, getDoc, getDocs, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -598,6 +599,16 @@
         };
 
         const app = initializeApp(firebaseConfig);
+
+        // App Check (Fraud Defense / reCAPTCHA Enterprise): verifica que las peticiones vienen de esta página
+        // Solo para pruebas locales: genera un token de depuración que se registra en Firebase
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+        }
+        initializeAppCheck(app, {
+            provider: new ReCaptchaEnterpriseProvider('6LfUlSIuAAAAAMvGMa19EnvlXEjGLN3NQyPLn41c'),
+            isTokenAutoRefreshEnabled: true
+        });
         const auth = getAuth(app);
         const db = getFirestore(app);
 
